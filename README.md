@@ -1,13 +1,9 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/60264344/134811326-27109632-f653-4025-9786-482824635994.png">
+    <h1>GOUVPT</h1>
 </p>
 <p align="center">
-    <i>⚙️ Udata customizations for data.gouv.fr made by Etalab ⚙️</i>
+    <i>⚙️ Official uData customizations for the Open Data Portal of Portugal (data.gov.pt) ⚙️</i>
     <br>
-    <br>
-    <img src="https://img.shields.io/github/contributors/etalab/udata-front">
-    <img src="https://img.shields.io/github/license/etalab/udata-front">
-    <img src="https://img.shields.io/github/commit-activity/m/etalab/udata-front">
 </p>
 
 - [Notes on this repo](#notes-on-this-repo)
@@ -57,8 +53,9 @@ Create a local configuration file `udata.cfg` in your **udata** directory
 (or where your UDATA_SETTINGS point out) or modify an existing one as following:
 
 ```python
-PLUGINS = ['front']
+PLUGINS = ['front','gouvpt_saml','gouvpt_faqs']
 THEME = 'gouvpt'
+DEFAULT_LANGUAGE = 'pt'
 ```
 
 ## Theme development
@@ -88,8 +85,9 @@ $WORKSPACE
 Modify your local `udata.cfg` configuration file as following:
 
 ```python
-PLUGINS = ['front']
+PLUGINS = ['front','gouvpt_saml','gouvpt_faqs']
 THEME = 'gouvpt'
+DEFAULT_LANGUAGE = 'pt'
 ```
 
 #### 🐍 Python development
