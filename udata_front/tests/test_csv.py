@@ -1,13 +1,13 @@
 from flask import url_for
 
-from udata_front.tests.frontend import GouvfrFrontTestCase
-from udata_front.tests import GouvFrSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
+from udata_front.tests import gouvptSettings
 
 from udata.tests.frontend.test_csv import blueprint as testcsv
 
 
-class CsvTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class CsvTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = ['admin']
 
     def create_app(self):

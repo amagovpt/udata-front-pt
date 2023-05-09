@@ -5,7 +5,7 @@ import pytest
 from udata.tests import TestCase, WebTestMixin, DBTestMixin
 
 
-class GouvfrFrontTestCase(WebTestMixin, DBTestMixin, TestCase):
+class gouvptFrontTestCase(WebTestMixin, DBTestMixin, TestCase):
     modules = []
 
     @pytest.fixture(autouse=True)

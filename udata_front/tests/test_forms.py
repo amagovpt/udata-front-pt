@@ -1,13 +1,13 @@
 from typing import List
 from udata_front.forms import ExtendedRegisterForm
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 import pytest
 
 
-class ExtendedRegisterFormTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class ExtendedRegisterFormTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules: List[str] = []
     url = "https://example.com/validation-captchetat"
     oauth_url = "https://example.com/oauth"

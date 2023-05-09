@@ -4,19 +4,19 @@ import pytest
 from flask import current_app
 
 from udata.core.dataset.factories import DatasetFactory
-from udata_front import APIGOUVFR_EXTRAS_KEY
-from udata_front.tests import GouvFrSettings
-from udata_front.tasks import apigouvfr_load_apis
+from udata_front import APIGOUVPT_EXTRAS_KEY
+from udata_front.tests import gouvptSettings
+from udata_front.tasks import apigouvpt_load_apis
 
 
 @pytest.mark.usefixtures('clean_db')
-class ApiGouvFrTasksTest:
-    settings = GouvFrSettings
+class ApigouvptTasksTest:
+    settings = gouvptSettings
     modules = []
 
-    def test_apigouvfr_load_apis(app, rmock):
+    def test_apigouvpt_load_apis(app, rmock):
         dataset = DatasetFactory()
-        url = current_app.config.get('APIGOUVFR_URL')
+        url = current_app.config.get('APIGOUVPT_URL')
         apis = [{
             'title': 'une API',
             'tagline': 'tagline',
@@ -34,6 +34,6 @@ class ApiGouvFrTasksTest:
             'datagouv_uuid': [str(dataset.id)],
         })
         rmock.get(url, json=payload)
-        apigouvfr_load_apis()
+        apigouvpt_load_apis()
         dataset.reload()
-        assert dataset.extras.get(APIGOUVFR_EXTRAS_KEY) == apis
+        assert dataset.extras.get(APIGOUVPT_EXTRAS_KEY) == apis

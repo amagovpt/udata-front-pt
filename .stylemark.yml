@@ -11,8 +11,8 @@ excludeDir:
   - stylemark
 examples:
   css:
-    - udata_front/theme/gouvfr/static/less/index.css
+    - udata_front/theme/gouvpt/static/less/index.css
     - theme/less/examples.css
   js:
-    - udata_front/theme/gouvfr/static/js/index.js
+    - udata_front/theme/gouvpt/static/js/index.js
   htmlTag: '<html data-fr-scheme="light" data-fr-theme="light">'

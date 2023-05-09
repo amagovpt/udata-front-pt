@@ -32,7 +32,7 @@ def _load_views(app, module):
         app.register_blueprint(blueprint)
 
 
-VIEWS = ['gouvfr', 'dataset', 'organization', 'follower', 'post',
+VIEWS = ['gouvpt', 'dataset', 'organization', 'follower', 'post',
          'reuse', 'site', 'territories', 'topic', 'user']
 
 
@@ -78,10 +78,11 @@ def init_app(app):
         from flask_debugtoolbar import DebugToolbarExtension
         DebugToolbarExtension(app)
 
-    if app.config.get('CAPTCHETAT_BASE_URL'):
-        # Security override init
-        from udata.auth import security
-        from udata_front.forms import ExtendedRegisterForm
-        with app.app_context():
-            security._state.register_form = ExtendedRegisterForm
-            security._state.confirm_register_form = ExtendedRegisterForm
+    # Security override init
+    from udata.auth import security
+    from udata_front.forms import ExtendedRegisterForm, ExtendedSendConfirmationForm, ExtendedForgotPasswordForm
+    with app.app_context():
+        security._state.register_form = ExtendedRegisterForm
+        security._state.confirm_register_form = ExtendedRegisterForm
+        security._state.send_confirmation_form = ExtendedSendConfirmationForm
+        security._state.forgot_password_form = ExtendedForgotPasswordForm

@@ -3,12 +3,12 @@
 # from udata.core.dataset.factories import VisibleDatasetFactory
 # from udata.core.reuse.factories import VisibleReuseFactory
 # from udata.core.topic.factories import TopicFactory
-# from udata_front.tests import GouvFrSettings
-# from udata_front.tests.frontend import GouvfrFrontTestCase
+# from udata_front.tests import gouvptSettings
+# from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-# class TopicsBlueprintTest(GouvfrFrontTestCase):
-#     settings = GouvFrSettings
+# class TopicsBlueprintTest(gouvptFrontTestCase):
+#     settings = gouvptSettings
 #     modules = ['admin']
 
 #     def test_render_display(self):

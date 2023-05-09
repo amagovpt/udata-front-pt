@@ -176,7 +176,7 @@
 - Add resources pagination dataset page and use DSFR pagination [#30](https://github.com/etalab/udata-front/pull/30) [#37](https://github.com/etalab/udata-front/pull/37)
 - Style oauth page [#34](https://github.com/etalab/udata-front/pull/34)
 - Fix horizontal scroll on mobile [#38](https://github.com/etalab/udata-front/pull/38)
-- Fix gouvfr static path [#39](https://github.com/etalab/udata-front/pull/39)
+- Fix gouvpt static path [#39](https://github.com/etalab/udata-front/pull/39)
 
 ## 1.1.1 (2021-10-22)
 
@@ -200,11 +200,11 @@
 ## 1.0.0 (2021-09-16)
 
 - :warning: **breaking change**: Package renaming and new repository [#1](https://github.com/etalab/udata-front/pull/1):
-  - udata-gouvfr is now udata-front
+  - udata-gouvpt is now udata-front
 - Update feedparser following setuptools 58.0.2 release that drops support for `use_2to3` [#6](https://github.com/etalab/udata-front/pull/6)
 - Show correct number of latest reuses on homepage [#3](https://github.com/etalab/udata-front/pull/3)
 - Fix next value on login to prevent infinite loop [#4](https://github.com/etalab/udata-front/pull/4) [#8](https://github.com/etalab/udata-front/pull/8)
 
-## Previous udata-gouvfr changelog
+## Previous udata-gouvpt changelog
 
-If you're migrating from udata-gouvfr, see previous changelog [here](https://github.com/etalab/udata-gouvfr/blob/master/CHANGELOG.md)
+If you're migrating from udata-gouvpt, see previous changelog [here](https://github.com/etalab/udata-gouvpt/blob/master/CHANGELOG.md)

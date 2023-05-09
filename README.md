@@ -34,7 +34,7 @@
 
 ## Notes on this repo
 
-This is a new version of [udata-gouvfr](https://github.com/etalab/udata-gouvfr)
+This is a new version of [udata-gouvpt](https://github.com/etalab/udata-gouvpt)
 This is a [udata][] extension, you should read the [udata documentation][udata-doc] first.
 
 ## Compatibility
@@ -58,13 +58,13 @@ Create a local configuration file `udata.cfg` in your **udata** directory
 
 ```python
 PLUGINS = ['front']
-THEME = 'gouvfr'
+THEME = 'gouvpt'
 ```
 
 ## Theme development
 
 The front-end theme for the public facing website, is split into two parts :
-- The [Jinja](https://jinja.palletsprojects.com/en/2.11.x/) templates are located inside `udata_front/theme/gouvfr/templates`.
+- The [Jinja](https://jinja.palletsprojects.com/en/2.11.x/) templates are located inside `udata_front/theme/gouvpt/templates`.
 - The [Less](https://lesscss.org/), [Vue](https://vuejs.org) & other sourcefiles for the front-end are located in `theme`.
 
 ### 🚀 Getting started
@@ -89,7 +89,7 @@ Modify your local `udata.cfg` configuration file as following:
 
 ```python
 PLUGINS = ['front']
-THEME = 'gouvfr'
+THEME = 'gouvpt'
 ```
 
 #### 🐍 Python development
@@ -181,7 +181,7 @@ Additionally, you can run javascript-related commands through `npm run`.
 Because [udata][] is written in Python, its templating engine is Jinja 2.
 This means that the HTML received by clients is built at runtime, for each request, using templates with `{% block %}` tags and includes.
 
-Those template are responsible for building the pages using layouts and blocks. Here are a few to get started (in `udata_front/theme/gouvfr/templates`), from less specific to more specific :
+Those template are responsible for building the pages using layouts and blocks. Here are a few to get started (in `udata_front/theme/gouvpt/templates`), from less specific to more specific :
 
 - `raw.html` : contains the general html structure exposing a `body` block where we can write our page's body. This template is also responsible for including the CSS and JS files.
 - `base.html` : contains some extra html structure exposing a `content` block for our page's content, and wraps it around the header and footer.

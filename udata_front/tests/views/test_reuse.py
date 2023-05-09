@@ -8,13 +8,13 @@ from udata.core.dataset.factories import DatasetFactory
 from udata.core.reuse.factories import ReuseFactory
 from udata.core.user.factories import UserFactory
 from udata.core.organization.factories import OrganizationFactory
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 from udata.frontend.markdown import mdstrip
 
 
-class ReuseBlueprintTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class ReuseBlueprintTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = ['admin']
 
     def test_render_display(self):

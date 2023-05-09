@@ -24,14 +24,14 @@ from udata.utils import faker
 from udata.tests.helpers import assert200, assert404, assert_redirects, assert_equal_dates
 from udata.frontend.markdown import md
 
-from udata_front import APIGOUVFR_EXTRAS_KEY
+from udata_front import APIGOUVPT_EXTRAS_KEY
 from udata_front.models import SPD, TERRITORY_DATASETS
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 
 
-class GouvFrThemeTest:
+class gouvptThemeTest:
     '''Ensure themed views render'''
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     def test_render_home(self, client):
@@ -75,7 +75,7 @@ class GouvFrThemeTest:
     def test_render_dataset_w_api(self, client):
         '''It should render the dataset page'''
         dataset = DatasetFactory()
-        dataset.extras[APIGOUVFR_EXTRAS_KEY] = [{
+        dataset.extras[APIGOUVPT_EXTRAS_KEY] = [{
             'title': 'une API',
             'tagline': 'tagline',
             'path': '/path',
@@ -114,9 +114,9 @@ WP_FEED_URL = 'http://somewhere.test/feed'
 
 
 @pytest.mark.options(WP_ATOM_URL=WP_FEED_URL)
-class GouvFrHomeBlogTest:
+class gouvptHomeBlogTest:
     '''Ensure home page render with blog'''
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     @pytest.fixture
@@ -173,7 +173,7 @@ class GouvFrHomeBlogTest:
 @pytest.mark.options(WP_ATOM_URL=WP_FEED_URL)
 class GetBlogPostMixin:
     '''Ensure home page render with blog'''
-    settings = GouvFrSettings
+    settings = gouvptSettings
     mime = None
 
     @pytest.fixture
@@ -431,7 +431,7 @@ class GetBlogPostRssTest(GetBlogPostMixin):
 
 @pytest.mark.options(DEFAULT_LANGUAGE='en')
 class LegacyUrlsTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     def test_redirect_datasets(self, client):
@@ -458,7 +458,7 @@ class LegacyUrlsTest:
 
 
 class SpecificUrlsTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     def test_terms(self, client):
@@ -466,27 +466,27 @@ class SpecificUrlsTest:
         assert200(response)
 
     def test_licences(self, client):
-        response = client.get(url_for('gouvfr.licences'))
+        response = client.get(url_for('gouvpt.licences'))
         assert200(response)
 
 
 class SpdTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     def test_render_without_data(self, client):
-        response = client.get(url_for('gouvfr.spd'))
+        response = client.get(url_for('gouvpt.spd'))
         assert200(response)
 
     def test_render_with_data(self, client):
         for i in range(3):
             badge = Badge(kind=SPD)
             VisibleDatasetFactory(badges=[badge])
-        response = client.get(url_for('gouvfr.spd'))
+        response = client.get(url_for('gouvpt.spd'))
         assert200(response)
 
 
-class TerritoriesSettings(GouvFrSettings):
+class TerritoriesSettings(gouvptSettings):
     ACTIVATE_TERRITORIES = True
     HANDLED_LEVELS = ('fr:commune', 'fr:departement', 'fr:region')
 
@@ -496,7 +496,7 @@ class TerritoriesTest:
     settings = TerritoriesSettings
     modules = []
 
-    def test_with_gouvfr_town_territory_datasets(self, client, templates):
+    def test_with_gouvpt_town_territory_datasets(self, client, templates):
         paca, bdr, arles = create_geozones_fixtures()
         url = url_for('territories.territory', territory=arles)
         with templates.capture():
@@ -511,7 +511,7 @@ class TerritoriesTest:
             assert expected.format(dataset=dataset) in data
         assert bdr.name in data
 
-    def test_with_gouvfr_county_territory_datasets(self, client, templates):
+    def test_with_gouvpt_county_territory_datasets(self, client, templates):
         paca, bdr, arles = create_geozones_fixtures()
         url = url_for('territories.territory', territory=bdr)
         with templates.capture():
@@ -525,7 +525,7 @@ class TerritoriesTest:
         for dataset in base_datasets:
             assert expected.format(dataset=dataset) in data
 
-    def test_with_gouvfr_region_territory_datasets(self, client, templates):
+    def test_with_gouvpt_region_territory_datasets(self, client, templates):
         paca, bdr, arles = create_geozones_fixtures()
         url = url_for('territories.territory', territory=paca)
         with templates.capture():

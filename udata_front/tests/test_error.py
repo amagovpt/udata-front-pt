@@ -1,7 +1,7 @@
 from flask import abort, url_for, Blueprint
 
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 errors = Blueprint('errors', __name__)
 
@@ -21,8 +21,8 @@ def route_500():
     abort(500)
 
 
-class CustomErrorPagesTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class CustomErrorPagesTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = ['admin']
 
     def create_app(self):

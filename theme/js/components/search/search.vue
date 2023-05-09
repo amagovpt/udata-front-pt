@@ -27,6 +27,7 @@
                     :onChange="handleFacetChange('organization')"
                   />
                 </div>
+                <!--
                 <div class="fr-col-12">
                   <MultiSelect
                     :placeholder="$t('Tags')"
@@ -38,6 +39,7 @@
                     :minimumCharacterBeforeSuggest="2"
                   />
                 </div>
+                -->
                 <div class="fr-col-12">
                   <MultiSelect
                     :placeholder="$t('Formats')"
@@ -59,12 +61,14 @@
                     :onChange="handleFacetChange('license')"
                   />
                 </div>
+                <!--
                 <div class="fr-col-12">
                   <SchemaFilter
                     :values="facets.schema"
                     :onChange="handleFacetChange('schema')"
                   />
                 </div>
+                -->
                 <div class="fr-col-12">
                   <MultiSelect
                     :placeholder="$t('Spatial coverage')"

@@ -12,12 +12,12 @@ from udata.core.user.factories import UserFactory
 from udata.core.organization.factories import OrganizationFactory
 from udata.models import Follow
 
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-class DatasetBlueprintTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class DatasetBlueprintTest(gouvptFrontTestCase):
+    settings = gouvptSettings
 
     def test_render_display(self):
         '''It should render the dataset page'''

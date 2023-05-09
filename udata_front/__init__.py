@@ -1,12 +1,12 @@
 '''
-udata customizations for data.gouv.fr
+udata customizations for dados.gov.pt
 '''
 
-__version__ = '3.0.1.dev'
-__description__ = 'udata customizations for data.gouv.fr'
+__version__ = '2023.1'
+__description__ = 'udata customizations for dados.gov.pt'
 
-APIGOUVFR_EXTRAS_KEY = 'apigouvfr:apis'
-APIGOUVFR_EXPECTED_FIELDS = [
+APIGOUVPT_EXTRAS_KEY = 'apigouvpt:apis'
+APIGOUVPT_EXPECTED_FIELDS = [
     'title',
     'tagline',
     'path',

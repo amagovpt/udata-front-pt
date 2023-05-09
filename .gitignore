@@ -34,7 +34,10 @@ bower
 /instance/
 /static/
 node_modules
-/udata_front/theme/gouvfr/static/
+#/udata_front/theme/gouvpt/static/
+/venv/
+/data/
+/uwsgi/
 
 # Installer logs
 pip-log.txt
@@ -49,7 +52,7 @@ nosetests.xml
 /reports
 
 # Translations
-*.mo
+#*.mo
 
 # Mr Developer
 .mr.developer.cfg

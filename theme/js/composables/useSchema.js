@@ -36,7 +36,7 @@ export default function useSchema(resource) {
       return null;
     }
     /** @type {object} */
-    let schemaPath = {'schema_name': `schema-datagouvfr.${resource.schema.name}`};
+    let schemaPath = {'schema_name': `schema-datagouvpt.${resource.schema.name}`};
     if(resource.schema.version) {
       const versionUrl = schema.value?.versions.find(version => version.version_name === resource.schema.version)?.schema_url;
       schemaPath = {"schema_url": versionUrl};

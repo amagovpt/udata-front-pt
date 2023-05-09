@@ -1,6 +1,6 @@
 from flask import url_for
 from typing import List
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 from udata.tests import WebTestMixin
 
 import logging
@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 class ApiTest(WebTestMixin):
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules: List[str] = []
     styles = ["captchaFR", "captchaEN"]
     captcha_id = "0d9285701cae44279ea2c8893ddd4eaf"

@@ -4,11 +4,11 @@ from udata.core.post.factories import PostFactory
 from udata.core.reuse.factories import VisibleReuseFactory
 # from udata.core.topic.factories import TopicFactory
 
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 
 
 class SitemapTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     # def test_topics_within_sitemap(self, sitemap):

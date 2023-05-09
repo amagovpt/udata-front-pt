@@ -8,7 +8,7 @@ from udata.i18n import I18nBlueprint
 from udata.models import db
 from udata.tests.helpers import assert_urls_equal, full_url
 from udata_front.frontend.helpers import in_url
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 
 
 def iso2date(string):
@@ -22,7 +22,7 @@ def dr(start, end, **kwargs):
 @pytest.mark.usefixtures('app')
 @pytest.mark.frontend
 class FrontEndRootTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
 
     def test_rewrite(self, app):
         '''url_rewrite should replace a parameter in the URL if present'''

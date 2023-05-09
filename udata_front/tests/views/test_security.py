@@ -1,12 +1,12 @@
 from flask import url_for
 
 from udata.core.dataset.factories import DatasetFactory
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-class SecurityViewsTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class SecurityViewsTest(gouvptFrontTestCase):
+    settings = gouvptSettings
 
     def test_security_login_next_home(self):
         '''Login should redirect to the correct next endpoint: homepage'''

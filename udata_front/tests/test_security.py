@@ -1,6 +1,6 @@
 from flask import url_for
 from typing import List
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 from udata.tests import WebTestMixin
 
 import pytest
@@ -8,7 +8,7 @@ import pytest
 
 class SecurityTest(WebTestMixin):
     '''Ensure themed views render'''
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules: List[str] = []
 
     @pytest.mark.options(CAPTCHETAT_BASE_URL=None)

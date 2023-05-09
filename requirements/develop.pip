@@ -86,3 +86,5 @@ zipp==3.5.0
     # via
     #   -c requirements/test.pip
     #   importlib-metadata
+markdown==3.4.1
+owslib==0.18.0

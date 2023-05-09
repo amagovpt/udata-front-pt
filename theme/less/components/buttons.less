@@ -36,7 +36,7 @@ Secondary buttons exist in every color available.
 ```
 
 ## Buttons with icons
-You can use icons from DSFR. You can find the list on [DSFR documentation](https://gouvfr.atlassian.net/wiki/spaces/DB/pages/222331396/Ic+nes+-+Icons) with their classes.
+You can use icons from DSFR. You can find the list on [DSFR documentation](https://gouvpt.atlassian.net/wiki/spaces/DB/pages/222331396/Ic+nes+-+Icons) with their classes.
 There are `.fr-btn--icon-left` and `fr-btn--icon-right` to add spacing around the icon.
 
 ```button-icons-dsfr.html
@@ -56,11 +56,11 @@ In Italian, we say it's a "bottoni molto grandi".
 Use the `bg-{color}` classes to style the background accordingly.
 
 ```buttons-venti.html
-<a href="{{ url_for('gouvfr.spd') }}" class=" btn-venti bg-blue-400">
+<a href="{{ url_for('gouvpt.spd') }}" class=" btn-venti bg-blue-400">
     Données de
     <strong>Référence</strong>
 </a>
-<a href="{{ url_for('gouvfr.show_page', slug='donnees-coronavirus') }}"
+<a href="{{ url_for('gouvpt.show_page', slug='donnees-coronavirus') }}"
     class="btn-venti fr-my-2w bg-blue-450">
     Données relatives à la <strong>COVID-19</strong>
 </a>

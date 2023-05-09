@@ -19,8 +19,8 @@ from udata.core.user.factories import UserFactory, AdminFactory
 
 from udata.tests.helpers import capture_mails, assert_starts_with
 
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 from udata_front.views.organization import OrganizationDetailView
 
 pytestmark = [
@@ -28,8 +28,8 @@ pytestmark = [
 ]
 
 
-class OrganizationBlueprintTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class OrganizationBlueprintTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = ['admin']
 
     def test_render_display(self):
@@ -323,7 +323,7 @@ class OrganizationBlueprintTest(GouvfrFrontTestCase):
 
 
 class OrganizationBadgeAPITest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     @pytest.fixture(autouse=True)
@@ -369,8 +369,8 @@ class OrganizationBadgeAPITest:
         assert [m.recipients[0] for m in mails] == members_emails
 
 
-class DiscussionCsvTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class DiscussionCsvTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = []
 
     def test_discussions_csv_content_empty(self):

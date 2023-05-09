@@ -9,20 +9,20 @@ from udata.tests.features.territories import (
     create_geozones_fixtures, create_old_new_regions_fixtures,
     TerritoriesSettings
 )
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-class GouvFrTerritoriesSettings(TerritoriesSettings):
+class gouvptTerritoriesSettings(TerritoriesSettings):
     TEST_WITH_THEME = True
     TEST_WITH_PLUGINS = True
     PLUGINS = ['front']
-    THEME = 'gouvfr'
+    THEME = 'gouvpt'
 
 
-@pytest.mark.skip(reason='Territories logic changed because of gouvfr')
-class TerritoriesTest(GouvfrFrontTestCase):
+@pytest.mark.skip(reason='Territories logic changed because of gouvpt')
+class TerritoriesTest(gouvptFrontTestCase):
     modules = ['admin']
-    settings = GouvFrTerritoriesSettings
+    settings = gouvptTerritoriesSettings
 
     def setUp(self):
         self.paca, self.bdr, self.arles = create_geozones_fixtures()
@@ -390,10 +390,10 @@ class TerritoriesTest(GouvfrFrontTestCase):
             '/territories/region/93@1970-01-09/' in response.location)
 
 
-@pytest.mark.skip(reason='Territories logic changed because of gouvfr')
-class TerritoriesGenTest(GouvfrFrontTestCase):
+@pytest.mark.skip(reason='Territories logic changed because of gouvpt')
+class TerritoriesGenTest(gouvptFrontTestCase):
     modules = ['admin']
-    settings = GouvFrTerritoriesSettings
+    settings = gouvptTerritoriesSettings
 
     def setUp(self):
         self.paca, self.bdr, self.arles = create_geozones_fixtures()

@@ -14,12 +14,12 @@ from udata.core.organization.factories import OrganizationFactory
 from udata.core.site.models import current_site
 from udata.core.reuse.factories import ReuseFactory
 from udata.harvest.models import HarvestSource
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-class SiteViewsTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class SiteViewsTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = ['admin']
 
     def test_site_global(self):

@@ -1,0 +1,333 @@
+{% extends theme("base.html") %} 
+{% set meta = { 'title': 'Contact', 'description': "Page Contacts", 'keywords': [ 'contact']} %} 
+{% block content %}
+<style>
+.btnWrapper{
+    background: #f1f1f2;
+    height: 43px;
+    line-height: 43px;
+    border: 1px solid #575757;
+    padding: 0 25px;
+    /*display: inline-block;*/
+    min-width: 162px;
+    text-align: center;
+    border-radius: 30px;
+}
+
+/*Componente Formul�rio*/
+.form-wrapper input,
+.form-wrapper textarea{
+	width: 100%;
+    border: 2px solid #fff !important;
+    background: #F1F1F2;
+    box-shadow: none;
+    height: 60px !important;
+    line-height: 18px !important;
+    color: #F08322 !important;
+    font-size: 18px !important;
+    font-family: 'latolight';
+    padding: 0 !important;
+    border-radius: 0 !important;
+    padding-left: 33.5px !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    box-shadow: none !important;
+}
+.form-wrapper input:focus,
+.form-wrapper textarea:focus{
+	border: 2px solid #F08322 !important;
+	box-shadow: 0px 0px 7px rgba(0,0,0,0.4) !important;
+}
+.form-wrapper input:not([type="submit"]) {
+    margin-bottom: 28px;
+}
+.form-wrapper textarea {
+    height: 132px !important;
+    line-height: 22px !important;
+    padding-top: 25px !important;
+    resize: none !important;
+}
+.form-wrapper input::-webkit-input-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 25px;
+}
+.form-wrapper input::-moz-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 60px;
+}
+.form-wrapper input:-ms-input-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 60px;
+}
+.form-wrapper input:-moz-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 60px;
+}
+.form-wrapper textarea::-webkit-input-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 25px;
+}
+.form-wrapper textarea::-moz-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 25px;
+}
+.form-wrapper textarea:-ms-input-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 25px;
+}
+.form-wrapper textarea:-moz-placeholder {
+  	color: #808184;
+	font-size: 16px;
+	font-family: 'karmalight';
+	line-height: 25px;
+}
+.form-wrapper label.animateInput p.error-msg{
+	font-size:	14px;
+	font-family: "latobold_italic";
+	text-align: left;
+    position: absolute;
+    bottom: -15px;
+    left: 35px;
+}
+.form-wrapper label.animateInput p.error-msg.invalid{
+	color: #BE1E2D;
+}
+.form-wrapper label.animateInput p.error-msg.required{
+	color: #F7931E;
+}
+.form-wrapper label.animateInput input.error-invalid{
+	border: 2px solid #BE1E2D !important;
+}
+.form-wrapper label.animateInput input.error-invalid + span{
+	color: #BE1E2D;
+}
+.form-wrapper label.animateInput input.error-required,
+.form-wrapper label.animateInput textarea.error-required{
+	border: 2px solid #F7931E !important;
+}
+.form-wrapper label.animateInput input.error-required + span{
+	color: #F7931E;
+}
+label.animateInput {
+    position: relative;
+    display: block;
+    margin: 0;
+    cursor: default;
+}
+.animateInput input,.animateInput textarea {
+    outline: none!important;
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput input::-webkit-input-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput input:-moz-placeholderr {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput input::-moz-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput input:-ms-input-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput textarea::-webkit-input-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput textarea:-moz-placeholderr {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput textarea::-moz-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput textarea:-ms-input-placeholder {
+    transition: all .2s ease-in-out!important
+}
+
+.animateInput input:focus,.animateInput input.populated,.animateInput textarea:focus,.animateInput textarea.populated {
+    padding-top: 28px!important;
+    padding-bottom: 12px!important
+}
+
+.animateInput input:focus::-webkit-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput input:focus:-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput input:focus::-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput input:focus:-ms-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea:focus::-webkit-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea:focus:-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea:focus::-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea:focus:-ms-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput input.populated::-webkit-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput input.populated:-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput input.populated::-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput input.populated:-ms-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea.populated::-webkit-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea.populated:-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea.populated::-moz-placeholder {
+    color: transparent!important
+}
+
+.animateInput textarea.populated:-ms-input-placeholder {
+    color: transparent!important
+}
+
+.animateInput input:focus~span,.animateInput input.populated~span,.animateInput textarea:focus~span,.animateInput textarea.populated~span {
+    opacity: 1;
+    top: 5px
+}
+
+.animateInput span {
+    color: #F7931E;
+    font-size: 14px;
+    font-family: "latobold";
+    position: absolute;
+    top: 0;
+    left: 33.5px;
+    opacity: 0;
+    transition: all .2s ease-in-out
+}
+
+.form-wrapper{
+    padding: 80px 95px;
+}
+.form-wrapper input,
+.form-wrapper textarea{
+    width: 100%;
+    border: 2px solid #fff;
+    box-shadow: none;
+    height: 60px;
+    line-height: 18px;
+    color: #808184;
+    font-size: 18px;
+    font-family: 'latolight';
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    padding-left: 33.5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+</style>
+
+<section class="content">
+    <!-- <div class="container block-wrapper grey"> -->
+    <div class="fr-container fr-py-7w">
+        <div class="row">
+            <div class="maniFluid" id="formServicesWrapper">
+                <div class="headerForm">
+                    <h2>{{_('Contact')|upper}}</h2>
+                    <p>{{ _("Use this form to get in touch with us in case of doubts or need of assistance. You can also contact us to request for additional datasets or info that you’d like to see available on this portal. To interact with data suppliers, i.e. ask for more data or specific improvements, use the \"Contact\" option on each dataset page, to start a new discussion thread.") }}</p>
+                </div>
+                <div class="form-wrapper">
+                    <form action="{{ url_for('gouvpt_faq.contact') }}" method=post>
+                        {{ form.hidden_tag() }} 
+                        <label class="animateInput">
+                        {{ form.name(placeholder='*'+_("Name"))}}
+                        <span>  {{ _("Name") }} </span>
+                        </label> 
+                        <label class="animateInput">
+                        {{ form.email(placeholder='*'+_("Email")) }} 
+                         <span> {{ _("Email") }} </span>
+                        </label> 
+                        <label class="animateInput">
+                        {{ form.subject(placeholder='*'+_("Subject"))}} 
+                        <span>  {{ _("Subject") }} </span>
+                         </label> 
+                         <label class="animateInput">
+                        {{ form.message(placeholder='*'+_("Message")) }}
+                        <span> {{ _("Message") }} </span>
+                        </label> 
+                        <div class="labelInfoObrig">
+                            <br> *{{ _("required fields")|title }} </div>
+                        <center>
+                            {% for error in form.recaptcha.errors %}
+                                <p style="color:red">
+                                    {{ _(error) }}
+                                </p>
+                            {% endfor %} 
+                            {{ form.recaptcha }}
+                        </center>
+                        <br>
+                        <div class="btnWrapper">
+                            <button id="submit" type="submit" class="btn btn-submit" disabled>
+                                {{ _("Submit") }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function enableBtn(){
+        document.getElementById("submit").disabled = false;
+    }
+    
+</script>
+{% endblock %}

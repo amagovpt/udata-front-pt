@@ -7,12 +7,12 @@ from udata.core.dataset.factories import DatasetFactory
 from udata.core.user.factories import UserFactory
 from udata.utils import faker
 from udata.tests.helpers import capture_mails
-from udata_front.tests import GouvFrSettings
-from udata_front.tests.frontend import GouvfrFrontTestCase
+from udata_front.tests import gouvptSettings
+from udata_front.tests.frontend import gouvptFrontTestCase
 
 
-class DiscussionsMailsTest(GouvfrFrontTestCase):
-    settings = GouvFrSettings
+class DiscussionsMailsTest(gouvptFrontTestCase):
+    settings = gouvptSettings
     modules = []
 
     def test_new_discussion_mail(self):

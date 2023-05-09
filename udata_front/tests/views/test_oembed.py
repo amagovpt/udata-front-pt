@@ -18,11 +18,11 @@ from udata.utils import faker
 from udata.tests.helpers import assert200, assert400, assert404, assert_status, assert_cors
 from udata.frontend.markdown import mdstrip
 
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 
 
 class OEmbedAPITest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = []
 
     def test_oembed_for_dataset(self, api):
@@ -181,7 +181,7 @@ class OEmbedSettings(Testing):
     TEST_WITH_THEME = True
     TEST_WITH_PLUGINS = True
     PLUGINS = ['front']
-    THEME = 'gouvfr'
+    THEME = 'gouvpt'
 
 
 class OEmbedsDatasetAPITest:

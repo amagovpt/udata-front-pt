@@ -8,9 +8,9 @@ from invoke import task, call
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
-I18N_ROOT = 'udata_front/theme/gouvfr/translations'
+I18N_ROOT = 'udata_front/theme/gouvpt/translations'
 
-THEME_ROOT = os.path.join(ROOT, 'udata_front/theme', 'gouvfr')
+THEME_ROOT = os.path.join(ROOT, 'udata_front/theme', 'gouvpt')
 
 LANGUAGES = ['fr']
 
@@ -132,9 +132,9 @@ def i18n(ctx, update=False):
     info('Extract python translations')
     with ctx.cd(ROOT):
         ctx.run('python setup.py extract_messages')
-        set_po_metadata(os.path.join(I18N_ROOT, 'gouvfr.pot'), 'en')
+        set_po_metadata(os.path.join(I18N_ROOT, 'gouvpt.pot'), 'en')
         for lang in LANGUAGES:
-            pofile = os.path.join(I18N_ROOT, lang, 'LC_MESSAGES', 'gouvfr.po')
+            pofile = os.path.join(I18N_ROOT, lang, 'LC_MESSAGES', 'gouvpt.po')
             if not os.path.exists(pofile):
                 ctx.run('python setup.py init_catalog -l {}'.format(lang))
                 set_po_metadata(pofile, lang)

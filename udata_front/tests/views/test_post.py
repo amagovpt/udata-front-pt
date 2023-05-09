@@ -6,12 +6,12 @@ from udata.core.post.factories import PostFactory
 from udata.tests.helpers import assert200
 from udata.utils import faker
 
-from udata_front.tests import GouvFrSettings
+from udata_front.tests import gouvptSettings
 
 
 @pytest.mark.usefixtures('clean_db')
 class PostBlueprintTest:
-    settings = GouvFrSettings
+    settings = gouvptSettings
     modules = ['admin']
 
     def test_render_list(self, client, templates):
