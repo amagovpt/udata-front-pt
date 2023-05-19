@@ -26,7 +26,7 @@ import redis
 
 from urllib.parse import urlparse
 from flask_wtf import FlaskForm, recaptcha
-from wtforms.fields.html5 import EmailField
+from wtforms.fields import EmailField
 from udata.forms import fields, validators
 from flask_mail import Message
 from flask_security.utils import do_flash
