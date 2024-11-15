@@ -342,7 +342,7 @@ tzdata==2024.1
     #   udata
 #udata @ git+https://github.com/opendatateam/udata.git
 #    # via -r requirements/udata.in
-udata @ git+https://github.com/gpsilv4/udata-front-pt/blob/main/requirements/udata-v10.0.0.zip?raw=true
+#udata @ git+https://github.com/gpsilv4/udata-front-pt/blob/update_udata_v10.0.0/requirements/udata-v10.0.0.zip?raw=true
 unidecode==0.4.21
     # via
     #   awesome-slugify
