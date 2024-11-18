@@ -118,6 +118,6 @@ fi
 
 # Install udata locally
 echo -e "${GREEN}Installing udata locally...${NC}"
-pip install -r "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+pip install "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
 
 echo -e "${GREEN}Process completed successfully!${NC}"
