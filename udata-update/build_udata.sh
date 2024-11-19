@@ -7,14 +7,14 @@ RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m' # Sem cor
 
-# Função para verificar a existência do arquivo no GitHub
+# Função para verificar a existência do ficheiro no GitHub
 check_file_exists() {
     url=$1
     status_code=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
     if [ "$status_code" -eq 200 ]; then
-        return 0 # Arquivo existe
+        return 0 # ficheiro existe
     else
-        return 1 # Arquivo não existe
+        return 1 # ficheiro não existe
     fi
 }
 
@@ -25,22 +25,26 @@ archive_name="udata-v$version.zip"
 echo -e "${GREEN}Version: v$version, Archive Name: $archive_name${NC}"
 file_url="https://github.com/gpsilv4/udata-front-pt/blob/udata-v$version/udata-update/$archive_name"
 
-# Atualizar o arquivo requirements.pip
+# Atualizar o ficheiro requirements.pip
 requirements_file="../requirements.pip"
 if [ -f "$requirements_file" ]; then
     echo -e "${GREEN}Updating the version link in the $requirements_file file...${NC}"
-    sed -i "s|https://github.com/gpsilv4/udata-front-pt/tree/$archive_name/udata-update/udata-v.*.zip?raw=true|https://github.com/gpsilv4/udata-front-pt/tree/$archive_name/udata-update/udata-v$version.zip?raw=true|g" "$requirements_file" || { echo -e "${RED}Error updating the requirements.pip file.${NC}"; exit 1; }
+    sed -i "s|https://github.com/gpsilv4/udata-front-pt/blob/udata-v.*/udata-update/udata-v.*.zip|$file_url|g" "$requirements_file" || {
+        echo -e "${RED}Error updating the requirements.pip file.${NC}"
+        exit 1
+    }
+    echo -e "${GREEN}File updated successfully.${NC}"
 else
     echo -e "${RED}requirements.pip file not found in $requirements_file.${NC}"
     exit 1
 fi
 
-# Passo 2: Verificar se o arquivo já existe no repositório
-# echo -e "${YELLOW}Checking if the file $archive_name exists in the repository...${NC}"
+
+# Passo 2: Verificar se o ficheiro já existe no repositório
 if check_file_exists "$file_url"; then
     echo -e "${GREEN}File $file_url already exists. Skipping all Git and setup steps...${NC}"
 
-    # Instalar o arquivo diretamente
+    # Instalar o ficheiro diretamente
     echo -e "${GREEN}Installing udata locally from $file_url...${NC}"
     pip install "$file_url?raw=true" || {
         
@@ -50,18 +54,18 @@ if check_file_exists "$file_url"; then
     echo -e "${GREEN}Process completed successfully!${NC}"
     exit 0
 else
-    echo -e "${RED}File $file_url does not exist. Proceeding with full setup...${NC}"
+    echo -e "${GREEN}File $file_url does not exist. Proceeding with full setup...${NC}"
 fi
 
 
-# Passo 3: Clonar o repositório e prosseguir se o arquivo não existir
-source_repo="https://github.com/opendatateam/udata"
+# Passo 3: Clonar o repositório e prosseguir se o ficheiro não existir
+source_repo="https://github.com/opendatateam/udata/tree/$version"
 clone_dir="udata-v$version"
 
 echo -e "${GREEN}Cloning the udata repository version $version...${NC}"
 git clone $source_repo "$clone_dir" || { echo -e "${RED}Error cloning the repository.${NC}"; exit 1; }
 
-# Passo 4: Substituir o arquivo form.vue
+# Passo 4: Substituir o ficheiro form.vue
 form_vue_path="./form.vue"
 destination_path="$clone_dir/js/components/organization/form.vue"
 
@@ -84,7 +88,7 @@ else
 fi
 cd - > /dev/null
 
-# Passo 6: Executar os comandos necessários
+# Passo 6: Executar os comandos necessários para construir o pacote
 echo -e "${GREEN}Running the necessary commands...${NC}"
 cd "$clone_dir" || { echo -e "${RED}Error accessing the $clone_dir directory.${NC}"; exit 1; }
 
@@ -107,11 +111,11 @@ cd ..
 echo -e "${GREEN}Compressing the $clone_dir directory into $archive_name...${NC}"
 zip -r "$archive_name" "$clone_dir" || { echo -e "${RED}Error compressing the directory.${NC}"; exit 1; }
 
-# Remover o diretório compactado
+# Passo 8: Remover o diretório compactado
 echo -e "${GREEN}Removing the directory $clone_dir...${NC}"
 rm -rf "$clone_dir" || { echo -e "${RED}Error removing the directory $clone_dir.${NC}"; exit 1; }
 
-# Passo 8: Adicionar o arquivo ao Git e atualizar
+# Passo 9: Adicionar o ficheiro ao Git e atualizar
 target_repo="https://github.com/gpsilv4/udata-front-pt.git"
 echo -e "${GREEN}Changing remote repository to $target_repo...${NC}"
 git remote set-url origin "$target_repo" || { echo -e "${RED}Error configuring the remote repository.${NC}"; exit 1; }
@@ -123,9 +127,7 @@ git add "$archive_name" || { echo -e "${RED}Error adding the zip file to git.${N
 git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No changes to commit.${NC}"; }
 git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
 
-
-
-# Instalar o arquivo compactado
+# Passo 10: Instalar o ficheiro compactado
 echo -e "${GREEN}Installing udata locally...${NC}"
 pip install -r "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
 
