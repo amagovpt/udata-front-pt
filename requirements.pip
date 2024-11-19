@@ -1,3 +1,3 @@
 -r requirements/install.pip
 https://github.com/gpsilv4/udata-front-pt/blob/main/requirements/pysaml2-7.1.2.zip?raw=true
-https://github.com/gpsilv4/udata-front-pt/tree/udata-v10.0.2.dev/udata-update/udata-v10.0.0.zip?raw=true
+https://github.com/gpsilv4/udata-front-pt/tree/udata-vx.x.x.dev/udata-update/udata-vx.x.x.zip?raw=true

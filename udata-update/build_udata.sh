@@ -18,18 +18,51 @@ check_file_exists() {
     fi
 }
 
-# Passo 1: Clonar o repositório
+# Passo 1: Obter a versão e construir a URL
 echo -e "${BLUE}Enter the udata version (e.g., 2.5.1):${NC}"
 read version
+archive_name="udata-v$version.zip"
+echo -e "${GREEN}Version: v$version, Archive Name: $archive_name${NC}"
+file_url="https://github.com/gpsilv4/udata-front-pt/blob/udata-v$version/udata-update/$archive_name"
+
+# Atualizar o arquivo requirements.pip
+requirements_file="../requirements.pip"
+if [ -f "$requirements_file" ]; then
+    echo -e "${GREEN}Updating the version link in the $requirements_file file...${NC}"
+    sed -i "s|https://github.com/gpsilv4/udata-front-pt/tree/$archive_name/udata-update/udata-v.*.zip?raw=true|https://github.com/gpsilv4/udata-front-pt/tree/$archive_name/udata-update/udata-v$version.zip?raw=true|g" "$requirements_file" || { echo -e "${RED}Error updating the requirements.pip file.${NC}"; exit 1; }
+else
+    echo -e "${RED}requirements.pip file not found in $requirements_file.${NC}"
+    exit 1
+fi
+
+# Passo 2: Verificar se o arquivo já existe no repositório
+# echo -e "${YELLOW}Checking if the file $archive_name exists in the repository...${NC}"
+if check_file_exists "$file_url"; then
+    echo -e "${GREEN}File $file_url already exists. Skipping all Git and setup steps...${NC}"
+
+    # Instalar o arquivo diretamente
+    echo -e "${GREEN}Installing udata locally from $file_url...${NC}"
+    pip install "$file_url?raw=true" || {
+        
+        echo -e "${RED}Error installing udata locally.${NC}"
+        exit 1
+    }
+    echo -e "${GREEN}Process completed successfully!${NC}"
+    exit 0
+else
+    echo -e "${RED}File $file_url does not exist. Proceeding with full setup...${NC}"
+fi
+
+
+# Passo 3: Clonar o repositório e prosseguir se o arquivo não existir
 source_repo="https://github.com/opendatateam/udata"
-target_repo="https://github.com/gpsilv4/udata-front-pt.git"
 clone_dir="udata-v$version"
 
 echo -e "${GREEN}Cloning the udata repository version $version...${NC}"
 git clone $source_repo "$clone_dir" || { echo -e "${RED}Error cloning the repository.${NC}"; exit 1; }
 
-# Step 2: Copy the form.vue file
-form_vue_path="./form.vue" # Update path if necessary
+# Passo 4: Substituir o arquivo form.vue
+form_vue_path="./form.vue"
 destination_path="$clone_dir/js/components/organization/form.vue"
 
 if [ -f "$form_vue_path" ]; then
@@ -40,7 +73,7 @@ else
     exit 1
 fi
 
-# Exit to the parent directory and activate the virtual environment
+# Passo 5: Configurar o ambiente virtual
 echo -e "${GREEN}Activating the virtual environment...${NC}"
 cd ..
 if [ -d "venv" ]; then
@@ -49,9 +82,9 @@ else
     echo -e "${RED}Virtual environment (venv) not found. Please create it first.${NC}"
     exit 1
 fi
-cd - > /dev/null # Return to the script directory
+cd - > /dev/null
 
-# Step 3: Run necessary commands
+# Passo 6: Executar os comandos necessários
 echo -e "${GREEN}Running the necessary commands...${NC}"
 cd "$clone_dir" || { echo -e "${RED}Error accessing the $clone_dir directory.${NC}"; exit 1; }
 
@@ -68,56 +101,32 @@ inv widgets-build || { echo -e "${RED}Error building widgets.${NC}"; exit 1; }
 
 npm prune --production || { echo -e "${RED}Error removing development dependencies.${NC}"; exit 1; }
 
-Return to the parent directory
 cd ..
 
-# Step 4: Compress the udata directory
-archive_name="$clone_dir.zip"
+# Passo 7: Compactar o diretório
 echo -e "${GREEN}Compressing the $clone_dir directory into $archive_name...${NC}"
 zip -r "$archive_name" "$clone_dir" || { echo -e "${RED}Error compressing the directory.${NC}"; exit 1; }
 
-# Remover o diretório compactado para liberar espaço
+# Remover o diretório compactado
 echo -e "${GREEN}Removing the directory $clone_dir...${NC}"
 rm -rf "$clone_dir" || { echo -e "${RED}Error removing the directory $clone_dir.${NC}"; exit 1; }
 
-# Add the .zip file to Git
-echo -e "${GREEN}Adding the $archive_name to Git...${NC}"
+# Passo 8: Adicionar o arquivo ao Git e atualizar
+target_repo="https://github.com/gpsilv4/udata-front-pt.git"
+echo -e "${GREEN}Changing remote repository to $target_repo...${NC}"
+git remote set-url origin "$target_repo" || { echo -e "${RED}Error configuring the remote repository.${NC}"; exit 1; }
+
+echo -e "${GREEN}Creating a new branch: $clone_dir...${NC}"
+git checkout -b "$clone_dir" || { echo -e "${RED}Error creating the branch.${NC}"; exit 1; }
+
 git add "$archive_name" || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
+git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No changes to commit.${NC}"; }
+git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
 
-# echo -e "${GREEN}Adding files to Git...${NC}"
-# git add . || { echo -e "${RED}Error adding files.${NC}"; exit 1; }
 
-# Step 5: Update the requirements.pip file
-requirements_file="../requirements.pip"
-if [ -f "$requirements_file" ]; then
-    echo -e "${GREEN}Updating the version link in the $requirements_file file...${NC}"
-    sed -i "s|https://github.com/gpsilv4/udata-front-pt/tree/$clone_dir/udata-update/udata-v.*.zip?raw=true|https://github.com/gpsilv4/udata-front-pt/tree/$clone_dir/udata-update/udata-v$version.zip?raw=true|g" "$requirements_file" || { echo -e "${RED}Error updating the requirements.pip file.${NC}"; exit 1; }
-else
-    echo -e "${RED}requirements.pip file not found in $requirements_file.${NC}"
-    exit 1
-fi
 
-# Check if the file already exists on GitHub
-file_url="https://github.com/gpsilv4/udata-front-pt/tree/$clone_dir/udata-update/udata-v$version.zip"
-if check_file_exists "$file_url"; then
-    echo -e "${YELLOW}File $file_url already exists on the remote repository. Skipping Git configuration step.${NC}"
-else
-    # Configure the remote repository and create a new branch
-    echo -e "${GREEN}Changing remote repository to $target_repo...${NC}"
-    git remote set-url origin "$target_repo" || { echo -e "${RED}Error configuring the remote repository.${NC}"; exit 1; }
-
-    echo -e "${GREEN}Creating a new branch: $clone_dir...${NC}"
-    git checkout -b "$clone_dir" || { echo -e "${RED}Error creating the branch.${NC}"; exit 1; }
-
-    # Commit and Push the changes
-    echo -e "${GREEN}Committing changes to Git...${NC}"
-    git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No changes to commit.${NC}"; }
-    git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
-
-fi
-
-# Install udata locally
+# Instalar o arquivo compactado
 echo -e "${GREEN}Installing udata locally...${NC}"
-pip install "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+pip install -r "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
 
 echo -e "${GREEN}Process completed successfully!${NC}"
