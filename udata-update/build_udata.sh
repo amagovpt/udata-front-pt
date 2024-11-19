@@ -59,7 +59,7 @@ fi
 
 
 # Passo 3: Clonar o repositório e prosseguir se o ficheiro não existir
-source_repo="https://github.com/opendatateam/udata/tree/$version"
+source_repo="https://github.com/opendatateam/udata.git --branch v$version"
 clone_dir="udata-v$version"
 
 echo -e "${GREEN}Cloning the udata repository version $version...${NC}"
