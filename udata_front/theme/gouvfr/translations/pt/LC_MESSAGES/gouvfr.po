@@ -2620,3 +2620,15 @@ msgstr "Adicionar aos favoritos"
 
 msgid "days ago"
 msgstr "à dias"
+
+msgid "day ago"
+msgstr "dia atrás"
+
+msgid "day"
+msgstr "dia"
+
+msgid "days"
+msgstr "dias"
+
+msgid "ago"
+msgstr "atrás"
