@@ -23,8 +23,8 @@
 {% block breadcrumb %}
     {% cache cache_duration, 'dataservice-breadcrumb', dataservice.id|string, g.lang_code, dataservice.last_modified|string %}
         <li>
-            <a class="fr-breadcrumb__link">
-                {{ _('APIs') }}
+            <a class="fr-breadcrumb__link" href="{{ url_for('dataservices.list') }}">
+                {{ _('API') }}
             </a>
         </li>
         <li>
@@ -38,6 +38,25 @@
 {% block toolbar %}
 {{ follow_btn(dataservice) }}
 {{ report_btn(dataservice) }}
+{% if can_edit %}
+<div class="fr-col-auto fr-ml-3v">
+    {% if dataservice.organization %}
+    <a
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
+        href="{{ url_for('beta.beta-admin-org-dataservice', organization_id=dataservice.organization.id, dataservice_id=dataservice.id) }}"
+    >
+        {{ _('Edit') }}
+    </a>
+    {% else %}
+    <a
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
+        href="{{ url_for('beta.beta-admin-me-dataservice', dataservice_id=dataservice.id) }}"
+    >
+        {{ _('Edit') }}
+    </a>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -156,7 +175,7 @@
 
 <div class="fr-container">
     <section class="vuejs">
-        <dataservice-links 
+        <dataservice-links
             :dataservice='{{ dataservice|to_dataservice_api_format|tojson }}'
         ></dataservice-links>
     </section>
