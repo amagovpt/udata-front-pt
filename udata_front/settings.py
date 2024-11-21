@@ -39,7 +39,7 @@ PAGES_REPO_BRANCH = 'master'
 CATALOG_URL = 'https://catalogue.data.gouv.fr/'
 
 # suport.data.gouv.fr
-SUPPORT_URL = 'https://support.data.gouv.fr/'
+SUPPORT_URL = 'https://dados.gov.pt/pt/contact/'
 
 # Guides
 GUIDES_URL = 'https://guides.data.gouv.fr/'
