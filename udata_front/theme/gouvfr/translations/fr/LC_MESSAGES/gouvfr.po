@@ -159,7 +159,11 @@ msgstr "Guides data.gouv.fr"
 msgid "News"
 msgstr "Actualités"
 
-#: udata_front/theme/gouvfr/__init__.py:73 udata_front/theme/gouvfr/__init__.py:104
+#: udata_front/theme/gouvfr/__init__.py:104
+msgid "Contact"
+msgstr "Contacter"
+
+#: udata_front/theme/gouvfr/__init__.py:137
 msgid "Contact us"
 msgstr "Nous contacter"
 
