@@ -5,6 +5,7 @@
       <h1 class="subtitle subtitle--uppercase">
         {{ $t("Publishing type") }}
       </h1>
+      <!--
       <Well
         color="blue-cumulus"
         weight="regular"
@@ -20,6 +21,7 @@
           </template>
         </i18n-t>
       </Well>
+      -->
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <ActionCard
@@ -34,6 +36,7 @@
             </template>
           </ActionCard>
         </div>
+        <!--
         <div class="fr-col-12 fr-col-md-6">
           <ActionCard
             :title="$t('Publish with a schema')"
@@ -49,6 +52,7 @@
             </template>
           </ActionCard>
         </div>
+        -->
       </div>
     </Container>
     <section class="fr-mt-3w" aria-labelledby="documentation-links">
@@ -59,6 +63,7 @@
         {{ $t("You can automatically publish via API or by linking your open data portal to {site} with an harvester.", {site: title}) }}
       </p>
       <div class="fr-grid-row fr-grid-row--gutters">
+        <!--
         <div class="fr-col-auto">
           <p class="fr-m-0">
             <a class="fr-link" :href="api_doc_external_link" target="_blank">{{ $t("See API documentation") }}</a>
@@ -69,6 +74,7 @@
             <a class="fr-link" :href="guides_harvesting_url" target="_blank">{{ $t("Learn more about harvesting") }}</a>
           </p>
         </div>
+        -->
         <div class="fr-col-auto">
           <p class="fr-m-0">
             <a class="fr-link" :href="support_url" target="_blank">{{ $t("Contact us") }}</a>
@@ -76,6 +82,7 @@
         </div>
       </div>
     </section>
+    <!--
     <section class="fr-mt-5w" aria-labelledby="cataloging-links">
       <h2 id="cataloging-links" class="fr-m-0 fr-mb-3v fr-text--md fr-text--bold">
         {{ $t("Are you an administration and do you want to catalog your data ?") }}
@@ -87,6 +94,7 @@
         <a class="fr-link" :href="catalog_url" target="_blank">{{ $t("Go to cataloging space") }}</a>
       </p>
     </section>
+    -->
   </div>
 </template>
 

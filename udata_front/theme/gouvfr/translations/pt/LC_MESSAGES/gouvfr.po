@@ -128,8 +128,8 @@ msgid "Organizations"
 msgstr "Organizações"
 
 #: udata_front/theme/gouvfr/__init__.py:49
-msgid "Getting started on dados.gov.pt"
-msgstr "Primeiros passos para dados.gov.pt"
+msgid "Getting started"
+msgstr "Primeiros passos"
 
 #: udata_front/theme/gouvfr/__init__.py:51
 msgid "About open data"
@@ -178,7 +178,11 @@ msgstr "Referência da API"
 msgid "News"
 msgstr "Novidades"
 
-#: udata_front/theme/gouvfr/__init__.py:72 udata_front/theme/gouvfr/__init__.py:103
+#: udata_front/theme/gouvfr/__init__.py:104
+msgid "Contact"
+msgstr "Contatar"
+
+#: udata_front/theme/gouvfr/__init__.py:137
 msgid "Contact us"
 msgstr "Contate-nos"
 
@@ -365,6 +369,30 @@ msgstr "Um produto da Direção Interministerial dos Números (DINUM)."
 msgid "Select a Language"
 msgstr "Selecionar um idioma"
 
+#: udata_front/theme/gouvfr/templates/header.html:7
+msgid "A dataset"
+msgstr "Um conjunto de dados"
+
+#: udata_front/theme/gouvfr/templates/header.html:8
+msgid "An API"
+msgstr "Uma API"
+
+#: udata_front/theme/gouvfr/templates/header.html:9
+msgid "A reuse"
+msgstr "Uma reutilização"
+
+#: udata_front/theme/gouvfr/templates/header.html:10
+msgid "A harvester"
+msgstr "Um harvester"
+
+#: udata_front/theme/gouvfr/templates/header.html:11
+msgid "An organization"
+msgstr "Uma organização"
+
+#: udata_front/theme/gouvfr/templates/header.html:12
+msgid "A post"
+msgstr "Uma publicação"
+
 #: udata_front/theme/gouvfr/templates/footer.html:143
 msgid "Unless otherwise stated, all content of this site is availabe under <a href='{lo_url}'>Open Licence 2.0</a>"
 msgstr "Salvo disposição em contrário, todo o conteúdo deste site está disponível sob <a href='{lo_url}'>Open Licence 2.0</a>"
@@ -419,6 +447,10 @@ msgstr "Inscrever-se"
 #: udata_front/theme/gouvfr/templates/header.html:173
 msgid "Main Menu"
 msgstr "Menu principal"
+
+#: udata_front/theme/gouvfr/templates/header.html:229
+msgid "Publish on "
+msgstr "Publicar"
 
 #: udata_front/theme/gouvfr/templates/header.html:223
 msgid "This is a degraded experience of {site}. Please enable JavaScript and use an up to date browser."
