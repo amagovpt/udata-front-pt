@@ -1,5 +1,5 @@
 # Base: udata-ckan
-# Version: 1.3.0
+# Version: 2.9-beta
 # Summary: CKAN integration for udata
 # Home-page: https://github.com/opendatateam/udata-ckan
 
@@ -10,36 +10,40 @@ from datetime import datetime
 from uuid import UUID
 from urllib.parse import urljoin, urlparse
 
+from udata import uris
+from udata.i18n import lazy_gettext as _
+from udata.harvest.models import HarvestItem
 from voluptuous import (
     Schema, All, Any, Lower, Coerce, DefaultTo, Optional
 )
-
-from udata import uris
-from udata.i18n import lazy_gettext as _
+try:
+    from udata.core.dataset.constants import UPDATE_FREQUENCIES
+except ImportError:
+    # legacy import of constants in udata
+    from udata.models import UPDATE_FREQUENCIES
+from udata.core.dataset.models import HarvestDatasetMetadata, HarvestResourceMetadata
 from udata.core.dataset.rdf import frequency_from_rdf
 from udata.frontend.markdown import parse_html
 from udata.models import (
-    db, Resource, License, SpatialCoverage, GeoZone, Organization#, 
-    #UPDATE_FREQUENCIES,
+    db, Resource, License, SpatialCoverage, GeoZone, Organization
 )
 from udata.utils import get_by, daterange_start, daterange_end, safe_unicode
 
-from .tools.harvester_utils import missing_datasets_warning
-
 from udata.harvest.backends.base import BaseBackend, HarvestFilter
 from udata.harvest.exceptions import HarvestException, HarvestSkipException
+
 from udata.harvest.filters import (
     boolean, email, to_date, slug, normalize_tag, normalize_string,
     is_url, empty_none, hash
 )
+from .tools.harvester_utils import missing_datasets_warning
 
 from .schemas.ckan import schema as ckan_schema
-
-from udata.harvest.models import HarvestItem
+from .schemas.dkan import schema as dkan_schema
 
 log = logging.getLogger(__name__)
 
-
+# dkan is a dummy value for dkan that does not provide resource_type
 ALLOWED_RESOURCE_TYPES = ('dkan', 'file', 'file.upload', 'api', 'metadata')
 
 
@@ -277,6 +281,7 @@ class CkanPTBackend(BaseBackend):
 
         current_resources = [str(resource.id) for resource in dataset.resources]
         fetched_resources = []
+        
         # Resources
         for res in data['resources']:
             if res['resource_type'] not in ALLOWED_RESOURCE_TYPES:
