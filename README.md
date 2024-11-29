@@ -1,5 +1,7 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/60264344/134811326-27109632-f653-4025-9786-482824635994.png">
+    <br>
+    <h1 align="center">DADOS.GOV.PT</h1>
+    <h3 align="center">Made with uData</h3>
 </p>
 <p align="center">
     <i>Add a front-end to udata</i>
@@ -35,7 +37,7 @@
 
 ## Notes on this repo
 
-This is a new version of [udata-gouvfr](https://github.com/etalab/udata-gouvfr)
+This is a new version of [udata-front-pt](https://github.com/amagovpt/udata-front-pt)
 This is a [udata][] extension, you should read the [udata documentation][udata-doc] first.
 
 ## Compatibility

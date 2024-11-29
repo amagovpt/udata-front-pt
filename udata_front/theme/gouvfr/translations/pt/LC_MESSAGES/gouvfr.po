@@ -223,11 +223,11 @@ msgstr "Estatísticas"
 
 #: udata_front/theme/gouvfr/__init__.py:112
 msgid "api.gouv.fr"
-msgstr ""
+msgstr "api.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:113
 msgid "schema.data.gouv.fr"
-msgstr ""
+msgstr "schema.data.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:123
 msgid "Licences"
@@ -359,7 +359,7 @@ msgstr "extenção do tema udata : udata-front ({version})"
 
 #: udata_front/theme/gouvfr/templates/footer.html:84
 msgid "Go back to website home - data.gouv.fr - République Française"
-msgstr ""
+msgstr "Voltar à página inicial do sítio - dados.gov - República Portuguesa"
 
 #: udata_front/theme/gouvfr/templates/footer.html:89
 msgid "A product of the Direction Interministérielle du Numérique (DINUM)."
@@ -689,7 +689,7 @@ msgstr "Adicionar um cliente"
 
 #: udata_front/theme/gouvfr/templates/api/card.html:9
 msgid "See on <a target=\"_blank\" rel=\"noopener\" title=\"See {title} on api.gouv.fr - opens a new window\" href=\"{url}\">api.gouv.fr</a>"
-msgstr ""
+msgstr "Ver em <a target=\"_blank\" rel=\"noopener\" title=\"Ver {title} em api.gouv.pt - abre uma nova janela\" href=\"{url}\">api.gouv.pt"
 
 #: udata_front/theme/gouvfr/templates/api/card.html:18
 msgid "From {producer}"
@@ -947,7 +947,8 @@ msgstr "Autor"
 #, python-format
 msgid "This API has been published on the initiative and under the responsibility of\n"
 "                    %(author)s<br />Published on %(date)s"
-msgstr ""
+msgstr "Esta API foi publicada por iniciativa e sob a responsabilidade de"
+"                    %(author)s<br />Publicado em %(date)s"
 
 #: udata_front/theme/gouvfr/templates/dataservice/display.html:105
 #: udata_front/theme/gouvfr/templates/dataset/display.html:161
@@ -1116,7 +1117,9 @@ msgstr "Este conjunto de dados provém de um portal externo.&nbsp;<a href='{exte
 msgid "This dataset is handled by the <a href='{geo_link}'>geo.data.gouv.fr</a> platform.\n"
 "                This platform is not actively maintained and as a result, you may find some bogus data or metadata.\n"
 "                More information about <a href='{blog_link}'>the shutdown of geo.data.gouv.fr is available here.</a>"
-msgstr ""
+msgstr "Este conjunto de dados é gerido pela <a href='{geo_link}'>geo.data.gouv.pt</a> plataforma.\n"
+"                Esta plataforma não é ativamente mantida e, por conseguinte, pode encontrar alguns dados ou metadados falsos.\n"
+"                Mais informações sobre <a href='{blog_link}'>o encerramento do geo.data.gouv.pt está disponível aqui.</a>"
 
 #: udata_front/theme/gouvfr/templates/dataset/display.html:166
 #: udata_front/theme/gouvfr/templates/dataset/display.html:553
