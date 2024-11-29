@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: udata-front 6.0.3\n"
+"Project-Id-Version: udata-front 6.0.5\n"
 "Report-Msgid-Bugs-To: data.gouv@data.gouv.fr\n"
-"POT-Creation-Date: 2024-11-21 11:32+0000\n"
-"PO-Revision-Date: 2024-11-21 11:32+0000\n"
+"POT-Creation-Date: 2024-11-29 16:44+0000\n"
+"PO-Revision-Date: 2024-11-29 16:44+0000\n"
 "Last-Translator: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
 "Language: en\n"
 "Language-Team: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
@@ -97,19 +97,19 @@ msgstr ""
 msgid "B"
 msgstr ""
 
-#: udata_front/harvesters/ckanpt.py:49
+#: udata_front/harvesters/ckanpt.py:53
 msgid "Organization"
 msgstr ""
 
-#: udata_front/harvesters/ckanpt.py:50
+#: udata_front/harvesters/ckanpt.py:54
 msgid "A CKAN Organization name"
 msgstr ""
 
-#: udata_front/harvesters/ckanpt.py:51 udata_front/harvesters/odspt.py:45
+#: udata_front/harvesters/ckanpt.py:55 udata_front/harvesters/odspt.py:45
 msgid "Tag"
 msgstr ""
 
-#: udata_front/harvesters/ckanpt.py:51
+#: udata_front/harvesters/ckanpt.py:55
 msgid "A CKAN tag name"
 msgstr ""
 
@@ -310,8 +310,8 @@ msgid "Add to your own website"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/embed-dataset.html:206
-#: udata_front/theme/gouvfr/templates/header.html:139
-#: udata_front/theme/gouvfr/templates/header.html:177
+#: udata_front/theme/gouvfr/templates/header.html:138
+#: udata_front/theme/gouvfr/templates/header.html:176
 msgid "Close"
 msgstr ""
 
@@ -379,7 +379,7 @@ msgid "udata theme extension: udata-front ({version})"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/footer.html:88
-#: udata_front/theme/gouvfr/templates/header.html:64
+#: udata_front/theme/gouvfr/templates/header.html:63
 msgid "Go back to home page"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgstr ""
 msgid "A post"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:32
+#: udata_front/theme/gouvfr/templates/header.html:31
 msgid ""
 "Internet Explorer 8 and below are not anymore supported.\n"
 "                Please upgrade or change your browser to access the website.\n"
@@ -423,36 +423,36 @@ msgid ""
 "information →</a>"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:47
-#: udata_front/theme/gouvfr/templates/header.html:49
-#: udata_front/theme/gouvfr/templates/header.html:151
-#: udata_front/theme/gouvfr/templates/header.html:155
-#: udata_front/theme/gouvfr/templates/header.html:163
-#: udata_front/theme/gouvfr/templates/header.html:165
+#: udata_front/theme/gouvfr/templates/header.html:46
+#: udata_front/theme/gouvfr/templates/header.html:48
+#: udata_front/theme/gouvfr/templates/header.html:150
+#: udata_front/theme/gouvfr/templates/header.html:154
+#: udata_front/theme/gouvfr/templates/header.html:162
+#: udata_front/theme/gouvfr/templates/header.html:164
 msgid "Search for data"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:56
-#: udata_front/theme/gouvfr/templates/header.html:59
+#: udata_front/theme/gouvfr/templates/header.html:55
+#: udata_front/theme/gouvfr/templates/header.html:58
 msgid "Open menu"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:97
+#: udata_front/theme/gouvfr/templates/header.html:96
 msgid "Administration"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:112
+#: udata_front/theme/gouvfr/templates/header.html:111
 msgid "Logout"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:121
+#: udata_front/theme/gouvfr/templates/header.html:120
 #: udata_front/theme/gouvfr/templates/security/login_user.html:12
 #: udata_front/theme/gouvfr/templates/security/login_user.html:27
 #: udata_front/theme/gouvfr/templates/territories/territory.html:28
 msgid "Log in"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:130
+#: udata_front/theme/gouvfr/templates/header.html:129
 #: udata_front/theme/gouvfr/templates/security/register_saml.html:54
 #: udata_front/theme/gouvfr/templates/security/register_user.html:12
 #: udata_front/theme/gouvfr/templates/security/register_user.html:63
@@ -460,15 +460,15 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:179
+#: udata_front/theme/gouvfr/templates/header.html:178
 msgid "Main Menu"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:229
+#: udata_front/theme/gouvfr/templates/header.html:228
 msgid "Publish on "
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/header.html:263
+#: udata_front/theme/gouvfr/templates/header.html:262
 msgid ""
 "This is a degraded experience of {site}. Please enable JavaScript and use an "
 "up to date browser."
@@ -607,17 +607,11 @@ msgid "metrics"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:19
-#: udata_front/theme/gouvfr/templates/participez/participate-header.html:16
-#: udata_front/theme/gouvfr/templates/participez/participez.html:22
-#: udata_front/theme/gouvfr/templates/participez/participez.html:52
 msgid "Publish a dataset"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/dataset/display.html:429
 #: udata_front/theme/gouvfr/templates/newsletter.html:26
-#: udata_front/theme/gouvfr/templates/participez/participate-header.html:24
-#: udata_front/theme/gouvfr/templates/participez/participez.html:30
-#: udata_front/theme/gouvfr/templates/participez/participez.html:59
 msgid "Publish a reuse"
 msgstr ""
 
@@ -625,13 +619,11 @@ msgstr ""
 #: udata_front/theme/gouvfr/templates/newsletter.html:39
 #: udata_front/theme/gouvfr/templates/newsletter.html:49
 #: udata_front/theme/gouvfr/templates/newsletter.html:56
-#: udata_front/theme/gouvfr/templates/participez/participez.html:64
 msgid "Subscribe to our newsletter"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:34
 #: udata_front/theme/gouvfr/templates/newsletter.html:59
-#: udata_front/theme/gouvfr/templates/participez/participez.html:67
 msgid "See our next events"
 msgstr ""
 
@@ -646,12 +638,10 @@ msgid "Subscribe"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:67
-#: udata_front/theme/gouvfr/templates/participez/participez.html:77
 msgid "Follow us"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:68
-#: udata_front/theme/gouvfr/templates/participez/participez.html:78
 msgid "on social media"
 msgstr ""
 
@@ -2032,20 +2022,6 @@ msgstr ""
 #: udata_front/theme/gouvfr/templates/organization/publishing-form.html:6
 #, python-format
 msgid "%(site)s organization publishing form"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/participez/participate-header.html:5
-#: udata_front/theme/gouvfr/templates/participez/participez.html:5
-#: udata_front/theme/gouvfr/templates/participez/participez.html:41
-msgid "Contribute"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/participez/participez.html:8
-msgid "How to publish data"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/participez/participez.html:11
-msgid "Go to documentation"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/post/display.html:35
