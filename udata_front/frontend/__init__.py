@@ -82,14 +82,15 @@ def init_app(app):
         from flask_debugtoolbar import DebugToolbarExtension
         DebugToolbarExtension(app)
 
-    if app.config.get('CAPTCHETAT_BASE_URL'):
+    # if app.config.get('CAPTCHETAT_BASE_URL'):
         # Security override init
-        from udata.auth import security
-        from udata_front.forms import ExtendedRegisterForm, ExtendedForgotPasswordForm
-        with app.app_context():
-            security.forms['register_form'].cls = ExtendedRegisterForm
-            security.forms['confirm_register_form'].cls = ExtendedRegisterForm
-            security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
+    from udata.auth import security
+    from udata_front.forms import ExtendedRegisterForm, ExtendedForgotPasswordForm
+    with app.app_context():
+        security.forms['register_form'].cls = ExtendedRegisterForm
+        security.forms['confirm_register_form'].cls = ExtendedRegisterForm
+        security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
+
 
     if app.config.get('PROCONNECT_OPENID_CONF_URL'):
         # ProConnect SSO
