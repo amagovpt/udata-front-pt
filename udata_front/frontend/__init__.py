@@ -7,6 +7,7 @@ from udata import entrypoints
 # included for retro-compatibility reasons (some plugins may import from here instead of udata)
 from udata.frontend import template_hook  # noqa
 from udata.i18n import I18nBlueprint
+from udata_front.forms import ExtendedSendConfirmationForm
 from .markdown import init_app as init_markdown
 
 nav = Navigation()
@@ -89,6 +90,7 @@ def init_app(app):
     with app.app_context():
         security.forms['register_form'].cls = ExtendedRegisterForm
         security.forms['confirm_register_form'].cls = ExtendedRegisterForm
+        security.forms['send_confirmation_form'].cls = ExtendedSendConfirmationForm
         security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
 
 
