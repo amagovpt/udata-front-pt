@@ -7,6 +7,7 @@ from udata import entrypoints
 # included for retro-compatibility reasons (some plugins may import from here instead of udata)
 from udata.frontend import template_hook  # noqa
 from udata.i18n import I18nBlueprint
+from udata_front.forms import ExtendedSendConfirmationForm
 from .markdown import init_app as init_markdown
 
 nav = Navigation()
@@ -82,14 +83,16 @@ def init_app(app):
         from flask_debugtoolbar import DebugToolbarExtension
         DebugToolbarExtension(app)
 
-    if app.config.get('CAPTCHETAT_BASE_URL'):
+    # if app.config.get('CAPTCHETAT_BASE_URL'):
         # Security override init
-        from udata.auth import security
-        from udata_front.forms import ExtendedRegisterForm, ExtendedForgotPasswordForm
-        with app.app_context():
-            security.forms['register_form'].cls = ExtendedRegisterForm
-            security.forms['confirm_register_form'].cls = ExtendedRegisterForm
-            security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
+    from udata.auth import security
+    from udata_front.forms import ExtendedRegisterForm, ExtendedForgotPasswordForm
+    with app.app_context():
+        security.forms['register_form'].cls = ExtendedRegisterForm
+        security.forms['confirm_register_form'].cls = ExtendedRegisterForm
+        security.forms['send_confirmation_form'].cls = ExtendedSendConfirmationForm
+        security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
+
 
     if app.config.get('PROCONNECT_OPENID_CONF_URL'):
         # ProConnect SSO
