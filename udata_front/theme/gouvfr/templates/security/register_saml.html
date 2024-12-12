@@ -13,7 +13,11 @@
                     <p class="fr-mt-2w fr-mb-1w fr-text--xs text-align-left">
                         {{ _("Fields preceded by a star (<span class='required-field-star'>*</span>) are required.") }}
                     </p>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% for f in form %}
+                    {% if f.type in ('CSRFTokenField', 'HiddenField') %}
+                    {{ f() }}
+                    {% endif %}
+                    {% endfor %}
                     <div class="fr-input-group">
                         <label for="name" class="fr-label fr-text-left required">
                             {{ _("First name") }}
