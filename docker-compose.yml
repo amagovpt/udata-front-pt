@@ -32,5 +32,19 @@ services:
         environment:
           TZ: "Portugal"
         network_mode: "host"
+        healthcheck:
+          test: >
+            bash -c "
+            if nc -z -v -w 3 127.0.0.1 7000; then
+              echo 'Connection successful';
+              exit 0;
+            else
+              echo 'Connection failed';
+              exit 1;
+            fi"
+          interval: 5s
+          timeout: 3s
+          retries: 3
+          start_period: 180s
         #ports:
         # - "7000:7000"

@@ -36,6 +36,9 @@ RUN pip install --upgrade pip
 RUN pip install -r /tmp/requirements.pip && pip check || pip install -r /tmp/requirements.pip
 RUN rm -r /root/.cache
 
+# Be used with healthcheck
+RUN apt-get update && apt-get install -y netcat
+
 # Copy udata configuration and setup
 RUN mkdir -p /udata/fs /src
 
