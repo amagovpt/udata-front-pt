@@ -91,7 +91,7 @@ def sp_initiated():
     spcertenc = RequestedAttributes([
         RequestedAttribute(name="http://interop.gov.pt/MDC/Cidadao/CorreioElectronico",
                            name_format="urn:oasis:names:tc:SAML:2.0:attrname-format:uri", is_required='True'),
-        RequestedAttribute(name="http://interop.gov.pt/MDC/Cidadao/NICCifrado",
+        RequestedAttribute(name="http://interop.gov.pt/MDC/Cidadao/NIC",
                            name_format="urn:oasis:names:tc:SAML:2.0:attrname-format:uri", is_required='False'),
         RequestedAttribute(name="http://interop.gov.pt/MDC/Cidadao/NomeProprio",
                            name_format="urn:oasis:names:tc:SAML:2.0:attrname-format:uri", is_required='False'),
@@ -180,7 +180,7 @@ def idp_initiated():
         try:
             if child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/CorreioElectronico':
                 user_email = child.find('.//assertion:AttributeValue', ns).text
-            elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NICCifrado':
+            elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NIC':
                 user_nic = child.find('.//assertion:AttributeValue', ns).text
             elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NomeProprio':
                 first_name = child.find('.//assertion:AttributeValue', ns).text
@@ -427,7 +427,7 @@ def idp_eidas_initiated():
         try:
             if child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/CorreioElectronico':
                 user_email = child.find('.//assertion:AttributeValue', ns).text
-            elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NICCifrado':
+            elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NIC':
                 user_nic = child.find('.//assertion:AttributeValue', ns).text
             elif child.attrib['Name'] == 'http://interop.gov.pt/MDC/Cidadao/NomeProprio':
                 first_name = child.find('.//assertion:AttributeValue', ns).text
