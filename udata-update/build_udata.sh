@@ -65,7 +65,8 @@ clone_dir="udata-v$version"
 echo -e "${GREEN}Cloning the udata repository version $version...${NC}"
 git clone $source_repo "$clone_dir" || { echo -e "${RED}Error cloning the repository.${NC}"; exit 1; }
 
-# Passo 4: Substituir o ficheiro form.vue
+# Passo 4: Alterações ficheiros udata backend
+# 4.1: Substituir o ficheiro form.vue
 form_vue_path="./form.vue"
 destination_path="$clone_dir/js/components/organization/form.vue"
 
@@ -75,6 +76,18 @@ if [ -f "$form_vue_path" ]; then
 else
     echo -e "${RED}form.vue file not found in the current directory.${NC}"
     exit 1
+fi
+
+# 4.2: Alterar variável MAIL_DEFAULT_SENDER
+settings_file="$clone_dir/udata/settings.py"
+search_string="webmaster@udata"
+replace_string="noreply@ama.pt"
+
+if [ -f "$settings_file" ]; then
+    sed -i "s/$search_string/$replace_string/g" "$settings_file"
+    echo "Substituição concluída com sucesso."
+else
+    echo "O ficheiro $settings_file não foi encontrado."
 fi
 
 # Passo 5: Configurar o ambiente virtual
