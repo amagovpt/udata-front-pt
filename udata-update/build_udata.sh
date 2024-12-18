@@ -81,13 +81,25 @@ fi
 # 4.2: Alterar variável MAIL_DEFAULT_SENDER
 settings_file="$clone_dir/udata/settings.py"
 search_string="webmaster@udata"
-replace_string="noreply@ama.pt"
+replace_string="noreply.dados.gov@ama.gov.pt"
 
 if [ -f "$settings_file" ]; then
     sed -i "s/$search_string/$replace_string/g" "$settings_file"
     echo "Substituição concluída com sucesso."
 else
     echo "O ficheiro $settings_file não foi encontrado."
+fi
+
+# 4.3: Adicionar verificação para ficheiros SVG
+api_file="$clone_dir/udata/core/dataset/api.py"
+search_string="infos = handle_upload(storages.resources, prefix)"
+insert_string="        # Adicionar verificação para ficheiros SVG\n        if infos['mime'] == 'image/svg+xml':\n            api.abort(415, 'Unsupported file type: SVG images are not allowed')"
+
+if [ -f "$api_file" ]; then
+    sed -i "/$search_string/a $insert_string" "$api_file"
+    echo "Código inserido com sucesso."
+else
+    echo "O arquivo $api_file não foi encontrado."
 fi
 
 # Passo 5: Configurar o ambiente virtual
