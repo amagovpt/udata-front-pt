@@ -1,7 +1,15 @@
-{% extends theme('base.html') %} {% set meta = { 'title': _('Home'),
-'description': _("%(site)s home", site=config['SITE_TITLE']), 'keywords':
-[_('home')], } %} {% set read_only_mode = config.READ_ONLY_MODE %} {% block
-content %} {% cache cache_duration, 'home', g.lang_code %}
+{% extends theme('base.html') %}
+
+{% set meta = {
+    'title': _('Home'),
+    'description': _("%(site)s home", site=config['SITE_TITLE']),
+    'keywords': [_('home')],
+} %}
+
+{% set read_only_mode = config.READ_ONLY_MODE %}
+
+{% block content %}
+{% cache cache_duration, 'home', g.lang_code %}
 
 <section class="hero fr-py-3w fr-py-md-9v">
   <div class="fr-container">
@@ -71,9 +79,17 @@ content %} {% cache cache_duration, 'home', g.lang_code %}
   </div>
 </section>
 
-{% set metrics = [ (_('Datasets'), 'datasets'), (_('Files'), 'resources'),
-(_('Reuses'), 'reuses'), (_('Users'), 'users'), (_('Organizations'),
-'organizations'), (_('Discussions'), 'discussions'), ] %} {# Metrics Section #}
+{% set metrics = [
+  (_('Datasets'), 'datasets'),
+  (_('Files'), 'resources'),
+  (_('Reuses'), 'reuses'),
+  (_('Users'), 'users'),
+  (_('Organizations'), 'organizations'),
+  (_('Discussions'), 'discussions'),
+] %}
+
+
+{# Metrics Section #}
 <section class="metrics-bar">
   <div class="fr-container fr-py-md-7w fr-py-2w">
     <div class="bar fr-p-9v">
@@ -94,10 +110,14 @@ content %} {% cache cache_duration, 'home', g.lang_code %}
   </div>
 </section>
 
-{# Datasets section #} 
-{% set visible_datasets = current_site.settings.home_datasets|visibles %} 
-{% set nb_datasets = visible_datasets|length %} 
-{% set dataset_tabs = ( ('editorial-datasets',_('Featured datasets'), visible_datasets, {}), ('recent-datasets', _('Latest datasets'), recent_datasets[:nb_datasets], {'sort': '-created'}), ) %}
+{# Datasets section #}
+{% set visible_datasets = current_site.settings.home_datasets|visibles %}
+{% set nb_datasets = visible_datasets|length %}
+{% set dataset_tabs = (
+    ('editorial-datasets', _('Featured datasets'), visible_datasets, {}),
+    ('recent-datasets', _('Latest datasets'), recent_datasets[:nb_datasets], {'sort': '-created'}),
+    ('reference-datasets', _('Reference datasets'), spd_datasets, {}),
+) %}
 
 <section class="datasets fr-pb-7w fr-pt-2w bg-grey-50">
   <div class="fr-container">
@@ -113,23 +133,18 @@ content %} {% cache cache_duration, 'home', g.lang_code %}
             data-tabs
             role="tablist"
           >
-            {% for tab_id, label, _, _ in dataset_tabs %}
-            <button
+          {% for tab_id, label, _, _ in dataset_tabs %}
+          <button
               role="tab"
               aria-controls="{{tab_id}}"
               class="fr-tag"
-              {%
-              if
-              loop.first
-              %}
-              aria-selected="true"
-              {%
-              endif
-              %}
-            >
+              {% if loop.first %}
+                  aria-selected="true"
+              {% endif %}
+          >
               {{ label }}
-            </button>
-            {% endfor %}
+          </button>
+          {% endfor %}
           </div>
         </div>
         <div class="fr-col-auto">
@@ -159,11 +174,17 @@ content %} {% cache cache_duration, 'home', g.lang_code %}
     {% endfor %} {# end Dataset tabs #}
   </div>
 </section>
-{# End datasets section #} {# Reuses section #} {% set visible_reuses =
-current_site.settings.home_reuses|visibles %} {% set nb_reuses =
-visible_reuses|length %} {% set reuses_tabs = ( ('best-reuses', _('Featured
-reuses'), visible_reuses, {}), ('latest-reuses', _('Latest reuses'),
-recent_reuses[:nb_reuses], {'sort': '-created'}), ) %} {# Reuse section #}
+{# End datasets section #}
+
+{# Reuses section #}
+{% set visible_reuses = current_site.settings.home_reuses|visibles %}
+{% set nb_reuses = visible_reuses|length %}
+{% set reuses_tabs = (
+    ('best-reuses', _('Featured reuses'), visible_reuses, {}),
+    ('latest-reuses', _('Latest reuses'), recent_reuses[:nb_reuses], {'sort': '-created'}),
+) %}
+
+{# Reuse section #}
 <section class="reuse fr-py-3w fr-py-md-7w">
   <div class="fr-container">
     <div class="fr-grid-row fr-grid-row--gutters justify-between">
@@ -177,26 +198,19 @@ recent_reuses[:nb_reuses], {'sort': '-created'}), ) %} {# Reuse section #}
             data-tabs
             role="tablist"
           >
-            {% for tab_id, label, _, _ in reuses_tabs %}
-            <button
+          {% for tab_id, label, _, _ in reuses_tabs %}
+          <button
               role="tab"
               aria-controls="{{tab_id}}"
               class="fr-tag"
-              {%
-              if
-              loop.first
-              %}
-              aria-selected="true"
-              {%
-              else
-              %}
-              {%
-              endif
-              %}
-            >
+              {% if loop.first %}
+                  aria-selected="true"
+              {% else %}
+              {% endif %}
+          >
               {{ label }}
-            </button>
-            {% endfor %}
+          </button>
+          {% endfor %}
           </div>
         </div>
         <div class="fr-col-auto">
@@ -229,4 +243,6 @@ recent_reuses[:nb_reuses], {'sort': '-created'}), ) %} {# Reuse section #}
     {% endfor %}
   </div>
 </section>
-{# End reuse section #} {% endcache %} {% endblock %}
+{# End reuse section #}
+{% endcache %}
+{% endblock %}

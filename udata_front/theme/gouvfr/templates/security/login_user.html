@@ -55,20 +55,19 @@
                         *Utilize o Cartão de Cidadão ou a Chave Móvel Digital
                     </p>
                 </div>
-                
                 <p class="fr-hr-or"><span class="fr-hr-or-text">{{ _('or') }}</span></p>
                 <div class="fr-connect-group">
                     <a title="{{ _('Login') }}"
-                       id="sbmtLoginCC"
-                       href="{{ url_for('saml.login') }}" 
-                       class="btn btn-primary btn-block btn-lg">
-                        <img src="{{ theme_static('img/eidas.png') }}" alt="eIDAS logo"/>
+                        id="sbmtLoginCC"
+                        href="{{ url_for('saml.sp_eidas_initiated') }}"
+                        class="btn btn-primary btn-block btn-lg"
+                        >
+                        <img src="{{ theme_static('img/eidas.png') }}" />
                     </a>
                     <p class="info">
                         *Utilize o Serviços Eletrônicos de Identificação, Autenticação e Confiança Europeu
                     </p>
                 </div>
-                
             </div>
         </div>
         <div class="fr-grid-row">

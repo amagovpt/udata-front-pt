@@ -1,5 +1,55 @@
 # Changelog
 
+## 6.0.6 (2024-12-09)
+
+- Add geo specific display on OGC service resources [#609](https://github.com/datagouv/udata-front/pull/609)
+- Add dataservices.csv route [#612](https://github.com/datagouv/udata-front/pull/612)
+- Add csv.gz format as table resource [617](https://github.com/datagouv/udata-front/pull/617)
+
+## 6.0.5 (2024-11-29)
+
+- Compile udata deps to latest and upgrade lxml [#615](https://github.com/datagouv/udata-front/pull/615)
+
+## 6.0.4 (2024-11-29)
+
+- Disable sentry session tracking [#610](https://github.com/datagouv/udata-front/pull/610)
+- Use metadata_modifed_at in dataservice cache keys [#611](https://github.com/datagouv/udata-front/pull/611)
+- We don't want to fallback on site.home with params [#613](https://github.com/datagouv/udata-front/pull/613)
+- Update dataset params parsing to deal with tags correctly [#614](https://github.com/datagouv/udata-front/pull/614)
+
+## 6.0.3 (2024-11-19)
+
+- Remove duplicated /admin in admin dataservice route [#608](https://github.com/datagouv/udata-front/pull/608)
+
+## 6.0.2 (2024-11-19)
+
+- Display correct business documentation url link [#595](https://github.com/datagouv/udata-front/pull/595)
+- Remove old display from api.gouv.fr in datasets pages [#597](https://github.com/datagouv/udata-front/pull/597)
+- Change link to reuses search page instead of datasets search page in dataservice search page [#599](https://github.com/datagouv/udata-front/pull/599)
+- Add edit button in dataservice public page [#602](https://github.com/datagouv/udata-front/pull/602)
+- Add dataservice search to org page [#601](https://github.com/datagouv/udata-front/pull/601)
+- Add energie as featured topic [#604](https://github.com/datagouv/udata-front/pull/604)
+
+## 6.0.1 (2024-11-13)
+
+- Fix missing closing <a> tag in contact form [#589](https://github.com/datagouv/udata-front/pull/589)
+- Fix breadcrumb link for dataservice page [#590](https://github.com/datagouv/udata-front/pull/590)
+- Remove truncate and excerpt helpers function and fix error with remove-markdown [#591](https://github.com/datagouv/udata-front/pull/591)
+- Add API menu item [#592](https://github.com/datagouv/udata-front/pull/592)
+- Add publish button to menu [#578](https://github.com/datagouv/udata-front/pull/578)
+
+## 6.0.0 (2024-11-07)
+
+- Add beta admin `dataservice` page [#558](https://github.com/datagouv/udata-front/pull/558)
+- Add Dataservice publishing form [#358](https://github.com/datagouv/udata-front/pull/559)
+- Add the me keyword to the rel attribute of the link to the user website [#571](https://github.com/datagouv/udata-front/pull/571)
+- Add dataservice access banner [#573](https://github.com/datagouv/udata-front/pull/573)
+- Migrate organization badges label to lowercase [#577](https://github.com/datagouv/udata-front/pull/577)
+- Use Dataservice search [#565](https://github.com/datagouv/udata-front/pull/565)
+- Add organization type filter to dataset search [#579](https://github.com/datagouv/udata-front/pull/579)
+- Fix Reuse tests [#580](https://github.com/datagouv/udata-front/pull/580)
+- Rename private to draft [#572](https://github.com/datagouv/udata-front/pull/572) [#583](https://github.com/datagouv/udata-front/pull/583)
+
 ## 5.2.4 (2024-10-22)
 
 - Paginate datasets in dataservice display [#560](https://github.com/datagouv/udata-front/pull/560) [#568](https://github.com/datagouv/udata-front/pull/568)

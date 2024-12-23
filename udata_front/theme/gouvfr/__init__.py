@@ -46,10 +46,11 @@ gouvfr_menu = nav.Bar(
     "gouvfr_menu",
     [
         nav.Item(_("Data"), "datasets.list"),
+        nav.Item(_('API'), 'dataservices.list'),
         nav.Item(_("Reuses"), "reuses.list"),
         nav.Item(_("Organizations"), "organizations.list"),
         nav.Item(
-            _("Getting started on dados.gov.pt"),
+            _("Getting started"),
             None,
             items=[
                 nav.Item(
@@ -100,7 +101,7 @@ gouvfr_menu = nav.Bar(
             ],
         ),
         nav.Item(_("News"), "posts.list", args={"slug": "news"}),
-        nav.Item(_("Contact us"), "gouvfr_faq.contact", args={"slug": "contact"}),
+        nav.Item(_("Contact"), "gouvfr_faq.contact", args={"slug": "contact"}),
     ],
 )
 

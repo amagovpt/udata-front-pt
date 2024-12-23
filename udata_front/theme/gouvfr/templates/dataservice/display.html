@@ -15,16 +15,16 @@
 {% set read_only_mode = config.READ_ONLY_MODE %}
 
 {% block extra_head %}
-    {% cache cache_duration, 'dataservice-extra-head', dataservice.id|string, g.lang_code, dataservice.last_modified|string %}
+    {% cache cache_duration, 'dataservice-extra-head', dataservice.id|string, g.lang_code, dataservice.metadata_modified_at|string %}
     <link rel="canonical" href="{{ url_for('dataservices.show', dataservice=dataservice) }}" />
     {% endcache %}
 {% endblock %}
 
 {% block breadcrumb %}
-    {% cache cache_duration, 'dataservice-breadcrumb', dataservice.id|string, g.lang_code, dataservice.last_modified|string %}
+    {% cache cache_duration, 'dataservice-breadcrumb', dataservice.id|string, g.lang_code, dataservice.metadata_modified_at|string %}
         <li>
-            <a class="fr-breadcrumb__link">
-                {{ _('APIs') }}
+            <a class="fr-breadcrumb__link" href="{{ url_for('dataservices.list') }}">
+                {{ _('API') }}
             </a>
         </li>
         <li>
@@ -38,6 +38,25 @@
 {% block toolbar %}
 {{ follow_btn(dataservice) }}
 {{ report_btn(dataservice) }}
+{% if can_edit %}
+<div class="fr-col-auto fr-ml-3v">
+    {% if dataservice.organization %}
+    <a
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
+        href="{{ url_for('beta.beta-admin-org-dataservice', organization_id=dataservice.organization.id, dataservice_id=dataservice.id) }}"
+    >
+        {{ _('Edit') }}
+    </a>
+    {% else %}
+    <a
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
+        href="{{ url_for('beta.beta-admin-me-dataservice', dataservice_id=dataservice.id) }}"
+    >
+        {{ _('Edit') }}
+    </a>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -51,7 +70,7 @@
             {% if dataservice.private %}
                 <div class="fr-col-auto fr-mr-1w">
                     <p class="fr-tag"
-                        title="{{ _('This API is private and will not be visible by other users') }}">{{ _('Private') }}
+                    title="{{ _('This API is a draft and will not be visible by other users') }}">{{ _('Draft') }}
                     </p>
                 </div>
             {% endif %}
@@ -147,34 +166,19 @@
                     </p>
                 {% endif %}
             </div>
-            <h2 class="subtitle fr-mt-3v fr-mb-1v">{{ _('API link') }}</h2>
-            <p class="fr-text--sm fr-mt-0 fr-mb-3v text-overflow-ellipsis">
-            {% if dataservice.base_api_url %}
-                <code class="bg-alt-grey fr-px-1v text-grey-380">
-                    <a href="{{ dataservice.base_api_url }}" rel="ugc nofollow noopener">
-                        {{ dataservice.base_api_url }}
-                    </a>
-                </code>
-            {% else %}
-                {{ _('Not documented') }}
-            {% endif %}
-            <h2 class="subtitle fr-mt-3v fr-mb-1v">{{ _('Documentation link') }}</h2>
-            <p class="fr-text--sm fr-mt-0 fr-mb-3v text-overflow-ellipsis">
-            {% if dataservice.endpoint_description_url %}
-                <code class="bg-alt-grey fr-px-1v text-grey-380">
-                    <a href="{{ dataservice.endpoint_description_url }}" rel="ugc nofollow noopener">
-                        {{ dataservice.endpoint_description_url }}
-                    </a>
-                </code>
-            {% else %}
-                {{ _('Not documented') }}
-            {% endif %}
-            </p>
         </section>
     </div>
 </div>
 <div class="fr-mb-10v">
     {{ hook('dataservice.display.after-description') }}
+</div>
+
+<div class="fr-container">
+    <section class="vuejs">
+        <dataservice-links
+            :dataservice='{{ dataservice|to_dataservice_api_format|tojson }}'
+        ></dataservice-links>
+    </section>
 </div>
 
 <div class="fr-container">

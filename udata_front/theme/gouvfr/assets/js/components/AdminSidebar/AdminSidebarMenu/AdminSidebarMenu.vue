@@ -17,7 +17,7 @@
         :size="24"
         :rounded="true"
       />
-      <p class="fr-mx-1w">{{ t('My Profil') }}</p>
+      <p class="fr-mx-1w">{{ t('My Profile') }}</p>
     </template>
     <template v-else-if="organization">
       <div class="logo logo--sm">
@@ -46,6 +46,11 @@
           :to="{name: 'me-datasets'}"
           />
           <AdminSidebarLink
+          icon="fr-icon-code-s-slash-line"
+          :label="t('Dataservices')"
+          :to="{name: 'me-dataservices'}"
+          />
+          <AdminSidebarLink
             icon="fr-icon-line-chart-line"
             :label="t('Reuses')"
             :to="{name: 'me-reuses'}"
@@ -61,6 +66,12 @@
             :iconHtml="DatabaseIcon"
             :label="t('Datasets')"
             :to="{name: 'organization-datasets', params: {oid: organization.id}}"
+            @click="$emit('click')"
+          />
+          <AdminSidebarLink
+            icon="fr-icon-code-s-slash-line"
+            :label="t('Dataservices')"
+            :to="{name: 'organization-dataservices', params: {oid: organization.id}}"
             @click="$emit('click')"
           />
           <AdminSidebarLink

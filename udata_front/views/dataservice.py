@@ -82,7 +82,7 @@ class DataserviceDetailView(DataserviceView, DetailView):
                 abort(404)
             elif self.dataservice.deleted_at:
                 abort(410)
-        
+
         datasets = Pagination(
             self.dataservice.datasets,
             request.args.get('datasets_page', 1, type=int),
@@ -95,7 +95,7 @@ class DataserviceDetailView(DataserviceView, DetailView):
         # We need to have a seperate variable because .fetch() return the object instead of
         # setting it inside the LazyReference object.
         context['datasets_items'] = [dataset.fetch() for dataset in datasets.items]
-        
+
         context['can_edit'] = DataserviceEditPermission(self.dataservice)
         return context
 

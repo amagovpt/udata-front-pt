@@ -128,8 +128,8 @@ msgid "Organizations"
 msgstr "Organizações"
 
 #: udata_front/theme/gouvfr/__init__.py:49
-msgid "Getting started on dados.gov.pt"
-msgstr "Primeiros passos para dados.gov.pt"
+msgid "Getting started"
+msgstr "Primeiros passos"
 
 #: udata_front/theme/gouvfr/__init__.py:51
 msgid "About open data"
@@ -178,7 +178,11 @@ msgstr "Referência da API"
 msgid "News"
 msgstr "Novidades"
 
-#: udata_front/theme/gouvfr/__init__.py:72 udata_front/theme/gouvfr/__init__.py:103
+#: udata_front/theme/gouvfr/__init__.py:104
+msgid "Contact"
+msgstr "Contatar"
+
+#: udata_front/theme/gouvfr/__init__.py:137
 msgid "Contact us"
 msgstr "Contate-nos"
 
@@ -219,11 +223,11 @@ msgstr "Estatísticas"
 
 #: udata_front/theme/gouvfr/__init__.py:112
 msgid "api.gouv.fr"
-msgstr ""
+msgstr "api.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:113
 msgid "schema.data.gouv.fr"
-msgstr ""
+msgstr "schema.data.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:123
 msgid "Licences"
@@ -355,7 +359,7 @@ msgstr "extenção do tema udata : udata-front ({version})"
 
 #: udata_front/theme/gouvfr/templates/footer.html:84
 msgid "Go back to website home - data.gouv.fr - République Française"
-msgstr ""
+msgstr "Voltar à página inicial do sítio - dados.gov - República Portuguesa"
 
 #: udata_front/theme/gouvfr/templates/footer.html:89
 msgid "A product of the Direction Interministérielle du Numérique (DINUM)."
@@ -364,6 +368,30 @@ msgstr "Um produto da Direção Interministerial dos Números (DINUM)."
 #: udata_front/theme/gouvfr/templates/footer.html:106
 msgid "Select a Language"
 msgstr "Selecionar um idioma"
+
+#: udata_front/theme/gouvfr/templates/header.html:7
+msgid "A dataset"
+msgstr "Um conjunto de dados"
+
+#: udata_front/theme/gouvfr/templates/header.html:8
+msgid "An API"
+msgstr "Uma API"
+
+#: udata_front/theme/gouvfr/templates/header.html:9
+msgid "A reuse"
+msgstr "Uma reutilização"
+
+#: udata_front/theme/gouvfr/templates/header.html:10
+msgid "A harvester"
+msgstr "Um harvester"
+
+#: udata_front/theme/gouvfr/templates/header.html:11
+msgid "An organization"
+msgstr "Uma organização"
+
+#: udata_front/theme/gouvfr/templates/header.html:12
+msgid "A post"
+msgstr "Uma publicação"
 
 #: udata_front/theme/gouvfr/templates/footer.html:143
 msgid "Unless otherwise stated, all content of this site is availabe under <a href='{lo_url}'>Open Licence 2.0</a>"
@@ -419,6 +447,10 @@ msgstr "Inscrever-se"
 #: udata_front/theme/gouvfr/templates/header.html:173
 msgid "Main Menu"
 msgstr "Menu principal"
+
+#: udata_front/theme/gouvfr/templates/header.html:229
+msgid "Publish on "
+msgstr "Publicar"
 
 #: udata_front/theme/gouvfr/templates/header.html:223
 msgid "This is a degraded experience of {site}. Please enable JavaScript and use an up to date browser."
@@ -657,7 +689,7 @@ msgstr "Adicionar um cliente"
 
 #: udata_front/theme/gouvfr/templates/api/card.html:9
 msgid "See on <a target=\"_blank\" rel=\"noopener\" title=\"See {title} on api.gouv.fr - opens a new window\" href=\"{url}\">api.gouv.fr</a>"
-msgstr ""
+msgstr "Ver em <a target=\"_blank\" rel=\"noopener\" title=\"Ver {title} em api.gouv.pt - abre uma nova janela\" href=\"{url}\">api.gouv.pt"
 
 #: udata_front/theme/gouvfr/templates/api/card.html:18
 msgid "From {producer}"
@@ -915,7 +947,8 @@ msgstr "Autor"
 #, python-format
 msgid "This API has been published on the initiative and under the responsibility of\n"
 "                    %(author)s<br />Published on %(date)s"
-msgstr ""
+msgstr "Esta API foi publicada por iniciativa e sob a responsabilidade de"
+"                    %(author)s<br />Publicado em %(date)s"
 
 #: udata_front/theme/gouvfr/templates/dataservice/display.html:105
 #: udata_front/theme/gouvfr/templates/dataset/display.html:161
@@ -1029,7 +1062,7 @@ msgstr "A partir de "
 #: udata_front/theme/gouvfr/templates/dataset/card-sm.html:77
 #, python-format
 msgid "Updated %(date)s"
-msgstr "Atualizado %(date)s"
+msgstr "Actualizado %(date)s"
 
 #: udata_front/theme/gouvfr/templates/dataset/card-lg.html:103
 #: udata_front/theme/gouvfr/templates/organization/card.html:30
@@ -1084,7 +1117,9 @@ msgstr "Este conjunto de dados provém de um portal externo.&nbsp;<a href='{exte
 msgid "This dataset is handled by the <a href='{geo_link}'>geo.data.gouv.fr</a> platform.\n"
 "                This platform is not actively maintained and as a result, you may find some bogus data or metadata.\n"
 "                More information about <a href='{blog_link}'>the shutdown of geo.data.gouv.fr is available here.</a>"
-msgstr ""
+msgstr "Este conjunto de dados é gerido pela <a href='{geo_link}'>geo.data.gouv.pt</a> plataforma.\n"
+"                Esta plataforma não é ativamente mantida e, por conseguinte, pode encontrar alguns dados ou metadados falsos.\n"
+"                Mais informações sobre <a href='{blog_link}'>o encerramento do geo.data.gouv.pt está disponível aqui.</a>"
 
 #: udata_front/theme/gouvfr/templates/dataset/display.html:166
 #: udata_front/theme/gouvfr/templates/dataset/display.html:553
@@ -1364,7 +1399,7 @@ msgstr "esquema:"
 #: udata_front/theme/gouvfr/templates/dataset/resource/card.html:29
 #, python-format
 msgid "Updated on %(date)s"
-msgstr "Actualizado em %(date)s"
+msgstr "Actualizado à %(date)s"
 
 #: udata_front/theme/gouvfr/templates/dataset/resource/card.html:36
 msgid "downloads"
@@ -2618,3 +2653,17 @@ msgstr "Remover dos favoritos"
 msgid "Add to favourites"
 msgstr "Adicionar aos favoritos"
 
+msgid "days ago"
+msgstr "à dias"
+
+msgid "day ago"
+msgstr "dia atrás"
+
+msgid "day"
+msgstr "dia"
+
+msgid "days"
+msgstr "dias"
+
+msgid "ago"
+msgstr "atrás"
