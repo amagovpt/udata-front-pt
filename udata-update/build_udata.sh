@@ -23,13 +23,13 @@ echo -e "${BLUE}Enter the udata version (e.g., 2.5.1):${NC}"
 read version
 archive_name="udata-v$version.zip"
 echo -e "${GREEN}Version: v$version, Archive Name: $archive_name${NC}"
-file_url="https://github.com/gpsilv4/udata-front-pt/blob/udata-v$version/udata-update/$archive_name"
+file_url="https://github.com/amagovpt/udata-front-pt/blob/udata-v$version/udata-update/$archive_name"
 
 # Atualizar o ficheiro requirements.pip
 requirements_file="../requirements.pip"
 if [ -f "$requirements_file" ]; then
     echo -e "${GREEN}Updating the version link in the $requirements_file file...${NC}"
-    sed -i "s|https://github.com/gpsilv4/udata-front-pt/blob/udata-v.*/udata-update/udata-v.*.zip|$file_url|g" "$requirements_file" || {
+    sed -i "s|https://github.com/amagovpt/udata-front-pt/blob/udata-v.*/udata-update/udata-v.*.zip|$file_url|g" "$requirements_file" || {
         echo -e "${RED}Error updating the requirements.pip file.${NC}"
         exit 1
     }
@@ -141,7 +141,7 @@ echo -e "${GREEN}Removing the directory $clone_dir...${NC}"
 rm -rf "$clone_dir" || { echo -e "${RED}Error removing the directory $clone_dir.${NC}"; exit 1; }
 
 # Passo 9: Adicionar o ficheiro ao Git e atualizar
-target_repo="https://github.com/gpsilv4/udata-front-pt.git"
+target_repo="https://github.com/amagovpt/udata-front-pt.git"
 echo -e "${GREEN}Changing remote repository to $target_repo...${NC}"
 git remote set-url origin "$target_repo" || { echo -e "${RED}Error configuring the remote repository.${NC}"; exit 1; }
 
