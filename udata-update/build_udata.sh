@@ -155,5 +155,9 @@ git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing
 # Passo 10: Instalar o ficheiro compactado
 echo -e "${GREEN}Installing udata locally...${NC}"
 pip install -r "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+pip install -e . -r "$requirements/test.pip" -r "$requirements/develop.pip" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+
+# Passo 11: Executar os comandos necessários para atualizar o javascript
+inv assets-build
 
 echo -e "${GREEN}Process completed successfully!${NC}"
