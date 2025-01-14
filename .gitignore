@@ -86,3 +86,4 @@ logs/
 saml/
 udata-fs/
 uwsgi/
+utils/catalog.txt
