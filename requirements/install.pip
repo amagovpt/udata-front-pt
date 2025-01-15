@@ -49,6 +49,7 @@ gevent==24.2.1
 markdown==3.4.1
 owslib==0.18.0
 udata-ckan==3.0.3
+udata-metrics==2.0.3
 udata-piwik==4.1.0
 udata-recommendations==3.1.6
 uwsgi==2.0.21
