@@ -19,9 +19,9 @@ import errno
 import json
 import traceback
 
-REPORT_FILE_PATH = '/home/udata/report.csv'
+REPORT_FILE_PATH = '/home/dev/udata/report.csv'
 DADOSGOVPATH = 'dadosGovFiles'
-DOWNLOADFILEPATH = '/home/udata/fs/%s' % (DADOSGOVPATH)
+DOWNLOADFILEPATH = '/home/dev/udata/fs/%s' % (DADOSGOVPATH)
 DADOSGOVURL = 'servico.dados.gov.pt'
 
 class DGBackend(DGBaseBackend):
@@ -48,7 +48,7 @@ class DGBackend(DGBaseBackend):
                 , 'TagsAdicionarDataset'
             ])
 
-        auxFilePath = '/home/udata'
+        auxFilePath = '/home/dev/udata'
         # ******************************************************************************
         # store the data regarding organizations that matter from the db exported file
         organizationData = {}
