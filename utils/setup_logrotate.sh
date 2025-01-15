@@ -20,7 +20,7 @@ fi
 CONFIG_PATH="/etc/logrotate.d/uwsgi_logs"
 echo "2. Criando arquivo de configuração em $CONFIG_PATH..."
 sudo bash -c "cat > $CONFIG_PATH" <<EOL
-/home/udata/logs/app.logs {
+/home/dev/udata/logs/app.logs {
     su root root
     daily
     rotate 30
@@ -31,7 +31,7 @@ sudo bash -c "cat > $CONFIG_PATH" <<EOL
     dateformat .%Y-%m-%d
     copytruncate
     postrotate
-        : > /home/udata/logs/app.logs
+        : > /home/dev/udata/logs/app.logs
         systemctl reload uwsgi > /dev/null 2>&1 || true
     endscript
 }
@@ -48,7 +48,7 @@ sudo logrotate -f "$CONFIG_PATH"
 
 # 4. Verificar os arquivos de log após a rotação
 echo "4. Verificando os arquivos de log rotacionados..."
-ls /home/udata/logs/
+ls /home/dev/udata/logs/
 
 # 5. Configurar a execução automática com cron
 echo "5. Configurando a execução automática com cron..."
@@ -57,7 +57,7 @@ if [ -f "$CRON_PATH" ]; then
     echo "Cron job já configurado em $CRON_PATH."
 else
     echo "Adicionando cron job..."
-    sudo bash -c "echo '10 0 * * * /usr/sbin/logrotate /etc/logrotate.conf' >> /var/spool/cron/root"
+    sudo bash -c "echo '0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf' >> /var/spool/cron/root"
     echo "Cron job adicionado com sucesso."
 fi
 
