@@ -57,7 +57,7 @@ if [ -f "$CRON_PATH" ]; then
     echo "Cron job já configurado em $CRON_PATH."
 else
     echo "Adicionando cron job..."
-    sudo bash -c "echo '0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf' >> /var/spool/cron/root"
+    sudo bash -c "echo '59 23 * * * /usr/sbin/logrotate /etc/logrotate.conf' >> /var/spool/cron/root"
     echo "Cron job adicionado com sucesso."
 fi
 
