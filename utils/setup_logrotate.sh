@@ -66,6 +66,6 @@ echo "6. Verificando a execução automática de cron..."
 sudo run-parts /etc/cron.daily/
 
 echo "Verifique os logs do cron para validar a execução:"
-sudo cat /var/log/cron
+sudo tail -n 1 /var/log/cron
 
 echo "Configuração do logrotate concluída com sucesso."
