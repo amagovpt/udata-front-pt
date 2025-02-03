@@ -102,6 +102,28 @@ else
     echo "O arquivo $api_file não foi encontrado."
 fi
 
+# Passo 4.4: Substituir palavras francesas no arquivo udata/rdf.py
+rdf_file="$clone_dir/udata/rdf.py"
+
+declare -A translations=(
+    ["Météorologiques"]="Meteorológicas"
+    ["Entreprises et propriété d'entreprises"]="Empresas e propriedade de empresas"
+    ["Géospatiales"]="Geoespaciais"
+    ["Mobilité"]="Mobilidade"
+    ["Observation de la terre et environnement"]="Observação da Terra e do ambiente"
+    ["Statistiques"]="Estatísticas"
+)
+
+if [ -f "$rdf_file" ]; then
+    for fr in "${!translations[@]}"; do
+        pt="${translations[$fr]}"
+        sed -i "s/$fr/$pt/g" "$rdf_file"
+    done
+    echo "Substituição de termos franceses concluída com sucesso em $rdf_file."
+else
+    echo "O arquivo $rdf_file não foi encontrado."
+fi
+
 # Passo 5: Configurar o ambiente virtual
 echo -e "${GREEN}Activating the virtual environment...${NC}"
 cd ..
