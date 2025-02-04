@@ -85,7 +85,7 @@ replace_string="noreply.dados.gov@ama.gov.pt"
 
 if [ -f "$settings_file" ]; then
     sed -i "s/$search_string/$replace_string/g" "$settings_file"
-    echo "Substituição concluída com sucesso."
+    echo "Substituição de e-mail concluída com sucesso."
 else
     echo "O ficheiro $settings_file não foi encontrado."
 fi
@@ -97,9 +97,30 @@ insert_string="        # Adicionar verificação para ficheiros SVG\n        if 
 
 if [ -f "$api_file" ]; then
     sed -i "/$search_string/a $insert_string" "$api_file"
-    echo "Código inserido com sucesso."
+    echo "Código SVG inserido com sucesso."
 else
     echo "O arquivo $api_file não foi encontrado."
+fi
+
+# Passo 4.4: Substituir keywords (EU_HVD_CATEGORIES) francesas por portuguesas
+#Definir o caminho do arquivo
+rdf_file="$clone_dir/udata/rdf.py"
+
+#Verificar se o arquivo existe antes de aplicar as substituições
+if [ -f "$rdf_file" ]; then
+    echo "Substituindo termos franceses por português no arquivo $rdf_file..."
+
+    #Substituições usando sed
+    sed -i "s|\"Météorologiques\"|\"Meteorológicas\"|g" "$rdf_file"
+    sed -i "s|\"Entreprises et propriété d'entreprises\"|\"Empresas e propriedade de empresas\"|g" "$rdf_file"
+    sed -i "s|\"Géospatiales\"|\"Geoespaciais\"|g" "$rdf_file"
+    sed -i "s|\"Mobilité\"|\"Mobilidade\"|g" "$rdf_file"
+    sed -i "s|\"Observation de la terre et environnement\"|\"Observação da Terra e do ambiente\"|g" "$rdf_file"
+    sed -i "s|\"Statistiques\"|\"Estatísticas\"|g" "$rdf_file"
+
+    echo "Substituição EU_HVD_CATEGORIES concluída com sucesso."
+else
+    echo "O arquivo $rdf_file não foi encontrado."
 fi
 
 # Passo 5: Configurar o ambiente virtual
