@@ -1,52 +1,69 @@
 import os
 import requests
 
-# Base URL for the API
-# Production
-#BASE_URL = "https://dados.gov.pt/api/1/site/catalog.xml"
-# Preprod
-BASE_URL = "https://preprod.dados.gov.pt/api/1/site/catalog.xml"
-# Development
-#BASE_URL = "https://172.31.204.12/api/1/site/catalog.xml"
-# Test
-#BASE_URL = "https://10.55.37.38/api/1/site/catalog.xml"
+# Opções de fontes disponíveis
+sources = {
+    "Production": "https://dados.gov.pt/api/1/site/catalog.xml",
+    "Preprod": "https://preprod.dados.gov.pt/api/1/site/catalog.xml",
+    "Test": "https://10.55.37.38/api/1/site/catalog.xml",
+    "Development": "https://172.31.204.12/api/1/site/catalog.xml"
+}
 
-# Output file name
-OUTPUT_FILE = os.path.join(os.getcwd(), "catalog.txt")
+# Solicita ao usuário que escolha a fonte
+print("Escolha a fonte para criar o catálogo:")
+for key in sources:
+    print(f"- {key}")
 
-# Initialize page counter
+while True:
+    source_choice = input("Digite o nome da fonte desejada: ")
+    if source_choice in sources:
+        BASE_URL = sources[source_choice]
+        break
+    print("Opção inválida. Tente novamente.")
+
+# Pergunta se deseja adicionar uma tag
+add_tag = input("Deseja adicionar uma tag à consulta? (s/n): ").strip().lower()
+tag_param = ""
+if add_tag == "s":
+    tag = input("Digite a tag desejada: ").strip()
+    tag_param = f"&tag={tag}"
+
+# Pergunta pelo formato do arquivo de saída
+output_format = input("Digite o formato do arquivo de saída (ex: xml, json, txt): ").strip()
+output_file = os.path.join(os.getcwd(), f"catalog.{output_format}")
+
+# Inicializa o contador de páginas
 page = 1
 
-# Open the output file for writing
-with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
+# Abre o arquivo para escrita
+with open(output_file, "w", encoding="utf-8") as file:
     while True:
         try:
-            # Construct the URL with the current page number
-            url = f"{BASE_URL}?page={page}&tag=hvd"
+            # Monta a URL da requisição
+            url = f"{BASE_URL}?page={page}{tag_param}"
             print(f"Fetching: {url}")
-
-            # Make the HTTP GET request
-            response = requests.get(url, verify=False)  # Disable SSL verification for this example
-
-            # Check if the response status code indicates success
+            
+            # Faz a requisição HTTP
+            response = requests.get(url, verify=False)
+            
+            # Verifica se a resposta indica o fim das páginas
             if response.status_code == 404:
-                print("Received status code 404. No more pages available. Stopping.")
+                print("Recebido status 404. Nenhuma página adicional disponível. Parando.")
                 break
 
             if response.status_code != 200:
-                print(f"Page {page} returned {response.status_code}. Skipping.")
+                print(f"Página {page} retornou {response.status_code}. Pulando.")
                 page += 1
                 continue
-
-            # Write the content of the current page to the output file
+            
+            # Escreve o conteúdo da página no arquivo
             file.write(response.text)
-
-            # Increment the page number
+            
+            # Incrementa o contador de páginas
             page += 1
-
+        
         except requests.RequestException as e:
-            # Handle network or request-related errors
-            print(f"An error occurred: {e}")
+            print(f"Ocorreu um erro: {e}")
             break
 
-print("Fetching completed. Results saved in catalog.ttl.")
+print(f"Processo concluído. Resultados salvos em {output_file}.")
