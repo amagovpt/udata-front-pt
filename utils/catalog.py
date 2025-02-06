@@ -1,10 +1,18 @@
+import os
 import requests
 
 # Base URL for the API
-BASE_URL = "https://172.31.204.12/api/1/site/catalog.xml"
+# Production
+#BASE_URL = "https://dados.gov.pt/api/1/site/catalog.xml"
+# Preprod
+BASE_URL = "https://preprod.dados.gov.pt/api/1/site/catalog.xml"
+# Development
+#BASE_URL = "https://172.31.204.12/api/1/site/catalog.xml"
+# Test
+#BASE_URL = "https://10.55.37.38/api/1/site/catalog.xml"
 
 # Output file name
-OUTPUT_FILE = "./utils/catalog.txt"
+OUTPUT_FILE = os.path.join(os.getcwd(), "catalog.txt")
 
 # Initialize page counter
 page = 1
@@ -14,7 +22,7 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
     while True:
         try:
             # Construct the URL with the current page number
-            url = f"{BASE_URL}?page={page}"
+            url = f"{BASE_URL}?page={page}&tag=hvd"
             print(f"Fetching: {url}")
 
             # Make the HTTP GET request
@@ -41,4 +49,4 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
             print(f"An error occurred: {e}")
             break
 
-print("Fetching completed. Results saved in catalog.txt.")
+print("Fetching completed. Results saved in catalog.ttl.")
