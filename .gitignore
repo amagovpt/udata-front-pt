@@ -87,4 +87,10 @@ saml/
 udata-fs/
 uwsgi/
 utils/catalog.txt
-*.ttl
+/utils/*.ttl
+/utils/*.xml
+/utils/*.txt
+/utils/*.json
+
+
+
