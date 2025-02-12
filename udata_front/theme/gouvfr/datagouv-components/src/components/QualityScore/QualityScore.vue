@@ -20,7 +20,6 @@ const props = withDefaults(defineProps<{
 });
 const quality_max_score = 1;
 const high = quality_max_score*2/3;
-const high = quality_max_score * 2 / 3;
 const { t, locale } = useI18n();
 const calculatedScore = computed(() => new Intl.NumberFormat(locale.value, {style: 'percent'}).format(props.score))
 </script>
