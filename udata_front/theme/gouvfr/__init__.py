@@ -42,45 +42,44 @@ WP_TIMEOUT = 5
 FEED_THUMBNAIL_MIMES = ("image/jpeg", "image/png", "image/webp")
 
 
-gouvfr_menu = nav.Bar(
-    "gouvfr_menu",
-    [
+gouvfr_menu = nav.Bar("gouvfr_menu",[
         nav.Item(_("Data"), "datasets.list"),
         nav.Item(_('API'), 'dataservices.list'),
         nav.Item(_("Reuses"), "reuses.list"),
         nav.Item(_("Organizations"), "organizations.list"),
-        nav.Item(
-            _("Getting started"),
+        nav.Item(_('Getting started'),                
             None,
             items=[
                 nav.Item(
-                    _("About open data"),
-                    "gouvfr.show_page",
-                    args={"slug": "faqs/about_opendata"},
+                    _('About open data'),
+                    'gouvfr.show_page',
+                    args={'slug': 'faqs/about_opendata'}
                 ),
                 nav.Item(
-                    _("About dados.gov"),
-                    "gouvfr.show_page",
-                    args={"slug": "faqs/about_dadosgov"},
+                    _('What is {site}?').format(
+                        site=current_app.config.get('SITE_TITLE')
+                    ),
+                    'gouvfr.show_page',
+                    args={'slug': 'faqs/about_dadosgov'}
                 ),
                 nav.Item(
-                    _("How to publish data?"),
-                    "gouvfr.show_page",
-                    args={"slug": "faqs/publish"},
+                    _('How to publish data ?'),
+                    'gouvfr.show_page',
+                    args={'slug': 'faqs/publish'}
                 ),
                 nav.Item(
-                    _("How to reuse data?"),
-                    "gouvfr.show_page",
-                    args={"slug": "faqs/reuse"},
+                    _('How to use data ?'),
+                    'gouvfr.show_page',
+                    args={'slug': 'faqs/reuse'}
                 ),
-            ],
+            ]
         ),
         nav.Item(
             _("Documentation"),
             None,
             items=[
                 nav.Item(
-                    _("Licences"), "gouvfr.show_page", args={"slug": "faqs/licenses"}
+                    _("Licenses"), "gouvfr.show_page", args={"slug": "faqs/licenses"}
                 ),
                 nav.Item(
                     _("Terms of use"), "gouvfr.show_page", args={"slug": "faqs/terms"}
@@ -160,7 +159,7 @@ nav.Bar("gouvfr_platform", platform_links)
 # nav.Bar("gouvfr_resources", resources_links)
 
 footer_links = [
-    nav.Item(_("Licences"), "gouvfr.show_page", args={"slug": "faqs/licenses/"}),
+    nav.Item(_("Licenses"), "gouvfr.show_page", args={"slug": "faqs/licenses/"}),
     nav.Item(_("Terms of use"), "gouvfr.show_page", args={"slug": "faqs/terms"}),
     nav.Item(_("Tracking and privacy"), "gouvfr.suivi"),
     # nav.Item(_("Legal notice"), "gouvfr.show_page", args={"slug": "faqs/legal-notice"}),
