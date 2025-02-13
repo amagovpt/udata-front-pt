@@ -259,32 +259,52 @@
         </div>
     </div>
 </section>
-<div class="bg-dark text-white fr-py-8w">
+<div class="fr-py-8w" style="color: black;">
     <div class="fr-container">
-        <h2 class="h1 text-white fr-mb-3v fr-text--regular">{{_('{site} mission').format(site=config.SITE_TITLE)}}</h2>
+        <h2 class="h1 fr-mb-3v fr-text--regular" style="color: black;">
+            {{_('{site} mission').format(site=config.SITE_TITLE)}}
+        </h2>
         <section>
-            <h3 class="fs-xxl fs-md-xxxl font-800 fr-mb-4w">{{_('Simplify access to public data')}}</h3>
-            <p class="fr-mb-3w fs-xxl fs-md-xxxl line-height-xxxl text-grey-200 font-300">{{_('The opening and circulation of public data strengthen transparency, improve public action, and allow for the creation of new services.')}}</p>
-            <p class="fr-mb-4w fs-xxl fs-md-xxxl line-height-xxxl text-grey-200 font-300">{{_('{site} makes this information available by organizing its distribution and use.').format(site=config.SITE_TITLE)}}</p>
-            <h4 class="subtitle subtitle--uppercase fr-text--md text-grey-300 fr-mb-11v">{{_('Our goals')}}</h4>
+            <h3 class="fs-xxl fs-md-xxxl font-800 fr-mb-4w" style="color: black;">
+                {{_('Simplify access to public data')}}
+            </h3>
+            <p class="fr-mb-3w fs-xxl fs-md-xxxl line-height-xxxl font-300" style="color: black;">
+                {{_('The opening and circulation of public data strengthen transparency, improve public action, and allow for the creation of new services.')}}
+            </p>
+            <p class="fr-mb-4w fs-xxl fs-md-xxxl line-height-xxxl font-300" style="color: black;">
+                {{_('{site} makes this information available by organizing its distribution and use.').format(site=config.SITE_TITLE)}}
+            </p>
+            <h4 class="subtitle subtitle--uppercase fr-text--md fr-mb-11v" style="color: black;">
+                {{_('Our goals')}}
+            </h4>
             <div class="fr-grid-row fr-grid-row--gutters">
                 <div class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-pl-md-5v">
                     <span class="fr-mt-1v fr-icon-search-line" aria-hidden="true"></span>
-                    <p class="fr-mt-1w fr-mb-1v">{{_('Facilitate data discoverability')}}</p>
+                    <p class="fr-mt-1w fr-mb-1v" style="color: black;">
+                        {{_('Facilitate data discoverability')}}
+                    </p>
                 </div>
                 <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-pl-md-5v border-left-md border-grey-300">
                     <span class="fr-mt-md-1v fr-icon-award-line" aria-hidden="true"></span>
-                    <p class="fr-mt-1w fr-mb-1v">{{_('Improve data quality')}}</p>
+                    <p class="fr-mt-1w fr-mb-1v" style="color: black;">
+                        {{_('Improve data quality')}}
+                    </p>
                 </div>
                 <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-pl-md-5v border-left-lg border-grey-300">
                     <span class="fr-mt-1v fr-icon-line-chart-line" aria-hidden="true"></span>
-                    <p class="fr-mt-1w fr-mb-1v">{{_('Encourage data reusability')}}</p>
+                    <p class="fr-mt-1w fr-mb-1v" style="color: black;">
+                        {{_('Encourage data reusability')}}
+                    </p>
                 </div>
             </div>
             <div class="fr-my-8w text-align-center">
-                <a class="fr-btn fr-btn--white" href="{{url_for('gouvfr.show_page', slug='faqs/about_dadosgov')}}">{{_('Learn more about {site}').format(site=config.SITE_TITLE)}}</a>
+                <a class="fr-btn" href="{{url_for('gouvfr.show_page', slug='faqs/about_dadosgov')}}" style="background-color: #e4794a; color: white;">
+                    {{_('Learn more about {site}').format(site=config.SITE_TITLE)}}
+                </a>
             </div>
         </section>
+
+
         <!-- <section>
             <h3 class="fs-xxl fs-md-xxxl font-800 fr-mb-4w">{{_('Produce information based on data')}}</h3>
             <h4 class="subtitle subtitle--uppercase fr-text--md text-grey-300 fr-mb-3v">{{_('Our data explorations')}}</h4>
@@ -402,7 +422,7 @@
     </div>
 </div>
 {% if last_post %}
-<section class="fr-container fr-mt-8w fr-mb-10w">
+<section class="fr-container fr-mt-8w fr-mb-10w border-top">
     <h2 class="subtitle subtitle--uppercase text-mention-grey fr-mb-3v fr-text--bold">{{_('{site} news').format(site=config.SITE_TITLE)}}</h2>
     <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-5">
