@@ -136,15 +136,15 @@ msgid "About open data"
 msgstr "Sobre dados os abertos"
 
 #: udata_front/theme/gouvfr/__init__.py:56
-msgid "About dados.gov"
-msgstr "Sobre o dados.gov"
+msgid "What is {site}?"
+msgstr "O que é {site}?"
 
 #: udata_front/theme/gouvfr/__init__.py:61
 msgid "How to publish data?"
 msgstr "Como publicar dados?"
 
 #: udata_front/theme/gouvfr/__init__.py:66
-msgid "How to reuse data?"
+msgid "How to use data?"
 msgstr "Como reutilizar os dados?"
 
 #: udata_front/theme/gouvfr/__init__.py:71
@@ -152,7 +152,7 @@ msgid "Documentation"
 msgstr "Documentação"
 
 #: udata_front/theme/gouvfr/__init__.py:73 udata_front/theme/gouvfr/__init__.py:146
-msgid "Licences"
+msgid "Licenses"
 msgstr "Licenças"
 
 #: udata_front/theme/gouvfr/__init__.py:77 udata_front/theme/gouvfr/__init__.py:147
@@ -230,7 +230,7 @@ msgid "schema.data.gouv.fr"
 msgstr "schema.data.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:123
-msgid "Licences"
+msgid "Licenses"
 msgstr "Licenças"
 
 #: udata_front/theme/gouvfr/__init__.py:124
@@ -543,6 +543,18 @@ msgstr "é"
 #: udata_front/theme/gouvfr/templates/topic/display.html:51
 msgid "Featured datasets"
 msgstr "Conjuntos de dados em destaque"
+
+#: udata_front/theme/gouvfr/templates/home.html:261
+msgid "Facilitate data discoverability"
+msgstr "Facilitar a descoberta de dados"
+
+#: udata_front/theme/gouvfr/templates/home.html:44
+msgid "Use, share and improve public data"
+msgstr "Utilizar, partilhar e melhorar os dados públicos"
+
+#: udata_front/theme/gouvfr/templates/home.html:35
+msgid "Informations"
+msgstr "Informações"
 
 #: udata_front/theme/gouvfr/templates/topic/display.html:52
 #: udata_front/theme/gouvfr/templates/home.html:116
@@ -2745,3 +2757,6 @@ msgstr "Como publicar dados?"
 
 msgid "Simplify access to public data"
 msgstr "Simplifique o acesso a dados públicos"
+
+msgid "Statistics for the year"
+msgstr "Estatísticas do ano"
