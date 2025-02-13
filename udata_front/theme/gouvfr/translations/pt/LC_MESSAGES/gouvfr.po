@@ -136,23 +136,23 @@ msgid "About open data"
 msgstr "Sobre dados os abertos"
 
 #: udata_front/theme/gouvfr/__init__.py:56
-msgid "About dados.gov"
-msgstr "Sobre o dados.gov"
+msgid "What is {site}?"
+msgstr "O que é {site}?"
 
 #: udata_front/theme/gouvfr/__init__.py:61
 msgid "How to publish data?"
-msgstr "Como publicar dados ?"
+msgstr "Como publicar dados?"
 
 #: udata_front/theme/gouvfr/__init__.py:66
-msgid "How to reuse data?"
-msgstr "Como reutilizar os dados ?"
+msgid "How to use data?"
+msgstr "Como reutilizar os dados?"
 
 #: udata_front/theme/gouvfr/__init__.py:71
 msgid "Documentation"
 msgstr "Documentação"
 
 #: udata_front/theme/gouvfr/__init__.py:73 udata_front/theme/gouvfr/__init__.py:146
-msgid "Licences"
+msgid "Licenses"
 msgstr "Licenças"
 
 #: udata_front/theme/gouvfr/__init__.py:77 udata_front/theme/gouvfr/__init__.py:147
@@ -230,7 +230,7 @@ msgid "schema.data.gouv.fr"
 msgstr "schema.data.gouv.pt"
 
 #: udata_front/theme/gouvfr/__init__.py:123
-msgid "Licences"
+msgid "Licenses"
 msgstr "Licenças"
 
 #: udata_front/theme/gouvfr/__init__.py:124
@@ -543,6 +543,18 @@ msgstr "é"
 #: udata_front/theme/gouvfr/templates/topic/display.html:51
 msgid "Featured datasets"
 msgstr "Conjuntos de dados em destaque"
+
+#: udata_front/theme/gouvfr/templates/home.html:261
+msgid "Facilitate data discoverability"
+msgstr "Facilitar a descoberta de dados"
+
+#: udata_front/theme/gouvfr/templates/home.html:44
+msgid "Use, share and improve public data"
+msgstr "Utilizar, partilhar e melhorar os dados públicos"
+
+#: udata_front/theme/gouvfr/templates/home.html:35
+msgid "Informations"
+msgstr "Informações"
 
 #: udata_front/theme/gouvfr/templates/topic/display.html:52
 #: udata_front/theme/gouvfr/templates/home.html:116
@@ -1184,7 +1196,7 @@ msgstr "Publicar uma reutilização"
 
 #: udata_front/theme/gouvfr/templates/dataset/display.html:435
 #: udata_front/theme/gouvfr/templates/organization/display.html:296
-msgid "What's a reuse ?"
+msgid "What's a reuse?"
 msgstr "O que é uma reutilização?"
 
 #: udata_front/theme/gouvfr/templates/dataset/display.html:454
@@ -1955,8 +1967,8 @@ msgid "This organization hasn't published any datasets yet."
 msgstr "Esta organização ainda não publicou nenhum conjunto de dados."
 
 #: udata_front/theme/gouvfr/templates/organization/display.html:261
-msgid "What's a dataset ?"
-msgstr "O que é um conjunto de dados ?"
+msgid "What's a dataset?"
+msgstr "O que é um conjunto de dados?"
 
 #: udata_front/theme/gouvfr/templates/organization/display.html:289
 msgid "This organization hasn't published any reuses yet."
@@ -2272,7 +2284,7 @@ msgstr "Introduza os caracteres da imagem"
 
 #: udata_front/theme/gouvfr/templates/security/login_user.html:30
 msgid "Forgot your password?"
-msgstr "Esqueceu-se da sua palavra-passe ?"
+msgstr "Esqueceu-se da sua palavra-passe?"
 
 #: udata_front/theme/gouvfr/templates/security/login_user.html:32
 msgid "Recover your password"
@@ -2293,12 +2305,12 @@ msgstr "Iniciar sessão com"
 
 #: udata_front/theme/gouvfr/templates/security/login_user.html:54
 #: udata_front/theme/gouvfr/templates/security/register_user.html:76
-msgid "What is ProConnect ?"
+msgid "What is ProConnect?"
 msgstr "O que é o ProConnect?"
 
 #: udata_front/theme/gouvfr/templates/security/login_user.html:65
 msgid "Don't have an account?"
-msgstr "Não tem uma conta ?"
+msgstr "Não tem uma conta?"
 
 #: udata_front/theme/gouvfr/templates/security/login_user.html:71
 msgid "Create an account"
@@ -2418,7 +2430,7 @@ msgstr "Se quiser que os seus conjuntos de dados apareçam nesta lista, a área 
 
 #: udata_front/theme/gouvfr/templates/territories/territory.html:26
 msgid "You want to add your own datasets to that list?"
-msgstr "Deseja adicionar os seus próprios conjuntos de dados a esta lista ?"
+msgstr "Deseja adicionar os seus próprios conjuntos de dados a esta lista?"
 
 #: udata_front/theme/gouvfr/templates/territories/territory.html:27
 msgid "Log in / Sign up"
@@ -2667,3 +2679,84 @@ msgstr "dias"
 
 msgid "ago"
 msgstr "atrás"
+
+msgid "The opening and circulation of public data strengthen transparency, improve public action, and allow for the creation of new services."
+msgstr "A abertura e circulação de dados públicos reforçam a transparência, melhoram a ação pública e permitem a criação de novos serviços."
+
+msgid "{site} makes this information available by organizing its distribution and use."
+msgstr "{site} disponibiliza esta informação organizando a sua distribuição e utilização."
+
+msgid "{site} mission"
+msgstr "{site} missão"
+
+msgid "Our goals"
+msgstr "Os nossos objetivos"
+
+msgid "Improve data quality"
+msgstr "Melhore a qualidade dos dados"
+
+msgid "Encourage data reusability"
+msgstr "Incentive a reutilização de dados"
+
+msgid "Learn more about {site}"
+msgstr "Saiba mais sobre {site}"
+
+msgid "{site} news"
+msgstr "{site} novidades"
+
+msgid "Read the article"
+msgstr "Leia o artigo"
+
+msgid "See all news"
+msgstr "Ver todas as novidades"
+
+msgid "Our next events"
+msgstr "Os nossos próximos eventos"
+
+msgid "To stay up to date about {site} open data news, and follow our events."
+msgstr "Para se manter atualizado sobre as novidades de dados abertos do {site} e acompanhar os nossos eventos."
+
+msgid "A dynamic and engaged community"
+msgstr "Uma comunidade dinâmica e empenhada"
+
+msgid "Share your data usage and exchange between data producers and reusers."
+msgstr "Partilhe a utilização e a troca de dados entre produtores e reutilizadores de dados."
+
+msgid "They reuse data from {site}"
+msgstr "Reutilizam dados de {site}"
+
+msgid "See reuses"
+msgstr "Veja reutilizações"
+
+msgid "Portuguese data catalog"
+msgstr "Catálogo de dados português"
+
+msgid "Discover data on all subjects, made by the administration and civil society."
+msgstr "Conheça dados sobre todos os assuntos, feitos pela administração e pela sociedade civil."
+
+msgid "They publish data on {site}"
+msgstr "Publicam dados em {site}"
+
+msgid "Datasets and Dataservices"
+msgstr "Conjuntos de dados e serviços de dados"
+
+msgid "Open platform for Portuguese public data"
+msgstr "Plataforma aberta a dados públicos portugueses"
+
+msgid "Discover datasets"
+msgstr "Descubra conjuntos de dados"
+
+msgid "Explore data reuses"
+msgstr "Explore a reutilização de dados"
+
+msgid "See data"
+msgstr "Ver dados"
+
+msgid "How to publish data?"
+msgstr "Como publicar dados?"
+
+msgid "Simplify access to public data"
+msgstr "Simplifique o acesso a dados públicos"
+
+msgid "Statistics for the year"
+msgstr "Estatísticas do ano"
