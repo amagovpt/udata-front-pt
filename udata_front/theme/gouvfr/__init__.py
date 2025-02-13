@@ -63,12 +63,12 @@ gouvfr_menu = nav.Bar("gouvfr_menu",[
                     args={'slug': 'faqs/about_dadosgov'}
                 ),
                 nav.Item(
-                    _('How to publish data ?'),
+                    _('How to publish data?'),
                     'gouvfr.show_page',
                     args={'slug': 'faqs/publish'}
                 ),
                 nav.Item(
-                    _('How to use data ?'),
+                    _('How to use data?'),
                     'gouvfr.show_page',
                     args={'slug': 'faqs/reuse'}
                 ),
