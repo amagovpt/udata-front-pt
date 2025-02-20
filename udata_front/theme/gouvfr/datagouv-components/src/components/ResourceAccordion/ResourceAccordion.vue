@@ -80,8 +80,7 @@
             :title="t('Download file')"
             download
             class="relative text-transform-uppercase fr-btn fr-btn--sm fr-btn--icon-left fr-icon-test-tube-line fr-icon-download-line fr-icon--sm matomo_download z-2"
-          >
-          :aria-describedby="resourceTitleId"
+            :aria-describedby="resourceTitleId"
           >
             <span class="fr-sr-only">{{ t('Download file as ') }}</span>{{ format }}
           </a>
@@ -257,7 +256,7 @@ const tabsOptions = computed(() => {
   if (hasPreview.value) {
     options.push({ key: "swagger", label: t("Swagger") })
   }
-  
+
   return options;
 });
 const switchTab = (index: number) => {
