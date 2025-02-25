@@ -8,7 +8,8 @@ sources = {
     "1": {"name": "Production", "url": "https://dados.gov.pt/api/1/site/catalog.xml"},
     "2": {"name": "Preprod", "url": "https://preprod.dados.gov.pt/api/1/site/catalog.xml"},
     "3": {"name": "Test", "url": "https://10.55.37.38/api/1/site/catalog.xml"},
-    "4": {"name": "Development", "url": "https://172.31.204.12/api/1/site/catalog.xml"}
+    "4": {"name": "Development", "url": "https://172.31.204.12/api/1/site/catalog.xml"},
+    "5": {"name": "Local", "url": "http://localhost:7000/api/1/site/catalog.xml"}
 }
 
 print("Escolha a fonte para criar o catálogo:")
