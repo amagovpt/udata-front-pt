@@ -41,7 +41,7 @@ msgstr "Sobrenome"
 msgid "Last name is required"
 msgstr "Sobrenome é necessário"
 
-#: udata_front/models.py:16 udata_front/theme/gouvfr/__init__.py:79
+#: udata_front/models.py:16
 msgid "Reference Data"
 msgstr "Data de referência"
 
