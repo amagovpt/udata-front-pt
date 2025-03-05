@@ -40,17 +40,10 @@
 {{ report_btn(dataservice) }}
 {% if can_edit %}
 <div class="fr-col-auto fr-ml-3v">
-    {% if dataservice.organization %}
+    {% if config.NEW_ADMIN_URL %}
     <a
         class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
-        href="{{ url_for('beta.beta-admin-org-dataservice', organization_id=dataservice.organization.id, dataservice_id=dataservice.id) }}"
-    >
-        {{ _('Edit') }}
-    </a>
-    {% else %}
-    <a
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
-        href="{{ url_for('beta.beta-admin-me-dataservice', dataservice_id=dataservice.id) }}"
+        href="{{ beta_admin_url_for(path='dataservices/{id}/'.format(id=dataservice.id), fallback_path='dataservice/{id}/'.format(id=dataservice.id)) }}"
     >
         {{ _('Edit') }}
     </a>
@@ -117,9 +110,12 @@
                     {{author}}<br />Published on {{date}}{% endtrans %}
                 </p>
             {% endif %}
-            {% with contact_point=dataservice.contact_point %}
+            {% for contact_point in dataservice.contact_points if contact_point.role == "contact" %}
+                {% if loop.first %}
+                    <h2 id="{{ contact_point.role }}" class="subtitle fr-mt-3v fr-mb-1v">{{ CONTACT_ROLES.get(contact_point.role) }}</h2>
+                {% endif %}
                 {% include theme('contact_point.html') %}
-            {% endwith %}
+            {% endfor %}
             <h2 class="subtitle fr-mt-3v fr-mb-1v">{{ _('Latest update') }}</h2>
             <p class="fr-text--sm fr-mt-0 fr-mb-3v">
                 {{ dataservice.metadata_modified_at|dateformat(format='long') }}

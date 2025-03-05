@@ -150,5 +150,8 @@
   "URL copied!": "URL Copiée !",
   "Copy stable URL": "Copier l'URL stable",
   "Stable URL copied!": "URL stable copiée !",
-  "Download file as ": "Télécharger la liste au format "
+  "Download file as ": "Télécharger la liste au format ",
+  "Temporal coverage": "Couverture temporelle",
+  "since {date}": "depuis le {date}",
+  "{start} to {end}": "{start} au {end}"
 }
