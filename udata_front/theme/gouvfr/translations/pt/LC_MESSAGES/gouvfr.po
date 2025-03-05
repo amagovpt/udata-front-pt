@@ -1030,6 +1030,20 @@ msgstr "Nenhum conjunto de dados sobre %(site)s está ligado a esta API."
 msgid "There are no discussions for this API yet."
 msgstr "Ainda não há discussões para esta API."
 
+#: udata_front/theme/gouvfr/templates/dataservice/display.html:71
+msgid "This API is a draft and will not be visible by other users"
+msgstr "Esta API é um projeto e não será visível para outros utilizadores"
+
+#: udata_front/theme/gouvfr/templates/dataservice/display.html:71
+#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:13
+#: udata_front/theme/gouvfr/templates/dataset/card-sm.html:9
+#: udata_front/theme/gouvfr/templates/dataset/card-xs.html:10
+#: udata_front/theme/gouvfr/templates/dataset/display.html:76
+#: udata_front/theme/gouvfr/templates/reuse/display.html:79
+#: udata_front/theme/gouvfr/templates/reuse/oembed.html:11
+msgid "Draft"
+msgstr "Projeto"
+
 #: udata_front/theme/gouvfr/templates/dataservice/list.html:6
 #: udata_front/theme/gouvfr/templates/dataservice/list.html:12
 #: udata_front/theme/gouvfr/templates/dataservice/list.html:24
