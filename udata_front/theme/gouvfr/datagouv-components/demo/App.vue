@@ -239,7 +239,7 @@ const dataset : DatasetV2 = {
   tags: null,
   license: "lov2",
   frequency: "Unknown",
-  temporal_coverage: "Test",
+  temporal_coverage: { start: "2024-01-01", end: "2024-12-31"},
   frequency_date: null,
   private: false,
   badges: [],
@@ -269,7 +269,14 @@ const dataset : DatasetV2 = {
     name: "[TEST] Météo France",
     slug: "test-meteo-france",
     uri: "https://demo.data.gouv.fr/api/1/organizations/test-meteo-france/"
-  }
+  },
+  contact_points: [{
+    email: "",
+    id: "someId",
+    name: "Contact",
+    contact_form: "",
+    role: "contact",
+  }]
 };
 
 const license : License = {
@@ -324,13 +331,13 @@ const dataservice: Dataservice = {
   authorization_request_url: null,
   availability: 99.9,
   base_api_url: null,
-  contact_point: {
+  contact_points: [{
     email: "",
     id: "someId",
     name: "Contact",
-    organization: null,
-    owner: "John Doe",
-  },
+    contact_form: "",
+    role: "contact",
+  }],
   created_at: (new Date()).toDateString(),
   datasets: [
     {
