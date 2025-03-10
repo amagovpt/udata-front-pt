@@ -158,5 +158,7 @@
   "Download file as ": "Descarregar ficheiro como ",
   "Temporal coverage": "Cobertura temporal",
   "since {date}": "desde {date}",
-  "{start} to {end}": "{start} a {end}"
+  "{start} to {end}": "{start} to {end}",
+  "The {certifier} robot failed to access this file - Download file as {format}": "O robô {certifier} não conseguiu aceder a este ficheiro - Descarregar ficheiro como {format}",
+  "Download file as {format}": "Descarregar ficheiro como {format}"
 }
