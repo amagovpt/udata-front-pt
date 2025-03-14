@@ -639,5 +639,6 @@
   "All types": "All types",
   "My Profile": "My Profile",
   "dataservices": "dataservices",
-  "Delete as spam (no mail sent and discussions are deleted)": "Delete as spam (no mail sent and discussions are deleted)"
+  "Delete as spam (no mail sent and discussions are deleted)": "Delete as spam (no mail sent and discussions are deleted)",
+  "Delete without as spam (no mail sent and discussions are deleted)": ""
 }
