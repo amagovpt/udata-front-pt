@@ -159,6 +159,8 @@
   "Temporal coverage": "Cobertura temporal",
   "since {date}": "desde {date}",
   "{start} to {end}": "{start} to {end}",
-  "The {certifier} robot failed to access this file - Download file as {format}": "O robô {certifier} não conseguiu aceder a este ficheiro - Descarregar ficheiro como {format}",
-  "Download file as {format}": "Descarregar ficheiro como {format}"
+  "Technical documentation": "Documentação técnica",
+  "Machine readable documentation": "Documentação legível por máquina",
+  "The {certifier} robot failed to access this file - Download file as {format}": "O robô {certifier} não conseguiu aceder a este ficheiro - Descarregue o ficheiro como {format}",
+  "Download file as {format}": "Descarregue o ficheiro como {format}"
 }
