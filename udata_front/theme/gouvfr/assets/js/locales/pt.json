@@ -640,5 +640,6 @@
   "My Profile": "O meu perfil",
   "dataservices": "dataservices",
   "Delete as spam (no mail sent and discussions are deleted)": "Apagar como spam (nenhum e-mail enviado e as discussões são apagadas)",
-  "Choose a type": "Escolha um tipo"
+  "Choose a type": "Escolha um tipo",
+  "Delete without as spam (no mail sent and discussions are deleted)": "Apagar como spam (nenhum e-mail enviado e as discussões são apagadas)"
 }
