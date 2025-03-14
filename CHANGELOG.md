@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.1.5 (2025-03-14)
+
+- Optimize dataset detail view for dataset with many resources [#673](https://github.com/datagouv/udata-front/pull/673)
+- Update dataservice type and remove unused stuff [#655](https://github.com/datagouv/udata-front/pull/655)
+- Add delete_comments args when deleting a user as spam [#666](https://github.com/datagouv/udata-front/pull/666)
+
 ## 6.1.4 (2025-03-10)
 
 - Change unavailable resource style [#670](https://github.com/datagouv/udata-front/pull/670)
