@@ -4,6 +4,7 @@ from flask import abort, request, url_for, redirect, make_response
 from feedgenerator.django.utils.feedgenerator import Atom1Feed
 
 from udata.models import Reuse, Follow
+from udata.core.contact_point.models import CONTACT_ROLES
 from udata.core.dataset.models import Dataset, get_resource
 from udata.core.dataset.constants import RESOURCE_TYPES
 from udata.core.dataset.search import DatasetSearch
@@ -89,10 +90,10 @@ class DatasetDetailView(DatasetView, DetailView):
         context = super(DatasetDetailView, self).get_context()
 
         params_dataservices_page = request.args.get("dataservices_page", 1, type=int)
-        dataservices = Dataservice.objects(datasets=self.dataset).visible()
+        dataservices = Dataservice.objects(datasets=self.dataset.id).visible()
 
         params_reuses_page = request.args.get('reuses_page', 1, type=int)
-        reuses = Reuse.objects(datasets=self.dataset).visible()
+        reuses = Reuse.objects(datasets=self.dataset.id).visible()
 
         if not DatasetEditPermission(self.dataset).can():
             if self.dataset.private:
@@ -110,6 +111,7 @@ class DatasetDetailView(DatasetView, DetailView):
 
         context['can_edit'] = DatasetEditPermission(self.dataset)
         context['can_edit_resource'] = ResourceEditPermission
+        context["CONTACT_ROLES"] = CONTACT_ROLES
         return context
 
 

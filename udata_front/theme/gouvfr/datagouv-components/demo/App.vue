@@ -239,7 +239,7 @@ const dataset : DatasetV2 = {
   tags: null,
   license: "lov2",
   frequency: "Unknown",
-  temporal_coverage: "Test",
+  temporal_coverage: { start: "2024-01-01", end: "2024-12-31"},
   frequency_date: null,
   private: false,
   badges: [],
@@ -269,7 +269,14 @@ const dataset : DatasetV2 = {
     name: "[TEST] Météo France",
     slug: "test-meteo-france",
     uri: "https://demo.data.gouv.fr/api/1/organizations/test-meteo-france/"
-  }
+  },
+  contact_points: [{
+    email: "",
+    id: "someId",
+    name: "Contact",
+    contact_form: "",
+    role: "contact",
+  }]
 };
 
 const license : License = {
@@ -324,13 +331,13 @@ const dataservice: Dataservice = {
   authorization_request_url: null,
   availability: 99.9,
   base_api_url: null,
-  contact_point: {
+  contact_points: [{
     email: "",
     id: "someId",
     name: "Contact",
-    organization: null,
-    owner: "John Doe",
-  },
+    contact_form: "",
+    role: "contact",
+  }],
   created_at: (new Date()).toDateString(),
   datasets: [
     {
@@ -344,13 +351,12 @@ const dataservice: Dataservice = {
   ],
   deleted_at: null,
   description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-  endpoint_description_url: null,
+  machine_documentation_url: null,
   extras: {},
-  format: "json",
+  format: "REST",
   harvest: {},
-  has_token: false,
   id: "653a6afa18f9f98d2ffdadee",
-  is_restricted: false,
+  access_type: 'open',
   license: "lov2",
   metadata_modified_at: (new Date()).toDateString(),
   metrics: { discussions: 12, followers: 25, reuses: 8, views: 59 },
