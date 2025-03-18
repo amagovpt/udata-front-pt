@@ -16,18 +16,19 @@
     </div>
   </li>
 </template>
-<script lang="ts">
+
+<script setup lang="ts">
 import type { RouteLocationRaw } from "vue-router";
-export type AdminSidebarLinkProps = {
+import TextClamp from "vue3-text-clamp";
+
+defineProps<{
   label: string,
   icon?: string,
   iconHtml?: string,
   to: RouteLocationRaw,
-};
+}>();
 </script>
-<script setup lang="ts">
-defineProps<AdminSidebarLinkProps>();
-</script>
+
 <style scoped>
 .fr-sidemenu__link {
   padding: 0.25rem 0.375rem;

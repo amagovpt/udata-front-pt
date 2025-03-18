@@ -109,6 +109,23 @@ def in_url(*args, **kwargs):
     )
 
 
+@front.app_template_global()
+def beta_admin_url_for(path, fallback_path, **kwargs):
+    '''
+    A helper to route to the new admin if available.
+    If NEW_ADMIN_URL is defined, we build the target url pointing to it using `path`.
+    Else we route to the old admin using `fallback_path`.
+    Kwargs are forwarded as as params in the first case
+    and as arguments of url_for in the seconde case.
+    '''
+    if current_app.config['NEW_ADMIN_URL']:
+        scheme, netloc, path, query, fragments = urlsplit(
+            current_app.config['NEW_ADMIN_URL'] + path
+        )
+        return urlunsplit((scheme, netloc, path, url_encode(kwargs), fragments))
+    return url_for('admin.index', path=fallback_path, **kwargs)
+
+
 @front.app_template_filter()
 @pass_context
 def placeholder(ctx, url, name='default', external=False):
@@ -310,21 +327,29 @@ def short_day(date):
 
 def daterange_with_details(value):
     '''Display a date range in the shorter possible maner.'''
-    delta = value.end - value.start
-    start, end = None, None
-    if is_first_year_day(value.start) and is_last_year_day(value.end):
+    if value.end:
+        delta = value.end - value.start
+    else:
+        delta = None
+
+    start, explicit_end = None, None
+    if is_first_year_day(value.start) and (not value.end or is_last_year_day(value.end)):
         start = value.start.year
-        if delta.days > 365:
-            end = value.end.year
-    elif is_first_month_day(value.start) and is_last_month_day(value.end):
+        if delta and delta.days > 365:
+            explicit_end = value.end.year
+    elif is_first_month_day(value.start) and (not value.end or is_last_month_day(value.end)):
         start = short_month(value.start)
-        if delta.days > 31:
-            end = short_month(value.end)
+        if delta and delta.days > 31:
+            explicit_end = short_month(value.end)
     else:
         start = short_day(value.start)
-        if value.start != value.end:
-            end = short_day(value.end)
-    return _('%(start)s to %(end)s', start=start, end=end) if end else start
+        if value.end and value.start != value.end:
+            explicit_end = short_day(value.end)
+    if explicit_end:
+        return _('%(start)s to %(end)s', start=start, end=explicit_end)
+    if not value.end:
+        return _('since %(start)s', start=start)
+    return start
 
 
 @front.app_template_global()
@@ -338,14 +363,19 @@ def daterange(value, details=False):
         return daterange_with_details(value)
 
     date_format = '%Y'
-
-    delta = value.end - value.start
-    start, end = None, None
     start = value.start.strftime(date_format)
-    if delta.days > 365:
-        end = value.end.strftime(date_format)
 
-    return '{start!s}–{end!s}'.format(start=start, end=end) if end else start
+    explicit_end = None
+    if value.end:
+        delta = value.end - value.start
+        if delta.days > 365:
+            explicit_end = value.end.strftime(date_format)
+
+    if explicit_end:
+        return '{start!s}–{end!s}'.format(start=start, end=explicit_end)
+    if not value.end:
+        return _('since %(start)s', start=start)
+    return start
 
 
 def format_from_now(value):

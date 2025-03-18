@@ -552,7 +552,7 @@
   "Last run": "Última execução",
   "Dataservices": "Serviços de dados",
   "Not yet": "Ainda não",
-  "There is no harvesters yet": "Ainda não há ceifeiras-debulhadoras",
+  "There is no harvesters yet": "Ainda não há harvesters",
   "Pending": "Pendente",
   "Initializing": "Inicializando",
   "Initialized": "Inicializado",
@@ -638,5 +638,8 @@
   "Search an organization type...": "Pesquisar um tipo de organização...",
   "All types": "Todos os tipos",
   "My Profile": "O meu perfil",
-  "dataservices": "dataservices"
+  "dataservices": "dataservices",
+  "Delete as spam (no mail sent and discussions are deleted)": "Apagar como spam (nenhum e-mail enviado e as discussões são apagadas)",
+  "Choose a type": "Escolha um tipo",
+  "Delete without as spam (no mail sent and discussions are deleted)": "Apagar como spam (nenhum e-mail enviado e as discussões são apagadas)"
 }
