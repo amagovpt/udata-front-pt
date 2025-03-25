@@ -18,6 +18,9 @@ check_file_exists() {
     fi
 }
 
+# Passo 0: Remover todos os ficheiros ZIP da pasta atual
+rm -f *.zip
+
 # Passo 1: Obter a versão e construir a URL
 echo -e "${BLUE}Enter the udata version (e.g., 2.5.1):${NC}"
 read version
