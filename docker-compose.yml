@@ -21,7 +21,7 @@ services:
           
     udata:
         build: .
-        #command: serve --reload
+        command: serve --reload
         #environment:
         #  - FLASK_DEBUG=true
         volumes:
