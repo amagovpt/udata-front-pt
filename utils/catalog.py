@@ -8,6 +8,10 @@ from typing import Dict, List, Optional, Tuple, Union
 import logging
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
+error_log_path = os.path.join(os.getcwd(), "error.log")
+http_errors: List[Tuple[int, str]] = []  # (pagina, mensagem)
+
+
 # Configuração de logging
 logging.basicConfig(
     level=logging.INFO,
@@ -177,6 +181,7 @@ def fetch_page(url: str, page: int, tag: Optional[str], max_retries: int = 3) ->
             # Verificar erro no status code
             if response.status_code != 200:
                 logger.warning(f"Erro HTTP {response.status_code} na página {page}.")
+                http_errors.append((page, f"Erro HTTP {response.status_code}"))
                 retry_count += 1
                 time.sleep(1)
                 continue
@@ -200,6 +205,13 @@ def fetch_page(url: str, page: int, tag: Optional[str], max_retries: int = 3) ->
                 
         except requests.RequestException as e:
             logger.error(f"Erro de conexão: {e}")
+            retry_count += 1
+            time.sleep(2)
+            continue
+        
+        except requests.RequestException as e:
+            logger.error(f"Erro de conexão: {e}")
+            http_errors.append((page, f"Erro de conexão: {e}"))
             retry_count += 1
             time.sleep(2)
             continue
@@ -361,11 +373,20 @@ def display_summary(start_time: float, records_count: int, output_path: str, out
     print(f"• Formato de saída: {output_format.upper()}")
     print(f"• Arquivo salvo em: {output_path}")
     
-    if os.path.exists(output_path):
-        size_kb = os.path.getsize(output_path) / 1024
-        print(f"• Tamanho do arquivo: {size_kb:.2f} KB")
+    if http_errors:
+        print(f"• Total de erros HTTP: {len(http_errors)}")
+        print("• Páginas com erro:")
+        for page, msg in http_errors:
+            print(f"    - Página {page}: {msg}")
+        try:
+            with open(error_log_path, "w", encoding="utf-8") as f:
+                for page, msg in http_errors:
+                    f.write(f"Página {page}: {msg}\n")
+            print(f"• Log de erros salvo em: {error_log_path}")
+        except Exception as e:
+            print(f"❌ Falha ao salvar o error.log: {e}")
     else:
-        print("❌ ATENÇÃO: O arquivo de saída não foi criado!")
+        print("• Nenhum erro HTTP registrado.")
     
     print("=" * 60)
 
