@@ -33,13 +33,13 @@ def clear_screen():
 def select_environment():
     """Exibe o menu para seleção do ambiente."""
     clear_screen()
-    print("=" * 50)
+    print("=" * 52)
     print("SISTEMA DE MIGRAÇÃO DE DATASETS, FIX ORGANIZAÇÃO INE")
-    print("=" * 50)
+    print("=" * 52)
     print("\nSelecione o ambiente para executar o script:")
-    print("1. Produção (10.51.37.51)")
-    print("2. Pré-produção (10.53.37.52)")
-    print("3. IP Personalizado")
+    print("1. BD Produção (10.51.37.51)")
+    print("2. BD Pré-produção (10.53.37.52)")
+    print("3. BD IP Personalizado")
     print("0. Sair")
     
     choice = input("\nEscolha uma opção (0-3): ")
@@ -47,7 +47,7 @@ def select_environment():
     if choice == '1':
         return "10.51.37.51"
     elif choice == '2':
-        return "10.53.37.52"
+        return "10.53.37.51"
     elif choice == '3':
         custom_ip = input("Digite o IP do servidor MongoDB: ")
         return custom_ip
