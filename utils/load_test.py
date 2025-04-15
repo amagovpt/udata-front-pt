@@ -18,6 +18,15 @@ logging.basicConfig(
     ]
 )
 
+# Available data sources - each with a name and URL
+SOURCES = {
+    "1": {"name": "Production", "url": "https://dados.gov.pt"},
+    "2": {"name": "Preprod", "url": "https://preprod.dados.gov.pt"},
+    "3": {"name": "Test", "url": "https://10.55.37.38"},
+    "4": {"name": "Development", "url": "https://172.31.204.12"},
+    "5": {"name": "Local", "url": "http://localhost:7000"}
+}
+
 def get_valid_url(prompt_text):
     """Solicita e valida uma URL do usuário"""
     while True:
@@ -41,6 +50,25 @@ def get_valid_url(prompt_text):
         except Exception as e:
             print(f"URL inválida: {str(e)}. Tente novamente.")
 
+def select_source():
+    """Permite ao usuário selecionar uma fonte de dados do menu"""
+    print("\n===== SELECIONE A FONTE DE DADOS =====")
+    for key, source in SOURCES.items():
+        print(f"{key}. {source['name']} - {source['url']}")
+    print("6. Outro (inserir URL manualmente)")
+    
+    while True:
+        choice = input("\nEscolha uma opção (1-6): ").strip()
+        
+        if choice in SOURCES:
+            source = SOURCES[choice]
+            print(f"Selecionado: {source['name']} ({source['url']})")
+            return source['url']
+        elif choice == "6":
+            return get_valid_url("Digite o IP ou nome do site para teste (ex: exemplo.com ou 10.0.0.1): ")
+        else:
+            print("Opção inválida. Tente novamente.")
+
 # Definição de headers comuns de navegadores
 BROWSER_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
@@ -58,7 +86,7 @@ BROWSER_HEADERS = {
 
 # Solicita as informações ao usuário
 print("\n===== CONFIGURAÇÃO DO TESTE DE CARGA =====")
-BASE_URL = get_valid_url("Digite o IP ou nome do site para teste (ex: exemplo.com ou 10.0.0.1): ")
+BASE_URL = select_source()
 
 # Para a página específica, oferece a opção de inserir ou usar a raiz
 use_specific = input("Deseja testar uma página específica além da página principal? (s/n): ").lower() == 's'
