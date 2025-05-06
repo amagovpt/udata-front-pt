@@ -247,7 +247,7 @@ msgstr "Catálogo de dados"
 
 #: udata_front/theme/gouvfr/__init__.py:126
 msgid "Portal for European data"
-msgstr "Portal de dados europeus"
+msgstr "Portal de dados europeu"
 
 #: udata_front/theme/gouvfr/__init__.py:133
 msgid "About us"
