@@ -18,6 +18,6 @@ base_url="https://dados.gov.pt/api/1/datasets"
 # Inserir a Chave da API do seu User - "X-Api-Key: *****"
 for id in "${dataset_ids[@]}"; do
     echo "A eliminar dataset com ID: $id"
-    curl -X DELETE "${base_url}/${id}/" -H "accept: application/json" -H "X-Api-Key: *****" 
+    curl -k -X DELETE "${base_url}/${id}/" -H "accept: application/json" -H "X-Api-Key: *****" 
     echo -e "\n-----------------------------"
 done
