@@ -7,7 +7,7 @@ import datetime
 DB_USER = "root"
 DB_PASSWORD = "root_secret"
 DB_NAME = "matomo"
-BACKUP_DIR = "/opt/matomo/backups"
+BACKUP_DIR = "/opt/matomo/backups_DB"
 DOCKER_DB_CONTAINER = "matomo-db"
 DATE = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
