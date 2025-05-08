@@ -81,7 +81,7 @@ class OrganizationDetailView(SearchView, OrgView, DetailView):
 
         dataservices = Dataservice.objects(
             organization=self.organization).visible()
-        
+
         datasets = Dataset.objects(
             organization=self.organization)
 

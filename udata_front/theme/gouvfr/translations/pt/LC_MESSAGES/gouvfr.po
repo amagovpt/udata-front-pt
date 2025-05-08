@@ -41,6 +41,10 @@ msgstr "Sobrenome"
 msgid "Last name is required"
 msgstr "Sobrenome é necessário"
 
+#: udata_front/forms.py:22 udata_front/forms.py:40
+msgid "captchetat_uuid"
+msgstr ""
+
 #: udata_front/models.py:16
 msgid "Reference Data"
 msgstr "Data de referência"
@@ -164,6 +168,10 @@ msgstr ""
 #: udata_front/views/site.py:103
 msgid "Reuses"
 msgstr "Reutilizações"
+
+#: udata_front/theme/gouvfr/__init__.py:79 udata_front/theme/gouvfr/__init__.py:110
+msgid "Write to us"
+msgstr ""
 
 #: udata_front/theme/gouvfr/__init__.py:49 udata_front/theme/gouvfr/__init__.py:113
 #: udata_front/theme/gouvfr/templates/home.html:64
