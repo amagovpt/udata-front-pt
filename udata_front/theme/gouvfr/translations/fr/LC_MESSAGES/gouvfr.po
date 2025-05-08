@@ -38,13 +38,13 @@ msgstr "Nom"
 msgid "Last name is required"
 msgstr "Nom de famille requis"
 
-#: udata_front/forms.py:19 udata_front/forms.py:35
+#: udata_front/forms.py:19 udata_front/forms.py:37
 msgid "captcha_input"
 msgstr "captcha_input"
 
-#: udata_front/forms.py:21 udata_front/forms.py:37
-msgid "captcha_id"
-msgstr "captcha_id"
+#: udata_front/forms.py:21 udata_front/forms.py:40
+msgid "captchetat_uuid"
+msgstr "captchetat_uuid"
 
 #: udata_front/forms.py:28 udata_front/forms.py:41
 msgid "Invalid Captcha"
@@ -169,8 +169,8 @@ msgid "News"
 msgstr "Actualités"
 
 #: udata_front/theme/gouvfr/__init__.py:80 udata_front/theme/gouvfr/__init__.py:111
-msgid "Contact us"
-msgstr "Nous contacter"
+msgid "Write to us"
+msgstr "Nous écrire"
 
 #: udata_front/theme/gouvfr/__init__.py:86
 #: udata_front/theme/gouvfr/templates/topic/datasets.html:15

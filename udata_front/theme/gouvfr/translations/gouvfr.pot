@@ -259,7 +259,7 @@ msgid "Roadmap and news"
 msgstr ""
 
 #: udata_front/theme/gouvfr/__init__.py:136
-msgid "Contact us"
+msgid "Write to us"
 msgstr ""
 
 #: udata_front/theme/gouvfr/__init__.py:142
