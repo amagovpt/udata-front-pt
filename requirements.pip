@@ -1,5 +1,5 @@
 -r requirements/install.pip
 #https://github.com/amagovpt/udata-front-pt/blob/main/requirements/pysaml2-7.5.2.zip?raw=true
 https://github.com/amagovpt/udata-front-pt/blob/main/requirements/pysaml2-7.1.2.zip?raw=true
-https://github.com/amagovpt/udata-front-pt/blob/udata-v10.1.4/udata-update/udata-v10.1.4.zip?raw=true
+https://github.com/amagovpt/udata-front-pt/blob/udata-v10.3.2/udata-update/udata-v10.3.2.zip?raw=true
 
