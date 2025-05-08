@@ -17,7 +17,11 @@
             <p class="fr-text--sm fr-m-0 f-italic">{{ t("Use our tool to get an overview of data, learn about different columns or perform filters and sorts.") }}</p>
           </div>
           <p class="fr-col-auto fr-my-0">
+<<<<<<< Updated upstream
             <a :href="resource.preview_url" class=" target="_blank">
+=======
+            <a :href="resource.preview_url" class="fr-btn" target="_blank">
+>>>>>>> Stashed changes
               {{ t("Explore data") }}
             </a>
           </p>

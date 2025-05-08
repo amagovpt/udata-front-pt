@@ -1,5 +1,35 @@
 # Changelog
 
+## 6.2.3 (2025-05-06)
+
+- Move CSV exports to udata [#692](https://github.com/datagouv/udata-front/pull/692/)
+- Link to new admin for community resource and user profile [#682](https://github.com/datagouv/udata-front/pull/682/)
+
+## 6.2.2 (2025-04-29)
+
+- Use csv queryset instead of .visible for csv routes [#685](https://github.com/datagouv/udata-front/pull/685)
+- Remove nofollow on internal pagination links [#686](https://github.com/datagouv/udata-front/pull/686)
+- Remove noindex on list pages [#687](https://github.com/datagouv/udata-front/pull/687)
+- Use target blank in resource explore [#689](https://github.com/datagouv/udata-front/pull/689)
+- Remove MAAF backend (it is now directly inside udata) [#688](https://github.com/datagouv/udata-front/pull/688)
+- Fix discussion tests following new closing behaviour [#690](https://github.com/datagouv/udata-front/pull/690)
+- Remove old new admin and new publishing forms (move to [cdata](https://github.com/datagouv/cdata)) [#691](https://github.com/datagouv/udata-front/pull/691)
+
+## 6.2.1 (2025-04-11)
+
+- Use SUPPORT_URL config everywhere and modify contact us wording [#683](https://github.com/datagouv/udata-front/pull/683)
+- [maaf backend] Rename is_done() function [#681](https://github.com/datagouv/udata-front/pull/681)
+
+## 6.2.0 (2025-04-02)
+
+- Update dependencies [#676](https://github.com/datagouv/udata-front/pull/676)
+  - propagate [udata dependencie upgrade](https://github.com/opendatateam/udata/pull/3278)
+  - upgrade feedparser to 6.0.11
+  - upgrade python-frontmatter to 1.1.0
+  - flask-themes2 to 1.0.1
+  - modify code following mistune upgrade in udata
+- Migrate to CaptchEtat v2 [#679](https://github.com/datagouv/udata-front/pull/679) [#680](https://github.com/datagouv/udata-front/pull/680)
+
 ## 6.1.6 (2025-03-24)
 
 - Fix menu translation using python parenthesis format [#678](https://github.com/datagouv/udata-front/pull/678)

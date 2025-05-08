@@ -78,7 +78,7 @@ def home():
         'spd_datasets': Dataset.objects.filter(badges__kind='spd'),
         'recent_datasets': Dataset.objects.visible(),
         'recent_reuses': Reuse.objects(featured=True).visible(),
-                'last_post': Post.objects.published().first(),
+        'last_post': Post.objects.published().first(),
         'data_metrics': [
             (_('Datasets and Dataservices'),
              current_site.metrics.get('datasets', 0) + current_site.metrics.get('dataservices', 0)),

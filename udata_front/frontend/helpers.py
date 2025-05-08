@@ -120,7 +120,7 @@ def beta_admin_url_for(path, fallback_path, **kwargs):
     '''
     if current_app.config['NEW_ADMIN_URL']:
         scheme, netloc, path, query, fragments = urlsplit(
-            current_app.config['NEW_ADMIN_URL'] + path
+            current_app.config['NEW_ADMIN_URL'].rstrip('/') + '/' + path.lstrip('/')
         )
         return urlunsplit((scheme, netloc, path, url_encode(kwargs), fragments))
     return url_for('admin.index', path=fallback_path, **kwargs)
@@ -385,7 +385,7 @@ def format_from_now(value):
     '''
     today = date.today()
     value_without_time = value.date()
-    if(value_without_time == today):
+    if value_without_time == today:
         return _("today")
     return format_timedelta(value_without_time - today, add_direction=True)
 
@@ -397,7 +397,7 @@ def format_based_on_date(value):
     Otherwise, show a formatted date.
     '''
     delta = date.today() - value.date()
-    if(delta.days > 30):
+    if delta.days > 30:
         return _("on %(date)s", date=format_date(value, "long"))
     return format_from_now(value)
 
