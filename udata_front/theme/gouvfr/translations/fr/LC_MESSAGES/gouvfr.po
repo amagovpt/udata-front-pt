@@ -42,11 +42,7 @@ msgstr "Nom de famille requis"
 msgid "captcha_input"
 msgstr "captcha_input"
 
-<<<<<<< Updated upstream
-#: udata_front/forms.py:21 udata_front/forms.py:40
-=======
 #: udata_front/forms.py:22 udata_front/forms.py:40
->>>>>>> Stashed changes
 msgid "captchetat_uuid"
 msgstr "captchetat_uuid"
 
@@ -174,11 +170,7 @@ msgstr "Guides data.gouv.fr"
 msgid "News"
 msgstr "Actualités"
 
-<<<<<<< Updated upstream
 #: udata_front/theme/gouvfr/__init__.py:80 udata_front/theme/gouvfr/__init__.py:111
-=======
-#: udata_front/theme/gouvfr/__init__.py:79 udata_front/theme/gouvfr/__init__.py:110
->>>>>>> Stashed changes
 msgid "Write to us"
 msgstr "Nous écrire"
 
