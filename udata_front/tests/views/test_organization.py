@@ -239,7 +239,7 @@ class OrganizationBlueprintTest(GouvfrFrontTestCase):
         self.assertIn(b'<meta name="robots" content="noindex, nofollow"',
                       response.data)
 
- class OrganizationBadgeAPITest:
+class OrganizationBadgeAPITest:
     settings = GouvFrSettings
     modules = []
 
