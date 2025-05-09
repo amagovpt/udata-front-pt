@@ -40,8 +40,4 @@ const adminUrl = computed(() => {
   }
   
 })
-<<<<<<< Updated upstream
 </script>
-=======
-</script>
->>>>>>> Stashed changes
