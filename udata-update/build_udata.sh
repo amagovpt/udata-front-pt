@@ -179,8 +179,8 @@ git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing
 # Passo 10: Instalar o ficheiro compactado
 echo -e "${GREEN}Installing udata locally...${NC}"
 cd .. || { echo -e "${RED}Erro ao mudar de diretorio.${NC}"; exit 1; }
-pip install -r "$requirements_file" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
-pip install -e . -r "$requirements/test.pip" -r "$requirements/develop.pip" || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+pip install -r requirements.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+pip install -e . -r requirements/test.pip -r requirements/develop.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
 
 # Passo 11: Executar os comandos necessários para atualizar o javascript
 inv assets-build
