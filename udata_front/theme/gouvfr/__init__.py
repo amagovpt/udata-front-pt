@@ -90,6 +90,11 @@ gouvfr_menu = nav.Bar("gouvfr_menu",[
                     args={"slug": "faqs/acessibilidade"},
                 ),
                 nav.Item(
+                    _("Acesso Catalogo via SPARQL"), 
+                    "gouvfr.show_page", 
+                    args={"slug": "faqs/acesso-ao-catalogo-via-sparql"}
+                ),
+                nav.Item(
                     _("API Tutorial"), "gouvfr.show_page", args={"slug": "api-tutorial"}
                 ),
                 nav.Item(
