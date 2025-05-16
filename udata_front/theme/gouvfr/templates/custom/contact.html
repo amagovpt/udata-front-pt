@@ -43,6 +43,7 @@
                                     </label>         
                                     <textarea id="message" name="message" style="border: 2px solid #eee" rows="4" cols="50"></textarea>                           
                                 </div>
+                                {{ form.csrf_token }}
                                 <center>
                                     {% for error in form.recaptcha.errors %}
                                         <p style="color:red">
