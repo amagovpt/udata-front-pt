@@ -21,7 +21,26 @@ class DGTBackend(BaseBackend):
         }
         res = requests.get(self.source.url, headers=headers)
         res.encoding = 'utf-8'
-        metadata = res.json().get("metadata")
+        data = res.json()
+        metadata = data.get("metadata")
+
+        # Garante que metadata é sempre uma lista de dicts
+        if isinstance(metadata, dict):
+            metadata = [metadata]
+        elif isinstance(metadata, str) and data.get("@to") == "1":
+            # Se for string e @to == "1", não é possível processar como dict, então ignora ou loga erro
+            self.logger.warning('metadata é uma string, não um dict: %r', metadata)
+            return
+        elif isinstance(metadata, str) and data.get("@to") == "0":
+            # Nenhum resultado, metadata vazio
+            self.logger.error('Erro: Metadados vazios. Nenhum dataset disponível.')
+            return
+        elif not isinstance(metadata, list):
+            metadata = []
+
+        if not metadata:
+            self.logger.error('Erro: Metadados vazios. Nenhum dataset disponível.')
+            return
 
         # Loop through the metadata and process each item
         for each in metadata:
