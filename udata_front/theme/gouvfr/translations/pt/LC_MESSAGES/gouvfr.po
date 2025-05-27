@@ -379,11 +379,11 @@ msgstr "Mecanismo de código aberto : udata ({version})"
 
 #: udata_front/theme/gouvfr/templates/footer.html:62
 msgid "data.gouv.fr extension: udata-front"
-msgstr "extenção dados.gov.pt : udata-front"
+msgstr "Extensão dados.gov.pt : udata-front"
 
 #: udata_front/theme/gouvfr/templates/footer.html:65
 msgid "udata theme extension: udata-front ({version})"
-msgstr "extenção do tema udata : udata-front ({version})"
+msgstr "Extensão do tema udata : udata-front ({version})"
 
 #: udata_front/theme/gouvfr/templates/footer.html:88
 #: udata_front/theme/gouvfr/templates/header.html:64
