@@ -257,19 +257,23 @@ msgstr "Catálogo de dados"
 msgid "Portal for European data"
 msgstr "Portal de dados europeu"
 
-#: udata_front/theme/gouvfr/__init__.py:133
+#: udata_front/theme/gouvfr/__init__.py:138
 msgid "About us"
 msgstr "Sobre nós"
 
-#: udata_front/theme/gouvfr/__init__.py:135
+#: udata_front/theme/gouvfr/__init__.py:140
 msgid "Roadmap and news"
 msgstr "Roadmap e notícias"
+
+#: udata_front/theme/gouvfr/__init__.py:141
+msgid "Contact us"
+msgstr "Contactar-nos"
 
 #: udata_front/theme/gouvfr/__init__.py:136
 msgid "Write to us"
 msgstr "Escreva-nos"
 
-#: udata_front/theme/gouvfr/__init__.py:142
+#: udata_front/theme/gouvfr/__init__.py:147
 msgid "Statistics"
 msgstr "Estatísticas"
 
