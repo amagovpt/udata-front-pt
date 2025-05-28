@@ -50,7 +50,7 @@ markdown==3.8 #3.4.1
 owslib==0.33.0 #0.18.0
 pysaml2==7.4.2
 udata-ckan==4.0.2 #3.0.3
-udata-metrics==2.0.4 #2.0.3
+# udata-metrics==2.0.4 #2.0.3
 udata-piwik==4.1.1 #4.1.0
 udata-recommendations==3.1.7 #3.1.6
 uwsgi==2.0.29 #2.0.21
