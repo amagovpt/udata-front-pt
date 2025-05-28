@@ -1,3 +1,4 @@
 -r requirements/install.pip
 https://github.com/amagovpt/udata-front-pt/blob/udata-v10.4.1/udata-update/udata-v10.4.1.zip?raw=true
+https://github.com/amagovpt/udata-front-pt/blob/custom-udata-metrics/udata-update/custom-udata-metrics.zip?raw=true
 
