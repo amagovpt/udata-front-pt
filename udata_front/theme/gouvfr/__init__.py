@@ -138,13 +138,14 @@ platform_links = [
     nav.Item(_("About us"), "gouvfr.show_page", args={"slug": "faqs/about_dadosgov"}),
     nav.Item(_("API Tutorial"), "gouvfr.show_page", args={"slug": "api-tutorial"}),
     nav.Item(_("Roadmap and news"), "gouvfr.show_page", args={"slug": "roadmap"}),
+    nav.Item(_("Webinars"), "gouvfr.show_page", args={"slug": "webinars"}),
+    nav.Item(_("Statistics"), "site.dashboard"),
     nav.Item(_("Contact us"), "gouvfr_faq.contact", args={"slug": "contact"}),
     # nav.Item(
     #     _("Give us your feedback"),
     #     None,
     #     url=current_app.config.get("FEEDBACK_FORM_URL", "#"),
     # ),
-    nav.Item(_("Statistics"), "site.dashboard"),
 ]
 
 nav.Bar("gouvfr_platform", platform_links)
