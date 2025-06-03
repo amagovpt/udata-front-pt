@@ -1,7 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 import os
 import subprocess
 import datetime
+
+# Compatibilidade Python 2 e 3
+try:
+    compat_input = raw_input  # Python 2
+except NameError:
+    compat_input = input      # Python 3
 
 # === CONFIGURAÇÕES ===
 DB_USER = "root"
@@ -11,60 +18,68 @@ BACKUP_DIR = "/opt/matomo/backups_DB"
 DOCKER_DB_CONTAINER = "matomo-db"
 DATE = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-BACKUP_FILE = f"{BACKUP_DIR}/matomo_backup_{DATE}.sql.gz"
-LOG_DIR = f"{BACKUP_DIR}/logs"
-EXPORT_LOG = f"{LOG_DIR}/export_{DATE}.log"
-IMPORT_LOG = f"{LOG_DIR}/import_{DATE}.log"
+BACKUP_FILE = "{}/matomo_backup_{}.sql.gz".format(BACKUP_DIR, DATE)
+LOG_DIR = "{}/logs".format(BACKUP_DIR)
+EXPORT_LOG = "{}/export_{}.log".format(LOG_DIR, DATE)
+IMPORT_LOG = "{}/import_{}.log".format(LOG_DIR, DATE)
 
 
 # === FUNÇÕES ===
+def make_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def run_command(cmd, log_path):
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = process.communicate()
+
+    with open(log_path, "wb") as log_file:
+        log_file.write(out)
+        log_file.write(err)
+
+    return process.returncode
+
+
 def export_db():
-    os.makedirs(BACKUP_DIR, exist_ok=True)
-    os.makedirs(LOG_DIR, exist_ok=True)
-    print(f"📦 A fazer backup da base de dados para: {BACKUP_FILE}")
+    make_dir(BACKUP_DIR)
+    make_dir(LOG_DIR)
+    print("📦 A fazer backup da base de dados para: {}".format(BACKUP_FILE))
 
-    cmd = f"sudo mysqldump -u{DB_USER} -p{DB_PASSWORD} {DB_NAME} | gzip > {BACKUP_FILE}"
-    result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd = "sudo mysqldump -u{} -p{} {} | gzip > {}".format(DB_USER, DB_PASSWORD, DB_NAME, BACKUP_FILE)
+    returncode = run_command(cmd, EXPORT_LOG)
 
-    with open(EXPORT_LOG, "wb") as log_file:
-        log_file.write(result.stdout)
-        log_file.write(result.stderr)
-
-    if result.returncode == 0:
+    if returncode == 0:
         print("✅ Backup concluído com sucesso!")
-        print(f"📄 Log de exportação: {EXPORT_LOG}")
+        print("📄 Log de exportação: {}".format(EXPORT_LOG))
     else:
         print("❌ Erro ao fazer backup!")
-        print(f"📄 Ver log de exportação: {EXPORT_LOG}")
+        print("📄 Ver log de exportação: {}".format(EXPORT_LOG))
 
 
 def import_db():
-    os.makedirs(LOG_DIR, exist_ok=True)
-    file_path = input("🗂 Caminho para o ficheiro de backup (.sql ou .sql.gz): ").strip()
+    make_dir(LOG_DIR)
+    file_path = compat_input("🗂 Caminho para o ficheiro de backup (.sql ou .sql.gz): ").strip()
 
     if not os.path.isfile(file_path):
         print("❌ Ficheiro não encontrado!")
         return
 
     if file_path.endswith(".gz"):
-        # Comprimir e enviar diretamente para o container
-        cmd = f"gunzip -c {file_path} | docker exec -i {DOCKER_DB_CONTAINER} mysql -u{DB_USER} -p{DB_PASSWORD} {DB_NAME}"
+        cmd = "gunzip -c {} | docker exec -i {} mysql -u{} -p{} {}".format(
+            file_path, DOCKER_DB_CONTAINER, DB_USER, DB_PASSWORD, DB_NAME)
     else:
-        cmd = f"docker exec -i {DOCKER_DB_CONTAINER} mysql -u{DB_USER} -p{DB_PASSWORD} {DB_NAME} < {file_path}"
+        cmd = "docker exec -i {} mysql -u{} -p{} {} < {}".format(
+            DOCKER_DB_CONTAINER, DB_USER, DB_PASSWORD, DB_NAME, file_path)
 
-    print(f"♻️ A importar base de dados de: {file_path}")
-    result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print("♻️ A importar base de dados de: {}".format(file_path))
+    returncode = run_command(cmd, IMPORT_LOG)
 
-    with open(IMPORT_LOG, "wb") as log_file:
-        log_file.write(result.stdout)
-        log_file.write(result.stderr)
-
-    if result.returncode == 0:
+    if returncode == 0:
         print("✅ Importação concluída com sucesso!")
-        print(f"📄 Log de importação: {IMPORT_LOG}")
+        print("📄 Log de importação: {}".format(IMPORT_LOG))
     else:
         print("❌ Erro ao importar a base de dados!")
-        print(f"📄 Ver log de importação: {IMPORT_LOG}")
+        print("📄 Ver log de importação: {}".format(IMPORT_LOG))
 
 
 # === MENU ===
@@ -72,7 +87,7 @@ def main():
     print("🛠 Script de Backup/Importação da Base de Dados Matomo")
     print("1. Exportar base de dados")
     print("2. Importar base de dados")
-    option = input("Escolha a opção (1 ou 2): ").strip()
+    option = compat_input("Escolha a opção (1 ou 2): ").strip()
 
     if option == "1":
         export_db()

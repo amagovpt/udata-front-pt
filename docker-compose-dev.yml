@@ -3,8 +3,8 @@ services:
     db:
         image: mongo:6.0.4
         volumes:
-          - ./data/db:/data/db
-          #- ./data/dump:/dump
+          # - ./data/db:/data/db
+          - ./data/dump:/dump
         expose:
           - "27017"
         ports:
