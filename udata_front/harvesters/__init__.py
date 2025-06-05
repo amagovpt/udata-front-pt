@@ -4,3 +4,4 @@ from . import apambiente # apambiente
 from . import ine # ine
 from . import odspt # odspt
 from . import dgt # dgt
+from . import dgtIne # dgt
