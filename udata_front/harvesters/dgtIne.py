@@ -1,7 +1,9 @@
 from udata.harvest.backends.base import BaseBackend
 from udata.models import Resource, Dataset, License
-import requests
 import logging
+import json
+import subprocess
+import os
 
 class DGTINEBackend(BaseBackend):
     display_name = 'INE Harvester'
@@ -11,29 +13,38 @@ class DGTINEBackend(BaseBackend):
         self.logger = logging.getLogger(__name__)
 
     def inner_harvest(self):
-        url = self.source.url
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Referer': 'https://www.ine.pt/',
-        }
-        session = requests.Session()
-        # Optional: visit the main page to get cookies
-        session.get('https://www.ine.pt/', headers=headers)
-        res = session.get(url, headers=headers)
-        print(res.status_code)
-        print(res.text[:500])
-        res.encoding = 'utf-8'
+        # Caminho do ficheiro JSON baixado
+        json_path = '/tmp/catalogo_hvd.json'
+
+        # Faz o download do JSON via curl
+        curl_cmd = [
+            "curl", "-s", "https://www.ine.pt/ine/catalogo_hvd.jsp?opc=4&lang=PT",
+            "-H", "Accept: application/json",
+            "-H", "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "-H", "Accept-Encoding: gzip, deflate, br",
+            "--compressed",
+            "-o", json_path
+        ]
+        subprocess.run(curl_cmd, check=True)
+
+        # Lê o conteúdo do ficheiro JSON baixado
+        if not os.path.exists(json_path):
+            self.logger.error(f'JSON file not found: {json_path}')
+            return
+
         try:
-            data = res.json()
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
         except Exception as e:
-            self.logger.error(f'Error parsing JSON: {e}')
+            self.logger.error(f'Error parsing JSON from file: {e}')
             return
 
         indicators = data.get('catalog', {}).get('indicators', [])
         if not indicators:
             self.logger.error('No indicators found in INE JSON.')
+            # Remove o ficheiro mesmo em caso de erro
+            if os.path.exists(json_path):
+                os.remove(json_path)
             return
 
         for ind in indicators:
@@ -60,6 +71,10 @@ class DGTINEBackend(BaseBackend):
                 'differenceInDays': ind.get('differenceInDays')
             }
             self.process_dataset(item['remote_id'], items=item)
+
+        # Remove o ficheiro JSON após o processamento
+        if os.path.exists(json_path):
+            os.remove(json_path)
 
     def inner_process_dataset(self, item: 'HarvestItem', **kwargs):
         dataset = self.get_dataset(item.remote_id)
