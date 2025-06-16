@@ -4,7 +4,8 @@ import logging
 import json
 import subprocess
 import os
-
+import unicodedata
+import re
 class DGTINEBackend(BaseBackend):
     display_name = 'INE Harvester'
 
@@ -76,6 +77,14 @@ class DGTINEBackend(BaseBackend):
         if os.path.exists(json_path):
             os.remove(json_path)
 
+    @staticmethod
+    def slugify(value):
+        """Converte string para slug: sem acento, minúscula, com hífens"""
+        value = str(value)
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub(r'[^\w\s-]', '', value).strip().lower()
+        return re.sub(r'[\s]+', '-', value)
+
     def inner_process_dataset(self, item: 'HarvestItem', **kwargs):
         dataset = self.get_dataset(item.remote_id)
         data = kwargs.get('items')
@@ -94,7 +103,13 @@ class DGTINEBackend(BaseBackend):
             f"Metadata: {data['meta_url']}"
         )
         dataset.license = License.guess('cc-by')
-        dataset.tags = ['ine.pt'] + data.get('tags', [])
+
+        # Corrigir TAGS
+        original_tags = data.get('tags', [])
+        slug_tags = [self.slugify(tag) for tag in original_tags if isinstance(tag, str)]
+
+        dataset.tags = ['ine.pt'] + slug_tags
+        dataset.extras['original_tags'] = original_tags
 
         # Resources
         dataset.resources = []
