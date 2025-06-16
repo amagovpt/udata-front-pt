@@ -79,7 +79,13 @@ class DGTINEBackend(BaseBackend):
 
     @staticmethod
     def slugify(value):
-        """Converte string para slug: sem acento, minúscula, com hífens"""
+        """
+        Normaliza uma string para uso como tag (slug):
+        - remove acentos e cedilhas
+        - substitui espaços por hífens
+        - converte para minúsculas
+        - remove caracteres especiais
+        """
         value = str(value)
         value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
         value = re.sub(r'[^\w\s-]', '', value).strip().lower()
