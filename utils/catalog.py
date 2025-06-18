@@ -3,7 +3,7 @@
 """
 Catalog Fetcher Tool - A utility for extracting, processing, and saving catalog data from various sources.
 This tool supports extracting catalog data from multiple environments, filtering by tags,
-and exporting in XML, JSON, or TXT formats.
+and exporting in XML, JSON, TXT, or TTL formats.
 """
 
 import os
@@ -37,7 +37,7 @@ SOURCES = {
 }
 
 # Supported output formats
-SUPPORTED_FORMATS = ["xml", "json", "txt"]
+SUPPORTED_FORMATS = ["xml", "json", "txt", "ttl"]
 
 # UI helper functions
 def clear_screen():
@@ -98,12 +98,18 @@ def get_output_format() -> str:
     Present available output formats and get the user's selection.
     
     Returns:
-        str: The selected output format (xml, json, or txt)
+        str: The selected output format (xml, json, txt, or ttl)
     """
     while True:
         print("\nFORMATOS DE SAÍDA DISPONÍVEIS:")
         for i, fmt in enumerate(SUPPORTED_FORMATS, 1):
-            print(f"  [{i}] - {fmt.upper()}")
+            format_description = {
+                "xml": "XML - Extensible Markup Language",
+                "json": "JSON - JavaScript Object Notation", 
+                "txt": "TXT - Plain Text",
+                "ttl": "TTL - Turtle RDF Format"
+            }
+            print(f"  [{i}] - {format_description.get(fmt, fmt.upper())}")
             
         format_choice = input("\nEscolha o formato do arquivo de saída (1-{}): ".format(len(SUPPORTED_FORMATS))).strip()
         
@@ -400,13 +406,60 @@ def fetch_all_data(base_url: str, tag: Optional[str] = None, max_retries: int = 
     logger.info(f"Total de registros obtidos: {len(all_records)}")
     return all_records
 
+def xml_element_to_ttl(element: ET.Element, base_uri: str = "http://example.org/") -> str:
+    """
+    Convert an XML element to TTL (Turtle) format.
+    
+    Args:
+        element: XML element to convert
+        base_uri: Base URI for the RDF resources
+        
+    Returns:
+        str: TTL representation of the element
+    """
+    ttl_lines = []
+    
+    # Create a subject URI based on element tag and attributes
+    element_id = element.attrib.get('id') or element.attrib.get('identifier', f"item_{id(element)}")
+    subject = f"<{base_uri}{element.tag}/{element_id}>"
+    
+    # Add type information
+    ttl_lines.append(f"{subject} a <{base_uri}types/{element.tag}> ;")
+    
+    # Process child elements
+    for child in element:
+        predicate = f"<{base_uri}properties/{child.tag.split('}')[-1]}>"
+        
+        if child.text and child.text.strip():
+            # Escape quotes in text
+            text_value = child.text.strip().replace('"', '\\"')
+            ttl_lines.append(f"    {predicate} \"{text_value}\" ;")
+        
+        # Process child attributes
+        for attr_name, attr_value in child.attrib.items():
+            attr_predicate = f"<{base_uri}attributes/{attr_name}>"
+            attr_value_escaped = attr_value.replace('"', '\\"')
+            ttl_lines.append(f"    {attr_predicate} \"{attr_value_escaped}\" ;")
+    
+    # Process element attributes
+    for attr_name, attr_value in element.attrib.items():
+        attr_predicate = f"<{base_uri}attributes/{attr_name}>"
+        attr_value_escaped = attr_value.replace('"', '\\"')
+        ttl_lines.append(f"    {attr_predicate} \"{attr_value_escaped}\" ;")
+    
+    # Remove the last semicolon and add a period
+    if ttl_lines:
+        ttl_lines[-1] = ttl_lines[-1].rstrip(' ;') + ' .'
+    
+    return '\n'.join(ttl_lines)
+
 def save_results(records: List, output_format: str, output_path: str) -> bool:
     """
     Save fetched records to a file in the specified format.
     
     Args:
         records: List of XML elements to save
-        output_format: Format to save in (xml, json, txt)
+        output_format: Format to save in (xml, json, txt, ttl)
         output_path: Path to save the file
         
     Returns:
@@ -431,6 +484,25 @@ def save_results(records: List, output_format: str, output_path: str) -> bool:
             data = {"catalog": [{elem.tag: elem.text for elem in record} for record in records]}
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
+            return True
+            
+        elif output_format == "ttl":
+            # Convert to TTL (Turtle) format and save
+            with open(output_path, "w", encoding="utf-8") as f:
+                # Write TTL prefixes
+                f.write("@prefix : <http://dados.gov.pt/catalog/> .\n")
+                f.write("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n")
+                f.write("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n")
+                f.write("@prefix dcat: <http://www.w3.org/ns/dcat#> .\n")
+                f.write("@prefix dc: <http://purl.org/dc/elements/1.1/> .\n")
+                f.write("@prefix dcterms: <http://purl.org/dc/terms/> .\n\n")
+                
+                # Convert each record to TTL
+                for i, record in enumerate(records):
+                    ttl_content = xml_element_to_ttl(record, "http://dados.gov.pt/catalog/")
+                    f.write(ttl_content)
+                    f.write("\n\n")
+                    
             return True
             
         else:  # txt format
