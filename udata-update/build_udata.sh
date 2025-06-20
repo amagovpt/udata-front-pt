@@ -238,7 +238,7 @@ git checkout -b "$clone_dir" || { echo -e "${RED}Error creating the branch.${NC}
 
 git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No changes to commit.${NC}"; }
 git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
-git add "$archive_name" || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
+git add -A || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
 git add custom-udata-metrics || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
 
 # Passo 10: Instalar o ficheiro compactado
