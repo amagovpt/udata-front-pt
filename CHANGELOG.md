@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.4 (2025-06-05)
+
+- Add noindex on security views [#693](https://github.com/datagouv/udata-front/pull/693)
+
 ## 6.2.3 (2025-05-06)
 
 - Move CSV exports to udata [#692](https://github.com/datagouv/udata-front/pull/692/)
