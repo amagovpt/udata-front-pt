@@ -237,17 +237,39 @@ echo -e "${GREEN}Creating a new branch: $clone_dir...${NC}"
 git checkout -b "$clone_dir" || { echo -e "${RED}Error creating the branch.${NC}"; exit 1; }
 
 git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No changes to commit.${NC}"; }
+git add -A || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
 git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
-git add "$archive_name" || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
-git add custom-udata-metrics || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
 
-# Passo 10: Instalar o ficheiro compactado
-echo -e "${GREEN}Installing udata locally...${NC}"
-cd .. || { echo -e "${RED}Erro ao mudar de diretorio.${NC}"; exit 1; }
-pip install -r requirements.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
-pip install -e . -r requirements/test.pip -r requirements/develop.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
 
-# Passo 11: Executar os comandos necessários para atualizar o javascript
-inv assets-build
+echo -e "${BLUE}Do you want to create a new release? (yes/no)${NC}"
+read create_release
+
+if [[ "$create_release" == "yes" || "$create_release" == "y" ]]; then
+    echo -e "${BLUE}Enter the release version (e.g., 2.5.1):${NC}"
+    read release_version
+
+    echo -e "${GREEN}Creating a new branch: $release_version...${NC}"
+    git checkout -b release-"$release_version" || { echo -e "${RED}Error creating the branch.${NC}"; exit 1; }
+
+    rm -f *.zip
+
+    # Instalar o ficheiro compactado
+    echo -e "${GREEN}Installing udata locally...${NC}"
+    cd .. || { echo -e "${RED}Erro ao mudar de diretorio.${NC}"; exit 1; }
+    pip install -r requirements.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+    pip install -e . -r requirements/test.pip -r requirements/develop.pip || { echo -e "${RED}Error installing udata locally.${NC}"; exit 1; }
+
+    # Atualizar javascript (comando a definir se necessário)
+
+    git push --set-upstream origin release-"$release_version" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
+
+else
+    echo -e "${GREEN}Skipping release creation. Cleaning up...${NC}"
+fi
+
+git checkout main || { echo -e "${RED}Error creating the branch.${NC}"; exit 1; }
+
+rm -f *.zip
+
 
 echo -e "${GREEN}Process completed successfully!${NC}"
