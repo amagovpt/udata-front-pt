@@ -240,7 +240,6 @@ git commit -m "Update to version $version of udata" || { echo -e "${YELLOW}No ch
 git add -A || { echo -e "${RED}Error adding the zip file to git.${NC}"; exit 1; }
 git push --set-upstream origin "$clone_dir" || { echo -e "${RED}Error performing the push.${NC}"; exit 1; }
 
-
 echo -e "${BLUE}Do you want to create a new release? (yes/no)${NC}"
 read create_release
 
