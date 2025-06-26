@@ -6,6 +6,7 @@ import urllib.parse as urlparse
 from datetime import datetime
 
 from udata.harvest.models import HarvestItem
+from .tools.harvester_utils import normalize_url_slashes
 
 # backend = 'https://snig.dgterritorio.gov.pt/rndg/srv/por/q?_content_type=json&fast=index&from=1&resultType=details&sortBy=referenceDateOrd&type=dataset%2Bor%2Bseries&dataPolicy=Dados%20abertos&keyword=DGT'
 
@@ -129,7 +130,7 @@ class DGTBackend(BaseBackend):
                 format = resource['url'].split('.')[-1]
 
             new_resource = Resource(title=item['title'],
-                                    url=self.normalize_url_slashes(resource['url']),
+                                    url=normalize_url_slashes(resource['url']),
                                     filetype='remote',
                                     format=format)
             
@@ -140,13 +141,3 @@ class DGTBackend(BaseBackend):
         dataset.extras['harvest:name'] = self.source.name
 
         return dataset
-
-    @staticmethod
-    def normalize_url_slashes(url: str) -> str:
-        """
-        Replace all backslashes in a URL with forward slashes.
-
-        Example:
-            https://example.com\foo\bar -> https://example.com/foo/bar
-        """
-        return url.replace("\\", "/")

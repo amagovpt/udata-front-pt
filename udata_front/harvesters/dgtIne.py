@@ -6,6 +6,8 @@ import subprocess
 import os
 import unicodedata
 import re
+
+from .tools.harvester_utils import normalize_url_slashes
 class DGTINEBackend(BaseBackend):
     display_name = 'INE Harvester'
 
@@ -123,20 +125,10 @@ class DGTINEBackend(BaseBackend):
             if url:
                 dataset.resources.append(Resource(
                     title=data['title'],
-                    url=self.normalize_url_slashes(url),
+                    url=normalize_url_slashes(url),
                     filetype='remote',
                     format=url.split('.')[-1] if '.' in url else 'file'
                 ))
             print(f"Resource URL: {url}")
         dataset.extras['harvest:name'] = self.source.name
         return dataset
-    
-    @staticmethod
-    def normalize_url_slashes(url: str) -> str:
-        """
-        Replace all backslashes in a URL with forward slashes.
-
-        Example:
-            https://example.com\foo\bar -> https://example.com/foo/bar
-        """
-        return url.replace("\\", "/")

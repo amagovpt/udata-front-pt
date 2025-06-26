@@ -7,6 +7,7 @@ from xml.dom import minidom, Node
 import requests
 
 from udata.harvest.models import HarvestItem
+from .tools.harvester_utils import normalize_url_slashes
 
 class INEBackend(BaseBackend):
     display_name = 'Instituto nacional de estatística'
@@ -93,7 +94,7 @@ class INEBackend(BaseBackend):
                                 dataset.resources.append(Resource(
                                     title = 'Dataset json url'
                                     , description = 'Dataset em formato json'
-                                    , url = self.normalize_url_slashes(obj.firstChild.nodeValue)
+                                    , url = normalize_url_slashes(obj.firstChild.nodeValue)
                                     , filetype='remote'
                                     , format = 'json'
                                 ))
@@ -101,19 +102,9 @@ class INEBackend(BaseBackend):
                                 dataset.resources.append(Resource(
                                     title = 'Json metainfo url'
                                     , description = 'Metainfo em formato json'
-                                    , url = self.normalize_url_slashes(obj.firstChild.nodeValue)
+                                    , url = normalize_url_slashes(obj.firstChild.nodeValue)
                                     , filetype='remote'
                                     , format = 'json'
                                 ))
 
         return dataset
-    
-    @staticmethod
-    def normalize_url_slashes(url: str) -> str:
-        """
-        Replace all backslashes in a URL with forward slashes.
-
-        Example:
-            https://example.com\foo\bar -> https://example.com/foo/bar
-        """
-        return url.replace("\\", "/")
