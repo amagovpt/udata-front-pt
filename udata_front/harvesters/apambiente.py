@@ -8,6 +8,8 @@ from owslib.csw import CatalogueServiceWeb
 
 from udata.harvest.models import HarvestItem
 
+from .tools.harvester_utils import normalize_url_slashes
+
 # backend = 'https://sniambgeoportal.apambiente.pt/geoportal/csw'
 
 
@@ -34,18 +36,6 @@ class PortalAmbienteBackend(BaseBackend):
                 # self.add_item(record.identifier, title=record.title, date=None, item=item)
                 self.process_dataset(record.identifier, title=record.title, date=None, items=item)
 
-            
-
-    @staticmethod
-    def normalize_url_slashes(url: str) -> str:
-        """
-        Replace all backslashes in a URL with forward slashes.
-
-        Example:
-            https://example.com\foo\bar -> https://example.com/foo/bar
-        """
-        return url.replace("\\", "/")
-    
     def inner_process_dataset(self, item: HarvestItem, **kwargs):
         dataset = self.get_dataset(item.remote_id)
         # Here you comes your implementation. You should :
@@ -71,7 +61,7 @@ class PortalAmbienteBackend(BaseBackend):
         dataset.resources = []
 
         url = item.get('url')
-        url = self.normalize_url_slashes(url)
+        url = normalize_url_slashes(url)
      
         if item.get('type') == "liveData":
             type = "wms"

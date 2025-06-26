@@ -36,7 +36,7 @@ from udata.harvest.filters import (
     boolean, email, to_date, slug, normalize_tag, normalize_string,
     is_url, empty_none, hash
 )
-from .tools.harvester_utils import missing_datasets_warning
+from .tools.harvester_utils import missing_datasets_warning, normalize_url_slashes
 
 from .schemas.ckan import schema as ckan_schema
 from .schemas.dkan import schema as dkan_schema
@@ -306,7 +306,7 @@ class CkanPTBackend(BaseBackend):
                 dataset.resources.append(resource)
             resource.title = res.get('name', '') or ''
             resource.description = parse_html(res.get('description'))
-            resource.url = self.normalize_url_slashes(res['url'])
+            resource.url = normalize_url_slashes(res['url'])
             resource.filetype = 'remote'
             resource.format = res.get('format')
             resource.mime = res.get('mimetype')
@@ -336,13 +336,3 @@ class CkanPTBackend(BaseBackend):
         # Check if datasets removed in origin
         if not self.dryrun:
             missing_datasets_warning(job_items=self.job.items, source=self.source)
-
-    @staticmethod
-    def normalize_url_slashes(url: str) -> str:
-        """
-        Replace all backslashes in a URL with forward slashes.
-
-        Example:
-            https://example.com\foo\bar -> https://example.com/foo/bar
-        """
-        return url.replace("\\", "/")
