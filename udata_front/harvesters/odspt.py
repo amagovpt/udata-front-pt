@@ -13,6 +13,7 @@ from udata.utils import get_by
 from urllib.parse import urlparse
 
 from udata.harvest.models import HarvestItem
+from .tools.harvester_utils import normalize_url_slashes
 
 def guess_format(mimetype, url=None):
     '''
@@ -236,9 +237,11 @@ class OdsBackendPT(BaseBackend):
                 dataset.resources.append(resource)
 
     def get_resource(self, dataset, url):
+        url = normalize_url_slashes(url)
         resource = get_by(dataset.resources, 'url', url)
         if not resource:
             return True, Resource(url=url)
+        print('Resource already exists: {0}'.format(url))
         return False, resource
 
     def process_resources(self, dataset, data, formats):

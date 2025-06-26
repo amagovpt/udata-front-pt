@@ -6,12 +6,18 @@ import urllib.parse as urlparse
 from datetime import datetime
 
 from udata.harvest.models import HarvestItem
+from .tools.harvester_utils import normalize_url_slashes
 
 # backend = 'https://snig.dgterritorio.gov.pt/rndg/srv/por/q?_content_type=json&fast=index&from=1&resultType=details&sortBy=referenceDateOrd&type=dataset%2Bor%2Bseries&dataPolicy=Dados%20abertos&keyword=DGT'
 
 
 class DGTBackend(BaseBackend):
     display_name = 'Harvester DGT'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        import logging
+        self.logger = logging.getLogger(__name__)
 
     def inner_harvest(self):
 
@@ -20,6 +26,7 @@ class DGTBackend(BaseBackend):
             'Accept-Charset': 'utf-8'
         }
         res = requests.get(self.source.url, headers=headers)
+        
         res.encoding = 'utf-8'
         data = res.json()
         metadata = data.get("metadata")
@@ -29,18 +36,22 @@ class DGTBackend(BaseBackend):
             metadata = [metadata]
         elif isinstance(metadata, str) and data.get("@to") == "1":
             # Se for string e @to == "1", não é possível processar como dict, então ignora ou loga erro
-            self.logger.warning('metadata é uma string, não um dict: %r', metadata)
-            return
+            msg = ('Error: metadata é uma string, não um dict: %r', metadata)
+            self.logger.error(msg)
+            raise Exception(msg)
+
         elif isinstance(metadata, str) and data.get("@to") == "0":
-            # Nenhum resultado, metadata vazio
-            self.logger.error('Erro: Metadados vazios. Nenhum dataset disponível.')
-            return
+            msg = 'Erro: Metadados vazios. Nenhum dataset disponível.'
+            self.logger.error(msg)
+            raise Exception(msg)
+
         elif not isinstance(metadata, list):
             metadata = []
 
         if not metadata:
-            self.logger.error('Erro: Metadados vazios. Nenhum dataset disponível.')
-            return
+            msg = 'Erro: Metadados vazios. Nenhum dataset disponível.'
+            self.logger.error(msg)
+            raise Exception(msg)
 
         # Loop through the metadata and process each item
         for each in metadata:
@@ -81,6 +92,7 @@ class DGTBackend(BaseBackend):
             # self.add_item(item["remote_id"], item=item)
             self.process_dataset(item["remote_id"], items=item)
 
+    
     def inner_process_dataset(self, item: HarvestItem, **kwargs):
         """Process harvested data into a dataset"""
         dataset = self.get_dataset(item.remote_id)
@@ -118,10 +130,11 @@ class DGTBackend(BaseBackend):
                 format = resource['url'].split('.')[-1]
 
             new_resource = Resource(title=item['title'],
-                                    url=resource['url'],
+                                    url=normalize_url_slashes(resource['url']),
                                     filetype='remote',
                                     format=format)
-
+            
+            
             dataset.resources.append(new_resource)
 
         # Add extra metadata
