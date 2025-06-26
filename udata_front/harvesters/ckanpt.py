@@ -290,6 +290,7 @@ class CkanPTBackend(BaseBackend):
             #Ignore invalid Resources
             try:
                 url = uris.validate(res['url'])
+                print('Resource URL:', url)
             except uris.ValidationError:
                 continue            
 
@@ -305,7 +306,7 @@ class CkanPTBackend(BaseBackend):
                 dataset.resources.append(resource)
             resource.title = res.get('name', '') or ''
             resource.description = parse_html(res.get('description'))
-            resource.url = res['url']
+            resource.url = self.normalize_url_slashes(res['url'])
             resource.filetype = 'remote'
             resource.format = res.get('format')
             resource.mime = res.get('mimetype')
@@ -335,3 +336,13 @@ class CkanPTBackend(BaseBackend):
         # Check if datasets removed in origin
         if not self.dryrun:
             missing_datasets_warning(job_items=self.job.items, source=self.source)
+
+    @staticmethod
+    def normalize_url_slashes(url: str) -> str:
+        """
+        Replace all backslashes in a URL with forward slashes.
+
+        Example:
+            https://example.com\foo\bar -> https://example.com/foo/bar
+        """
+        return url.replace("\\", "/")
