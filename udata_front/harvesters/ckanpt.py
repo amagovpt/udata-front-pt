@@ -36,7 +36,7 @@ from udata.harvest.filters import (
     boolean, email, to_date, slug, normalize_tag, normalize_string,
     is_url, empty_none, hash
 )
-from .tools.harvester_utils import missing_datasets_warning
+from .tools.harvester_utils import missing_datasets_warning, normalize_url_slashes
 
 from .schemas.ckan import schema as ckan_schema
 from .schemas.dkan import schema as dkan_schema
@@ -290,6 +290,7 @@ class CkanPTBackend(BaseBackend):
             #Ignore invalid Resources
             try:
                 url = uris.validate(res['url'])
+                print('Resource URL:', url)
             except uris.ValidationError:
                 continue            
 
@@ -305,7 +306,7 @@ class CkanPTBackend(BaseBackend):
                 dataset.resources.append(resource)
             resource.title = res.get('name', '') or ''
             resource.description = parse_html(res.get('description'))
-            resource.url = res['url']
+            resource.url = normalize_url_slashes(res['url'])
             resource.filetype = 'remote'
             resource.format = res.get('format')
             resource.mime = res.get('mimetype')

@@ -59,3 +59,12 @@ def missing_datasets_warning(job_items, source):
             mail.send(msg)
         except:
             pass
+
+def normalize_url_slashes(url: str) -> str:
+    """
+    Replace all backslashes in a URL with forward slashes.
+
+    Example:
+    https://example.com\foo\bar -> https://example.com/foo/bar
+    """
+    return url.replace("\\", "/")
