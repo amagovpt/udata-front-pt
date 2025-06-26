@@ -93,7 +93,7 @@ class INEBackend(BaseBackend):
                                 dataset.resources.append(Resource(
                                     title = 'Dataset json url'
                                     , description = 'Dataset em formato json'
-                                    , url = obj.firstChild.nodeValue
+                                    , url = self.normalize_url_slashes(obj.firstChild.nodeValue)
                                     , filetype='remote'
                                     , format = 'json'
                                 ))
@@ -101,8 +101,19 @@ class INEBackend(BaseBackend):
                                 dataset.resources.append(Resource(
                                     title = 'Json metainfo url'
                                     , description = 'Metainfo em formato json'
-                                    , url = obj.firstChild.nodeValue
+                                    , url = self.normalize_url_slashes(obj.firstChild.nodeValue)
                                     , filetype='remote'
                                     , format = 'json'
                                 ))
+
         return dataset
+    
+    @staticmethod
+    def normalize_url_slashes(url: str) -> str:
+        """
+        Replace all backslashes in a URL with forward slashes.
+
+        Example:
+            https://example.com\foo\bar -> https://example.com/foo/bar
+        """
+        return url.replace("\\", "/")

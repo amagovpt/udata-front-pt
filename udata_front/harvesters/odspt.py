@@ -236,9 +236,11 @@ class OdsBackendPT(BaseBackend):
                 dataset.resources.append(resource)
 
     def get_resource(self, dataset, url):
+        url = self.normalize_url_slashes(url)
         resource = get_by(dataset.resources, 'url', url)
         if not resource:
             return True, Resource(url=url)
+        print('Resource already exists: {0}'.format(url))
         return False, resource
 
     def process_resources(self, dataset, data, formats):
@@ -278,3 +280,13 @@ class OdsBackendPT(BaseBackend):
             return parse_date(date_str)
         except ValueError:
             pass
+    
+    @staticmethod
+    def normalize_url_slashes(url: str) -> str:
+        """
+        Replace all backslashes in a URL with forward slashes.
+
+        Example:
+            https://example.com\foo\bar -> https://example.com/foo/bar
+        """
+        return url.replace("\\", "/")

@@ -34,6 +34,8 @@ class PortalAmbienteBackend(BaseBackend):
                 # self.add_item(record.identifier, title=record.title, date=None, item=item)
                 self.process_dataset(record.identifier, title=record.title, date=None, items=item)
 
+            
+
     @staticmethod
     def normalize_url_slashes(url: str) -> str:
         """
@@ -70,7 +72,7 @@ class PortalAmbienteBackend(BaseBackend):
 
         url = item.get('url')
         url = self.normalize_url_slashes(url)
-
+     
         if item.get('type') == "liveData":
             type = "wms"
         else:
