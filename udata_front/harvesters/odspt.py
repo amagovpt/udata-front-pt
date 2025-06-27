@@ -241,7 +241,6 @@ class OdsBackendPT(BaseBackend):
         resource = get_by(dataset.resources, 'url', url)
         if not resource:
             return True, Resource(url=url)
-        print('Resource already exists: {0}'.format(url))
         return False, resource
 
     def process_resources(self, dataset, data, formats):
