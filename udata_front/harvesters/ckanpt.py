@@ -290,7 +290,6 @@ class CkanPTBackend(BaseBackend):
             #Ignore invalid Resources
             try:
                 url = uris.validate(res['url'])
-                print('Resource URL:', url)
             except uris.ValidationError:
                 continue            
 

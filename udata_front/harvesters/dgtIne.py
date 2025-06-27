@@ -129,6 +129,5 @@ class DGTINEBackend(BaseBackend):
                     filetype='remote',
                     format=url.split('.')[-1] if '.' in url else 'file'
                 ))
-            print(f"Resource URL: {url}")
         dataset.extras['harvest:name'] = self.source.name
         return dataset

@@ -31,7 +31,7 @@ class PortalAmbienteBackend(BaseBackend):
                 item["id"] = record.identifier
                 item["title"] = record.title
                 item["description"] = record.abstract
-                item["url"] = record.references[0].get('url')
+                item["url"] = normalize_url_slashes(record.references[0].get('url'))
                 item["type"] = record.type
                 # self.add_item(record.identifier, title=record.title, date=None, item=item)
                 self.process_dataset(record.identifier, title=record.title, date=None, items=item)
@@ -61,7 +61,7 @@ class PortalAmbienteBackend(BaseBackend):
         dataset.resources = []
 
         url = item.get('url')
-        url = normalize_url_slashes(url)
+        url = url
      
         if item.get('type') == "liveData":
             type = "wms"
