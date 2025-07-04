@@ -1,3 +1,21 @@
+"""
+Harvester for the Portuguese Environment Portal (Portal do Ambiente).
+
+This module defines a custom udata harvester backend for collecting datasets from a CSW (Catalogue Service for the Web)
+endpoint provided by the Portuguese Environment Portal. It fetches metadata records, normalizes resource URLs,
+and maps them to udata datasets and resources.
+
+Classes:
+    PortalAmbienteBackend: Custom udata harvester backend for the Environment Portal.
+
+Functions:
+    normalize_url_slashes(url: str) -> str: Utility to normalize slashes in URLs (imported).
+
+Usage:
+    This backend is intended to be used as a plugin in a udata instance. It will fetch datasets from the configured
+    CSW endpoint, process their metadata, and create or update corresponding datasets and resources in udata.
+"""
+
 from datetime import datetime
 import requests
 from urllib.parse import urlparse, urlencode
@@ -14,9 +32,25 @@ from .tools.harvester_utils import normalize_url_slashes
 
 
 class PortalAmbienteBackend(BaseBackend):
+    """
+    Harvester backend for the Portuguese Environment Portal (Portal do Ambiente).
+
+    This backend connects to a CSW endpoint, fetches dataset records, normalizes resource URLs,
+    and maps them to udata datasets and resources.
+    """
+
     display_name = 'Harvester Portal do Ambiente'
 
     def inner_harvest(self):
+        """
+        Main harvesting loop.
+
+        Connects to the CSW endpoint, fetches records in batches, normalizes resource URLs,
+        and processes each record into a udata dataset.
+
+        Yields:
+            None. Calls self.process_dataset for each harvested record.
+        """
         startposition = 0
         csw = CatalogueServiceWeb(self.source.url)
         csw.getrecords2(maxrecords=1)
@@ -31,19 +65,32 @@ class PortalAmbienteBackend(BaseBackend):
                 item["id"] = record.identifier
                 item["title"] = record.title
                 item["description"] = record.abstract
+                # Normalize URL slashes to ensure compatibility
                 item["url"] = normalize_url_slashes(record.references[0].get('url'))
                 item["type"] = record.type
-                # self.add_item(record.identifier, title=record.title, date=None, item=item)
+                # Process the dataset (create or update in udata)
                 self.process_dataset(record.identifier, title=record.title, date=None, items=item)
 
     def inner_process_dataset(self, item: HarvestItem, **kwargs):
+        """
+        Maps harvested metadata to a udata dataset.
+
+        Args:
+            item (HarvestItem): The harvested item containing the remote_id.
+            **kwargs: Additional keyword arguments, expects 'items' with the metadata dict.
+
+        Returns:
+            Dataset: The updated or created udata dataset.
+        """
         dataset = self.get_dataset(item.remote_id)
-        # Here you comes your implementation. You should :
-        # - fetch the remote dataset (if necessary)
-        # - validate the fetched payload
-        # - map its content to the dataset fields
-        # - store extra significant data in the `extra` attribute
-        # - map resources data
+        """
+        Here you comes your implementation. You should :
+        - fetch the remote dataset (if necessary)
+        - validate the fetched payload
+        - map its content to the dataset fields
+        - store extra significant data in the `extra` attribute
+        - map resources data
+        """
         item = kwargs.get('items')
 
         # Set basic dataset fields
@@ -61,8 +108,8 @@ class PortalAmbienteBackend(BaseBackend):
         dataset.resources = []
 
         url = item.get('url')
-        url = url
-     
+
+        # Determine resource format/type
         if item.get('type') == "liveData":
             type = "wms"
         else:
@@ -70,6 +117,7 @@ class PortalAmbienteBackend(BaseBackend):
             if len(type) > 3:
                 type = "wms"
 
+        # Create and append the resource
         new_resource = Resource(
             title=dataset.title,
             url=url,
