@@ -5,6 +5,7 @@ from udata.i18n import lazy_gettext as _
 
 from flask import current_app, render_template
 from flask_mail import Message
+import re
 
 #from udata import theme
 from udata_front import theme
@@ -63,8 +64,17 @@ def missing_datasets_warning(job_items, source):
 def normalize_url_slashes(url: str) -> str:
     """
     Replace all backslashes in a URL with forward slashes.
-
-    Example:
-    https://example.com\foo\bar -> https://example.com/foo/bar
+    Remove any accidental multiple slashes after the protocol.
     """
-    return url.replace("\\", "/")
+    if not url:
+        return url
+    # Substitui todos os tipos de backslash por slash
+    url = url.replace("\\", "/")
+    # Separa protocolo do resto
+    parts = url.split("://", 1)
+    if len(parts) == 2:
+        # Remove múltiplos slashes seguidos no caminho (mas não no protocolo)
+        parts[1] = re.sub(r'/+', '/', parts[1])
+        return "://".join(parts)
+    else:
+        return re.sub(r'/+', '/', url)
