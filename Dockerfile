@@ -18,7 +18,9 @@ LABEL "org.opencontainers.image.sources"="https://github.com/opendatateam/docker
 LABEL "org.opencontainers.image.revision"=$REVISION
 LABEL "org.opencontainers.image.created"=$CREATED
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \
+    && sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
     # uWSGI rooting features
     libpcre3-dev \
     mime-support \
