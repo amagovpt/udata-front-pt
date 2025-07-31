@@ -2,15 +2,14 @@
 # Dockerfile for udata
 ##########################################
 
-#FROM udata/system
-FROM udata/system:py3.11
+# Baseia-se na imagem oficial Python 3.11 no Debian Bullseye (mais recente e suportado)
+FROM python:3.11-slim-bullseye
 
-# Optionnal build arguments
+# Argumentos opcionais de build para metadados da imagem
 ARG REVISION="N/A"
 ARG CREATED="Undefined"
 
-# OCI annotations
-# See: https://github.com/opencontainers/image-spec/blob/master/annotations.md
+# Anotações OCI para descrever a imagem
 LABEL "org.opencontainers.image.title"="udata all-in-one"
 LABEL "org.opencontainers.image.description"="udata with all known plugins and themes"
 LABEL "org.opencontainers.image.authors"="Open Data Team"
@@ -18,43 +17,64 @@ LABEL "org.opencontainers.image.sources"="https://github.com/opendatateam/docker
 LABEL "org.opencontainers.image.revision"=$REVISION
 LABEL "org.opencontainers.image.created"=$CREATED
 
-RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \
-    && sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list \
-    && apt-get update && apt-get install -y --no-install-recommends \
-    # uWSGI rooting features
+# --- REMOVIDO: Correções para repositórios Buster (não são mais necessárias) ---
+
+# --- INSTALAÇÃO DE DEPENDÊNCIAS DO SISTEMA ---
+# Atualiza a lista de pacotes e instala as dependências necessárias.
+# A ordem é importante para evitar conflitos de dependência.
+# Usamos --no-install-recommends para manter a imagem mais pequena.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     libpcre3-dev \
     mime-support \
-    # xmlsec1 package
-    libxmlsec1 libxmlsec1-dev xmlsec1\
-    # Clean up
-    && apt-get autoremove\
-    && apt-get clean\
+    libxmlsec1 \
+    libxmlsec1-dev \
+    xmlsec1 \
+    libgnutls28-dev \
+    libssl-dev \
+    netcat \
+    # Limpeza de caches e ficheiros temporários
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install udata and all known plugins
-COPY ./requirements/install.pip /tmp/requirements/install.pip
-COPY requirements.pip /tmp/requirements.pip
+# Garante que pip está atualizado
 RUN pip install --upgrade pip
+
+# Copia e instala as dependências Python dos ficheiros requirements
+COPY requirements/install.pip /tmp/requirements/install.pip
+COPY requirements.pip /tmp/requirements.pip
 RUN pip install -r /tmp/requirements.pip && pip check || pip install -r /tmp/requirements.pip
-RUN rm -r /root/.cache
 
-# Be used with healthcheck
-RUN apt-get update && apt-get install -y netcat
+# Copia o código fonte da aplicação udata e instala-o
+COPY . /tmp/udata_app_source/
+RUN pip install -e /tmp/udata_app_source/
 
-# Copy udata configuration and setup
+# Criação de diretórios necessários dentro do container
 RUN mkdir -p /udata/fs /src
 
+# Copia os ficheiros de configuração e o script de entrada para o container
 COPY udata.cfg entrypoint.sh /udata/
+
+# Garante que o script entrypoint.sh é executável
+RUN chmod +x /udata/entrypoint.sh
+
+# Copia os ficheiros de configuração uWSGI
 COPY uwsgi/*.ini /udata/uwsgi/
 
-# Change to the working directory
+# Define o diretório de trabalho padrão dentro do container
 WORKDIR /udata
 
+# Declara o diretório /udata/fs como um volume para persistência de dados
 VOLUME /udata/fs
 
+# Define a variável de ambiente para o caminho do ficheiro de configurações do udata
 ENV UDATA_SETTINGS /udata/udata.cfg
 
+# Expõe a porta 7000 do container
 EXPOSE 7000
 
+# Define o script entrypoint.sh como o ponto de entrada principal do container
 ENTRYPOINT ["/udata/entrypoint.sh"]
+
+# Define o comando padrão a ser executado pelo entrypoint.sh se nenhum outro for especificado
 CMD ["uwsgi"]
