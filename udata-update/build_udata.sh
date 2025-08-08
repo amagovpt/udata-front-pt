@@ -180,6 +180,26 @@ else
     echo "O arquivo $rdf_file não foi encontrado."
 fi
 
+# Passo 4.6: Substituir nomes dos Emblemas (Badges) inglês por português
+#Definir o caminho do arquivo
+rdf_file="$clone_dir/udata/core/organization/models.py"
+
+#Verificar se o arquivo existe antes de aplicar as substituições
+if [ -f "$rdf_file" ]; then
+    echo "Substituindo nomes dos Emblemas (Badges) $rdf_file..."
+
+    #Substituições usando sed
+    sed -i "s|\"Public Service\"|\"Serviço Público\"|g" "$rdf_file"
+    sed -i "s|\"Certified\"|\"Certificado\"|g" "$rdf_file"
+    sed -i "s|\"Association\"|\"Associação\"|g" "$rdf_file"
+    sed -i "s|\"Company\"|\"Empresa\"|g" "$rdf_file"
+    sed -i "s|\"Local authority\"|\"Autoridade Local\"|g" "$rdf_file"
+
+    echo "Substituição nome emblemas concluída com sucesso."
+else
+    echo "O arquivo $rdf_file não foi encontrado."
+fi
+
 # Passo 5: Configurar o ambiente virtual
 echo -e "${GREEN}Activating the virtual environment...${NC}"
 cd ..
