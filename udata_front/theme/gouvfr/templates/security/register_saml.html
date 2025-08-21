@@ -9,15 +9,13 @@
         <div class="fr-grid-row">
             <div class="form-container fr-col-12 fr-col-md-6 fr-col-offset-md-3">
                 <form class="form" method="post" action="{{ url_for('saml.register') }}">
+                    {{ form.csrf_token }}
+
                     <h1 class="fr-h4 fr-mb-0 text-align-center">{{ _('Sign Up') }}</h1>
                     <p class="fr-mt-2w fr-mb-1w fr-text--xs text-align-left">
                         {{ _("Fields preceded by a star (<span class='required-field-star'>*</span>) are required.") }}
                     </p>
-                    {% for f in form %}
-                    {% if f.type in ('CSRFTokenField', 'HiddenField') %}
-                    {{ f() }}
-                    {% endif %}
-                    {% endfor %}
+
                     <div class="fr-input-group">
                         <label for="name" class="fr-label fr-text-left required">
                             {{ _("First name") }}
@@ -49,8 +47,9 @@
                     <div class="fr-checkbox-group">
                         <input id="accept_conditions" type="checkbox" name="accept_conditions" required />
                         <label class="fr-label" for="accept_conditions">
-                            <span>{{ _("I have read and accept <a href=\"%(url)s\"> the terms and conditions of the "
-"service.</a>", url=url_for('site.terms')) }}</span>
+                            <span>
+                                {{ _("I have read and accept <a href=\"%(url)s\"> the terms and conditions of the service.</a>", url=url_for('site.terms')) }}
+                            </span>
                         </label>
                     </div>
 
@@ -61,7 +60,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 </section>
 {% endblock %}
