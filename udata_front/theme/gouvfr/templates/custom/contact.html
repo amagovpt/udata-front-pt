@@ -15,46 +15,46 @@
                 <div class="fr-grid-row">
                     <div class="text-align-center form-container fr-col-12 fr-col-md-6 fr-col-offset-md-3">
                         <form class="form" method="post" action="{{ url_for('gouvfr_faq.contact') }}" data-bitwarden-watching="1">
+                            {{ form.csrf_token }}
+
                             <h1 class="fr-h4 fr-mb-0">Contate-nos</h1>
-                                <p class="fr-mt-2w fr-mb-1w fr-text--xs text-align-left">
-                                    {{ _("Fields preceded by a star (<span class='required-field-star'>*</span>) are required.") }}
-                                </p>
-                                <div class="fr-input-group field ">
-                                    <label for="name" class="fr-label required">
-                                        {{ _("Name") }}
-                                    </label>                                    
-                                    <input id="name" name="name" type="text" required="">
-                                </div>
-                                <div class="fr-input-group field ">
-                                    <label for="email" class="fr-label required">
-                                        {{ _("Email") }}
-                                    </label>                                    
-                                    <input id="email" name="email" type="email" required="">
-                                </div>
-                                <div class="fr-input-group field ">
-                                    <label for="name" class="fr-label required">
-                                        {{ _("Subject") }}
-                                    </label>                                    
-                                    <input id="subject" name="subject" type="text" required="">
-                                </div>
-                                <div class="fr-input-group field ">
-                                    <label for="name" class="fr-label required">
-                                        {{ _("Message") }}
-                                    </label>         
-                                    <textarea id="message" name="message" style="border: 2px solid #eee" rows="4" cols="50"></textarea>                           
-                                </div>
-                                {{ form.csrf_token }}
-                                <center>
-                                    {% for error in form.recaptcha.errors %}
-                                        <p style="color:red">
-                                            {{ _(error) }}
-                                        </p>
-                                    {% endfor %} 
-                                    {{ form.recaptcha }}
-                                </center>
-                                <br>
-                                <button id="submit" type="submit" class="fr-btn" disabled>{{ _("Submit") }}</button>
-                                <input id="csrf_token" name="csrf_token" type="hidden" value="IjdlZTk0YzgwMmVhYzhlMTM1ODZiYjBhNGVmOTA3NGQ4YTgwZGI2YzMi.ZyIPPw.bvEEYiW6Qw958m4iPXohjZWYysg">
+                            <p class="fr-mt-2w fr-mb-1w fr-text--xs text-align-left">
+                                {{ _("Fields preceded by a star (<span class='required-field-star'>*</span>) are required.") }}
+                            </p>
+                            <div class="fr-input-group field ">
+                                <label for="name" class="fr-label required">
+                                    {{ _("Name") }}
+                                </label>                                    
+                                <input id="name" name="name" type="text" required="">
+                            </div>
+                            <div class="fr-input-group field ">
+                                <label for="email" class="fr-label required">
+                                    {{ _("Email") }}
+                                </label>                                    
+                                <input id="email" name="email" type="email" required="">
+                            </div>
+                            <div class="fr-input-group field ">
+                                <label for="name" class="fr-label required">
+                                    {{ _("Subject") }}
+                                </label>                                    
+                                <input id="subject" name="subject" type="text" required="">
+                            </div>
+                            <div class="fr-input-group field ">
+                                <label for="name" class="fr-label required">
+                                    {{ _("Message") }}
+                                </label>         
+                                <textarea id="message" name="message" style="border: 2px solid #eee" rows="4" cols="50"></textarea>                           
+                            </div>                                
+                            <center>
+                                {% for error in form.recaptcha.errors %}
+                                    <p style="color:red">
+                                        {{ _(error) }}
+                                    </p>
+                                {% endfor %} 
+                                {{ form.recaptcha }}
+                            </center>
+                            <br>
+                            <button id="submit" type="submit" class="fr-btn" disabled>{{ _("Submit") }}</button>                                
                         </form>
                     </div>
                 </div>
