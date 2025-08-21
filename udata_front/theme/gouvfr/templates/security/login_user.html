@@ -12,22 +12,23 @@
         <div class="fr-grid-row">
             <div class="text-align-center form-container fr-col-12 fr-col-md-6 fr-col-offset-md-3">
                 <form class="form" method="post" action="{{ url_for('security.login') }}">
+                    {{ login_user_form.csrf_token }}
+                                        
                     <h1 class="fr-h4 fr-mb-0">{{ _('Log in') }}</h1>
                     <p class="fr-mt-2w fr-mb-1w fr-text--xs text-align-left">
                         {{ _("Fields preceded by a star (<span class='required-field-star'>*</span>) are required.") }}
                     </p>
+
                     {% for error in login_user_form.form_errors %}
                         <p class="fr-error-text fr-mt-1v">{{ error }}</p>
                     {% endfor %}
-                    {% for f in login_user_form %}
-                        {% if f.type in ('CSRFTokenField', 'HiddenField') %}
-                            {{ f() }}
-                        {% endif %}
-                    {% endfor %}
-                    {{ forms.render_single_field(login_user_form.email)}}
-                    {{ forms.render_single_field(login_user_form.password)}}
-                    {{ forms.render_boolean_field(login_user_form.remember)}}
+
+                    {{ forms.render_single_field(login_user_form.email) }}
+                    {{ forms.render_single_field(login_user_form.password) }}
+                    {{ forms.render_boolean_field(login_user_form.remember) }}
+
                     <button type="submit" class="fr-btn">{{ _('Log in') }}</button>
+
                     <div class="fr-mt-3w">
                         <p class="fr-text--sm fr-mb-3v">
                             {{ _('Forgot your password?') }}
