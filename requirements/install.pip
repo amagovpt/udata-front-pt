@@ -53,5 +53,6 @@ udata-ckan==4.0.2
 # udata-metrics==2.0.4
 udata-piwik==4.1.1
 udata-recommendations==3.1.7
+udata-tabular-preview==4.0.1
 uwsgi==2.0.29
 zope.event==5.0
