@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: udata-front 6.2.3\n"
+"Project-Id-Version: udata-front 6.2.4\n"
 "Report-Msgid-Bugs-To: data.gouv@data.gouv.fr\n"
-"POT-Creation-Date: 2025-05-27 11:00+0100\n"
-"PO-Revision-Date: 2025-05-27 11:00+0100\n"
+"POT-Creation-Date: 2025-09-30 14:27+0100\n"
+"PO-Revision-Date: 2025-09-30 14:28+0100\n"
 "Last-Translator: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
 "Language: en\n"
 "Language-Team: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: udata_front/forms.py:10
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:23
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:21
 msgid "First name"
 msgstr ""
 
@@ -33,7 +33,7 @@ msgid "URLs not allowed in this field"
 msgstr ""
 
 #: udata_front/forms.py:13
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:30
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:28
 msgid "Last name"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid "A CKAN Organization name"
 msgstr ""
 
-#: udata_front/harvesters/ckanpt.py:55 udata_front/harvesters/odspt.py:45
+#: udata_front/harvesters/ckanpt.py:55 udata_front/harvesters/odspt.py:46
 msgid "Tag"
 msgstr ""
 
@@ -110,27 +110,27 @@ msgstr ""
 msgid "A CKAN tag name"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:45
+#: udata_front/harvesters/odspt.py:46
 msgid "A tag name"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:46
+#: udata_front/harvesters/odspt.py:47
 msgid "Publisher"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:46
+#: udata_front/harvesters/odspt.py:47
 msgid "A publisher name"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:49
+#: udata_front/harvesters/odspt.py:50
 msgid "Harvest Inspire datasets"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:50
+#: udata_front/harvesters/odspt.py:51
 msgid "Whether this harvester should import datasets coming from Inspire"
 msgstr ""
 
-#: udata_front/harvesters/odspt.py:253
+#: udata_front/harvesters/odspt.py:255
 #, python-brace-format
 msgid "Export to {format}"
 msgstr ""
@@ -204,15 +204,15 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:82 udata_front/theme/gouvfr/__init__.py:167
+#: udata_front/theme/gouvfr/__init__.py:82 udata_front/theme/gouvfr/__init__.py:168
 msgid "Licenses"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:85 udata_front/theme/gouvfr/__init__.py:168
+#: udata_front/theme/gouvfr/__init__.py:85 udata_front/theme/gouvfr/__init__.py:169
 msgid "Terms of use"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:88 udata_front/theme/gouvfr/__init__.py:171
+#: udata_front/theme/gouvfr/__init__.py:88 udata_front/theme/gouvfr/__init__.py:172
 msgid "Accessibility"
 msgstr ""
 
@@ -263,14 +263,18 @@ msgid "Roadmap and news"
 msgstr ""
 
 #: udata_front/theme/gouvfr/__init__.py:141
-msgid "Contact us"
+msgid "Webinars"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:147
+#: udata_front/theme/gouvfr/__init__.py:142
 msgid "Statistics"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:169
+#: udata_front/theme/gouvfr/__init__.py:143
+msgid "Contact us"
+msgstr ""
+
+#: udata_front/theme/gouvfr/__init__.py:170
 msgid "Tracking and privacy"
 msgstr ""
 
@@ -448,17 +452,17 @@ msgid "Logout"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/header.html:121
-#: udata_front/theme/gouvfr/templates/security/login_user.html:12
-#: udata_front/theme/gouvfr/templates/security/login_user.html:27
+#: udata_front/theme/gouvfr/templates/security/login_user.html:17
+#: udata_front/theme/gouvfr/templates/security/login_user.html:30
 #: udata_front/theme/gouvfr/templates/territories/territory.html:28
 msgid "Log in"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/header.html:130
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:58
-#: udata_front/theme/gouvfr/templates/security/register_user.html:12
-#: udata_front/theme/gouvfr/templates/security/register_user.html:65
-#: udata_front/theme/gouvfr/templates/security/register_user.html:71
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:57
+#: udata_front/theme/gouvfr/templates/security/register_user.html:15
+#: udata_front/theme/gouvfr/templates/security/register_user.html:68
+#: udata_front/theme/gouvfr/templates/security/register_user.html:74
 msgid "Sign up"
 msgstr ""
 
@@ -828,7 +832,7 @@ msgid "terms"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/api/admin.html:10
-#: udata_front/theme/gouvfr/templates/custom/contact.html:24
+#: udata_front/theme/gouvfr/templates/custom/contact.html:26
 msgid "Name"
 msgstr ""
 
@@ -1018,39 +1022,39 @@ msgid ""
 "\"Contact\" option on each dataset page, to start a new discussion thread."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/custom/contact.html:20
-#: udata_front/theme/gouvfr/templates/security/change_email.html:15
-#: udata_front/theme/gouvfr/templates/security/change_password.html:15
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:16
-#: udata_front/theme/gouvfr/templates/security/login_user.html:14
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:14
-#: udata_front/theme/gouvfr/templates/security/register_user.html:24
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:13
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:14
+#: udata_front/theme/gouvfr/templates/custom/contact.html:22
+#: udata_front/theme/gouvfr/templates/security/change_email.html:18
+#: udata_front/theme/gouvfr/templates/security/change_password.html:18
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:19
+#: udata_front/theme/gouvfr/templates/security/login_user.html:19
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:16
+#: udata_front/theme/gouvfr/templates/security/register_user.html:27
+#: udata_front/theme/gouvfr/templates/security/reset_password.html:16
+#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:17
 msgid ""
 "Fields preceded by a star (<span class='required-field-star'>*</span>) are "
 "required."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/custom/contact.html:30
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:37
+#: udata_front/theme/gouvfr/templates/custom/contact.html:32
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:35
 msgid "Email"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/custom/contact.html:36
+#: udata_front/theme/gouvfr/templates/custom/contact.html:38
 msgid "Subject"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/custom/contact.html:42
+#: udata_front/theme/gouvfr/templates/custom/contact.html:44
 #: udata_front/theme/gouvfr/templates/mail/discussion_closed.html:31
 #: udata_front/theme/gouvfr/templates/mail/new_discussion.html:30
 #: udata_front/theme/gouvfr/templates/mail/new_discussion_comment.html:31
 msgid "Message"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/custom/contact.html:56
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:12
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:19
+#: udata_front/theme/gouvfr/templates/custom/contact.html:57
+#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:15
+#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:22
 msgid "Submit"
 msgstr ""
 
@@ -1848,10 +1852,10 @@ msgid "Drag a file here"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/macros/uploader.html:11
-#: udata_front/theme/gouvfr/templates/security/login_user.html:45
-#: udata_front/theme/gouvfr/templates/security/login_user.html:58
-#: udata_front/theme/gouvfr/templates/security/register_user.html:74
-#: udata_front/theme/gouvfr/templates/security/register_user.html:91
+#: udata_front/theme/gouvfr/templates/security/login_user.html:49
+#: udata_front/theme/gouvfr/templates/security/login_user.html:62
+#: udata_front/theme/gouvfr/templates/security/register_user.html:77
+#: udata_front/theme/gouvfr/templates/security/register_user.html:94
 msgid "or"
 msgstr ""
 
@@ -2344,111 +2348,111 @@ msgstr ""
 msgid " by "
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/change_email.html:10
-#: udata_front/theme/gouvfr/templates/security/change_email.html:17
+#: udata_front/theme/gouvfr/templates/security/change_email.html:13
+#: udata_front/theme/gouvfr/templates/security/change_email.html:20
 msgid "Change email"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/change_email.html:12
+#: udata_front/theme/gouvfr/templates/security/change_email.html:15
 msgid "You want to change your email? Enter the new email below."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/change_password.html:10
-#: udata_front/theme/gouvfr/templates/security/change_password.html:17
+#: udata_front/theme/gouvfr/templates/security/change_password.html:13
+#: udata_front/theme/gouvfr/templates/security/change_password.html:20
 msgid "Change Password"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/change_password.html:12
+#: udata_front/theme/gouvfr/templates/security/change_password.html:15
 msgid ""
 "You want to change your password? Enter your current password and new "
 "password below."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:11
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:46
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:11
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:15
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:14
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:49
+#: udata_front/theme/gouvfr/templates/security/reset_password.html:14
+#: udata_front/theme/gouvfr/templates/security/reset_password.html:18
 msgid "Reset Password"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:13
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:16
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:23
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:26
 msgid "Javascript is required to use this page correctly."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:33
-#: udata_front/theme/gouvfr/templates/security/register_user.html:52
+#: udata_front/theme/gouvfr/templates/security/forgot_password.html:36
+#: udata_front/theme/gouvfr/templates/security/register_user.html:55
 msgid "Retype the characters from the picture"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:30
+#: udata_front/theme/gouvfr/templates/security/login_user.html:34
 msgid "Forgot your password?"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:32
+#: udata_front/theme/gouvfr/templates/security/login_user.html:36
 msgid "Recover your password"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:37
+#: udata_front/theme/gouvfr/templates/security/login_user.html:41
 msgid "Confirmation instructions not received?"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:39
+#: udata_front/theme/gouvfr/templates/security/login_user.html:43
 msgid "Send the instructions again"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:47
-#: udata_front/theme/gouvfr/templates/security/login_user.html:60
+#: udata_front/theme/gouvfr/templates/security/login_user.html:51
+#: udata_front/theme/gouvfr/templates/security/login_user.html:64
 msgid "Login"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:77
+#: udata_front/theme/gouvfr/templates/security/login_user.html:81
 msgid "Don't have an account?"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/login_user.html:83
+#: udata_front/theme/gouvfr/templates/security/login_user.html:87
 msgid "Create an account"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:12
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:14
 msgid "Sign Up"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:44
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:42
 msgid "User NIC"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:52
-#: udata_front/theme/gouvfr/templates/security/register_user.html:42
+#: udata_front/theme/gouvfr/templates/security/register_saml.html:51
+#: udata_front/theme/gouvfr/templates/security/register_user.html:45
 #, python-format
 msgid ""
 "I have read and accept <a href=\"%(url)s\"> the terms and conditions of the "
 "service.</a>"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_user.html:18
+#: udata_front/theme/gouvfr/templates/security/register_user.html:21
 msgid "Why create an account? - opens a new window"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_user.html:20
+#: udata_front/theme/gouvfr/templates/security/register_user.html:23
 msgid "Why create an account?"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_user.html:30
+#: udata_front/theme/gouvfr/templates/security/register_user.html:33
 msgid "Javascript is required to sign up."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/register_user.html:77
-#: udata_front/theme/gouvfr/templates/security/register_user.html:93
+#: udata_front/theme/gouvfr/templates/security/register_user.html:80
+#: udata_front/theme/gouvfr/templates/security/register_user.html:96
 msgid "Register"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:10
+#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:13
 msgid "Resend confirmation instructions"
 msgstr ""
 
