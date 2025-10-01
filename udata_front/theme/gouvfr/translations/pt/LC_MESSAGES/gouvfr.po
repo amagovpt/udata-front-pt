@@ -477,7 +477,7 @@ msgstr "Publicar "
 
 #: udata_front/theme/gouvfr/templates/header.html:263
 msgid "This is a degraded experience of {site}. Please enable JavaScript and use an up to date browser."
-msgstr "A experiência no {site} pode estar limitada. Por favor, atualize a página."
+msgstr "A experiência no dados.gov pode estar temporariamente limitada. Por favor, atualize a página para melhorar a visualização."
 
 
 
