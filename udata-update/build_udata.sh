@@ -135,6 +135,30 @@ else
     exit 1
 fi
 
+# Alterar template de email de account_deleted.html
+account_deleted_path="./files/templates/account_deleted.html"
+destination_path="$clone_dir/udata/templates/mail/account_deleted.html"
+
+if [ -f "$account_deleted_path" ]; then
+    echo -e "${GREEN}Replacing the account_deleted.html file...${NC}"
+    cp "$account_deleted_path" "$destination_path" || { echo -e "${RED}Error replacing the account_deleted.html file.${NC}"; exit 1; }
+else
+    echo -e "${RED}account_deleted.html file not found in the current directory.${NC}"
+    exit 1
+fi
+
+# Alterar tradução do udata.po
+translation_path="./files/translations/udata.po"
+destination_path="$clone_dir/udata/translations/pt/LC_MESSAGES/udata.po"
+
+if [ -f "$translation_path" ]; then
+    echo -e "${GREEN}Replacing the udata.po file...${NC}"
+    cp "$translation_path" "$destination_path" || { echo -e "${RED}Error replacing the udata.po file.${NC}"; exit 1; }
+else
+    echo -e "${RED}udata.po file not found in the current directory.${NC}"
+    exit 1
+fi
+
 # 4.3: Alterar variável MAIL_DEFAULT_SENDER
 settings_file="$clone_dir/udata/settings.py"
 search_string="webmaster@udata"
