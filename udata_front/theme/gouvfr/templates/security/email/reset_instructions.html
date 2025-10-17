@@ -1,5 +1,5 @@
-{% extends theme('mail/base.html') %}
-{% from theme('mail/button.html') import mail_button %}
+{% extends 'security/email/base.html' %}
+{% from 'security/email/button.html' import mail_button %}
 
 {% block body %}
 
@@ -16,7 +16,7 @@
         <td align="center">
             {{ mail_button(
                 _('Reset my password'),
-                reset_link
+                cdata_url("/reset/" ~ reset_token) or reset_link
             ) }}
         </td>
     </tr>

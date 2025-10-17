@@ -1,5 +1,13 @@
-{% extends theme('mail/base.html') %}
+{% extends 'mail/base.html' %}
 
 {% block body %}
-<p style="margin: 0;padding: 0;">{{ _('Your account has now been deleted') }}</p>
+{# A linha original foi mantida no final, caso ainda seja necessária #}
+<!-- <p style="margin: 0;padding: 0;">{{ _('Your account has now been deleted') }}</p>
+  -->
+<!-- <p style="margin: 0;padding: 0;">{{ _('Dear %(user_name)s,', user_name=user_name) }}</p> -->
+<p style="margin: 0;padding: 0;">{{ _('Your user account has been removed from the Dados.gov portal.') }}</p>
+<p style="margin: 0;padding: 0;">{{ _('If you wish to regain access, you must create a new account.') }}</p>
+<p style="margin: 0;padding: 0;">{{ _('Thank you.') }}</p>
+<p style="margin: 0;padding: 0;">{{ _('Best regards,') }}</p>
+<p style="margin: 0;padding: 0;">{{ _('The Dados.gov Team') }}</p>
 {% endblock %}
