@@ -2003,7 +2003,7 @@ msgstr "Seleccione um ficheiro a partir do seu computador"
 
 #: udata_front/theme/gouvfr/templates/mail/account_deleted.html:4
 msgid "Your account has now been deleted"
-msgstr "A sua conta é agora apagada"
+msgstr "A sua conta foi eliminada"
 
 #: udata_front/theme/gouvfr/templates/mail/badge_added_certified.html:6
 #, python-format
@@ -2966,4 +2966,22 @@ msgstr "atrás"
 
 msgid "Opened with an account"
 msgstr "Aberto com uma conta"
+
+msgid "Dear %(user)"
+msgstr "Caro/a %(user)"
+
+msgid "Your user account has been removed from the Dados.gov portal."
+msgstr "A sua conta de utilizador foi removida no portal Dados.gov."
+
+msgid "If you wish to regain access, you must create a new account."
+msgstr "Se pretender retomar o acesso, deverá criar uma nova conta."
+
+msgid "Thank you."
+msgstr "Obrigado."
+
+msgid "Best regards,"
+msgstr "Cumprimentos."
+
+msgid "The Dados.gov Team"
+msgstr "A equipa Dados.gov"
 
