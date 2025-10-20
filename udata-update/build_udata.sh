@@ -210,10 +210,10 @@ target_repo="https://github.com/amagovpt/udata-front-pt.git"
 log "Alterando repositório remoto para $target_repo..."
 git remote set-url origin "$target_repo"
 
-git checkout -b "update-$version" >/dev/null 2>&1 || true
+git checkout -b "udata-v$version" >/dev/null 2>&1 || true
 git add -A
 git commit -m "Update to version $version of udata" || warn "Nenhuma modificação a commitar."
-git push --set-upstream origin "update-$version"
+git push --set-upstream origin "udata-v$version"
 
 # ───────────────────────────────
 # 🏁 Finalização
