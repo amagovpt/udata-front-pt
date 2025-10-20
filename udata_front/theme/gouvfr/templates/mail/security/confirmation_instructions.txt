@@ -1,4 +1,4 @@
-{% extends 'security/email/base.txt' %}
+{% extends theme('mail/base.txt') %}
 {% block body %}
 {{ _('Please confirm your email through the link below:') }}
 
