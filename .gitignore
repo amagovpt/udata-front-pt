@@ -93,4 +93,4 @@ utils/catalog.txt
 /utils/*.json
 
 GEMINI.md
-
+.env
