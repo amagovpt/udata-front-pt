@@ -85,7 +85,7 @@ data/
 logs/
 saml/
 udata-fs/
-uwsgi/
+#uwsgi/
 utils/catalog.txt
 /utils/*.ttl
 /utils/*.xml
