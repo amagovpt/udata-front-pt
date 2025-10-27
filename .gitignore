@@ -77,7 +77,7 @@ venv/
 .python-version
 
 # Project-specific
-udata.cfg
+#udata.cfg
 cypress/udata-front-e2e.cfg
 cypress/videos
 cypress/screenshots
