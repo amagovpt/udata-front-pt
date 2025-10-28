@@ -77,7 +77,7 @@ venv/
 .python-version
 
 # Project-specific
-udata.cfg
+#udata.cfg
 cypress/udata-front-e2e.cfg
 cypress/videos
 cypress/screenshots
@@ -85,7 +85,7 @@ data/
 logs/
 saml/
 udata-fs/
-uwsgi/
+#uwsgi/
 utils/catalog.txt
 /utils/*.ttl
 /utils/*.xml
@@ -93,4 +93,4 @@ utils/catalog.txt
 /utils/*.json
 
 GEMINI.md
-
+.env

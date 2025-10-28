@@ -48,6 +48,7 @@ werkzeug==2.2.3
 gevent==25.4.2
 markdown==3.8
 owslib==0.33.0
+python-dotenv==1.2.1
 pysaml2==7.4.2
 udata-ckan==4.0.2
 # udata-metrics==2.0.4

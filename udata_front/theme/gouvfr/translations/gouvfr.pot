@@ -1863,8 +1863,33 @@ msgstr ""
 msgid "Select a file from your computer"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:4
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:5
 msgid "Your account has now been deleted"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:7
+#, python-format
+msgid "Dear %(user_name)s,"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:8
+msgid "Your user account has been removed from the Dados.gov portal."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:9
+msgid "If you wish to regain access, you must create a new account."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:10
+msgid "Thank you."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:11
+msgid "Best regards,"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:12
+msgid "The Dados.gov Team"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/badge_added_certified.html:6
@@ -1883,24 +1908,29 @@ msgid "%(user)s has identified your organization \"%(name)s\" as public service"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/base.html:48
+#: udata_front/theme/gouvfr/templates/security/email/base.html:45
 msgid "on your browser."
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/base.html:51
+#: udata_front/theme/gouvfr/templates/security/email/base.html:48
 #, python-format
 msgid "View this email %(link)s"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/base.html:84
+#: udata_front/theme/gouvfr/templates/security/email/base.html:76
 #, python-format
 msgid "Hi %(user)s"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/base.html:95
+#: udata_front/theme/gouvfr/templates/security/email/base.html:87
 msgid "See you soon on the platform"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/base.html:96
+#: udata_front/theme/gouvfr/templates/security/email/base.html:88
 #, python-format
 msgid "The %(site)s team"
 msgstr ""
@@ -2017,69 +2047,6 @@ msgstr ""
 
 #: udata_front/theme/gouvfr/templates/mail/test.html:5
 msgid "If you read this, your mail configuration is working"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:6
-msgid "Your password has been changed."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:10
-msgid "If you did not change your password, click below to reset it."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:15
-msgid "Reset password"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/confirmation_instructions.html:6
-msgid "Please confirm your email through the link below:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/confirmation_instructions.html:14
-msgid "Confirm my account"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/login_instructions.html:6
-msgid "You can log into your account through the link below:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/login_instructions.html:13
-msgid "Login now"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:7
-#, python-format
-msgid ""
-"Someone has requested a password reset for your %(site)s account. If you "
-"didn't, please ignore this email."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:10
-msgid "To reset your password, please confirm your request through the link below:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:18
-msgid "Reset my password"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/reset_notice.html:7
-#, python-format
-msgid "Your password for %(site)s has been reset."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:7
-#, python-format
-msgid "Welcome to %(site)s!"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:10
-msgid ""
-"To activate your account, please confirm your email address through the link "
-"below:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:18
-msgid "Confirm now"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/organization/card.html:22
@@ -2454,6 +2421,91 @@ msgstr ""
 
 #: udata_front/theme/gouvfr/templates/security/send_confirmation.html:13
 msgid "Resend confirmation instructions"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/change_notice.html:6
+msgid "Your password has been changed."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/change_notice.html:10
+msgid "If you did not change your password, click below to reset it."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/change_notice.html:15
+msgid "Reset password"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/confirmation_instructions.html:6
+msgid "Please confirm your email through the link below:"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/confirmation_instructions.html:14
+msgid "Confirm my account"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/login_instructions.html:6
+msgid "You can log into your account through the link below:"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/login_instructions.html:13
+msgid "Login now"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/reset_instructions.html:7
+#, python-format
+msgid ""
+"Someone has requested a password reset for your %(site)s account. If you "
+"didn't, please ignore this email."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/reset_instructions.html:10
+msgid "To reset your password, please confirm your request through the link below:"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/reset_instructions.html:18
+msgid "Reset my password"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/reset_notice.html:7
+#, python-format
+msgid "Your password for %(site)s has been reset."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome.html:7
+#, python-format
+msgid "Welcome to %(site)s!"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome.html:10
+msgid ""
+"To activate your account, please confirm your email address through the link "
+"below:"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome.html:18
+msgid "Confirm now"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome_existing.html:7
+#, python-format
+msgid "Hello %(email)s!"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome_existing.html:10
+msgid "Someone (you?) tried to register this email - which is already in our system."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome_existing.html:14
+#, python-format
+msgid "This account also has the following username associated with it: %(username)s."
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome_existing.html:19
+msgid "If you forgot your password you can reset it"
+msgstr ""
+
+#: udata_front/theme/gouvfr/templates/security/email/welcome_existing.html:25
+msgid "Here"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/site/dashboard.html:5
