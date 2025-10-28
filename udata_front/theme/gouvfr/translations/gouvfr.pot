@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: udata-front 6.2.4\n"
 "Report-Msgid-Bugs-To: data.gouv@data.gouv.fr\n"
-"POT-Creation-Date: 2025-10-01 09:56+0100\n"
-"PO-Revision-Date: 2025-10-01 09:56+0100\n"
+"POT-Creation-Date: 2025-10-17 11:57+0100\n"
+"PO-Revision-Date: 2025-10-17 11:57+0100\n"
 "Last-Translator: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
 "Language: en\n"
 "Language-Team: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
@@ -781,7 +781,7 @@ msgid "on social media"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:46
-msgid "Twitter - new tab"
+msgid "X - new tab"
 msgstr ""
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:51
