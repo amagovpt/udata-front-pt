@@ -775,8 +775,8 @@ msgid "on social media"
 msgstr "nas redes sociais"
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:56
-msgid "Twitter - new tab"
-msgstr "Twitter - novo separador"
+msgid "X - new tab"
+msgstr "X - novo separador"
 
 #: udata_front/theme/gouvfr/templates/newsletter.html:51
 msgid "Linkedin - new tab"

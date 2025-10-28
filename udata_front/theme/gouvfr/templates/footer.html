@@ -77,17 +77,20 @@
             <div class="fr-footer__body">
             {% cache cache_duration, 'footer-brand-and-links', g.lang_code|default(config.DEFAULT_LANGUAGE)|string %}
             
-            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-                <div class="fr-footer__brand fr-enlarge-link" style="display: flex; align-items: center; top: 50%;">
-                    <a class="fr-footer__brand-link" href="https://www.ama.gov.pt/" style="width: 130px;">
-                        {% include theme('svg/logo-ama.svg') %}
-                    </a>
+            <div class="fr-grid-row fr-grid-row--middle">
+                <div class="fr-col-auto" style="margin-right: 20px;">
+                    <div class="fr-footer__brand fr-enlarge-link">
+                        <a class="fr-footer__brand-link" href="https://www.arte.gov.pt/" style="width: 130px;">
+                            {% include theme('svg/logo-arte.svg') %}
+                        </a>
+                    </div>
                 </div>
-            
-                <div class="fr-footer__brand fr-enlarge-link" style="top: 32px; ">
-                    <a href="{{ url_for('site.home') }}" title="{{ _('Go back to home page') }}">
-                        {% include theme('svg/logotype.svg') %}
-                    </a>
+                <div class="fr-col-auto">
+                    <div class="fr-footer__brand fr-enlarge-link">
+                        <a href="{{ url_for('site.home') }}" title="{{ _('Go back to home page') }}">
+                            {% include theme('svg/logotype.svg') %}
+                        </a>
+                    </div>
                 </div>
             </div>
             
@@ -146,8 +149,8 @@
                             >{{ item.label }}</a></li>
                     {% endfor %}
                         <li class="fr-footer__bottom-item">
-                            <a href="https://www.ama.gov.pt/" class="fr-footer__bottom-link">
-                                AMA - Agência para a Modernização Administrativa, I. P.
+                            <a href="https://www.arte.gov.pt/" class="fr-footer__bottom-link">
+                                ARTE - Agência para a Reforma Tecnológica do Estado
                             </a>
                         </li>
                         <li class="fr-footer__bottom-item">
