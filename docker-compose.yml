@@ -24,10 +24,13 @@ services:
         command: serve --reload
         #environment:
         #  - FLASK_DEBUG=true
+        env_file:
+          - ./udata-front-pt/.env
         volumes:
           - ./udata-fs:/udata/fs
           - .:/src/gouvfr
           - ./udata.cfg:/udata/udata.cfg
+          - ./udata-front-pt/.env:/udata/.env
           - ./logs:/logs
         environment:
           TZ: "Portugal"
@@ -46,5 +49,3 @@ services:
           timeout: 3s
           retries: 3
           start_period: 180s
-        #ports:
-        # - "7000:7000"

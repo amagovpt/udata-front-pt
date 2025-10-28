@@ -2,8 +2,8 @@
 # Dockerfile for udata
 ##########################################
 
-# Baseia-se na imagem oficial Python 3.11 no Debian Bullseye (mais recente e suportado)
-FROM python:3.11-slim-bullseye
+# Baseia-se na imagem oficial Python 3.11 no Debian Bookworm (mais recente e com correções de segurança)
+FROM python:3.11-slim-bookworm
 
 # Argumentos opcionais de build para metadados da imagem
 ARG REVISION="N/A"
@@ -24,6 +24,9 @@ LABEL "org.opencontainers.image.created"=$CREATED
 # A ordem é importante para evitar conflitos de dependência.
 # Usamos --no-install-recommends para manter a imagem mais pequena.
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    # testar certificados SSL (validar ligações HTTPS para o Hydra)
+    ca-certificates \
     build-essential \
     libpcre3-dev \
     mime-support \
@@ -32,7 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xmlsec1 \
     libgnutls28-dev \
     libssl-dev \
-    netcat \
+    netcat-openbsd \
     # Limpeza de caches e ficheiros temporários
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -52,8 +55,8 @@ RUN pip install -e /tmp/udata_app_source/
 # Criação de diretórios necessários dentro do container
 RUN mkdir -p /udata/fs /src
 
-# Copia os ficheiros de configuração e o script de entrada para o container
-COPY udata.cfg entrypoint.sh /udata/
+# Copia o ficheiro de configuração, ficheito de variáveis de ambiente e o script de entrada para o container
+COPY udata.cfg entrypoint.sh .env /udata/
 
 # Garante que o script entrypoint.sh é executável
 RUN chmod +x /udata/entrypoint.sh
@@ -68,7 +71,7 @@ WORKDIR /udata
 VOLUME /udata/fs
 
 # Define a variável de ambiente para o caminho do ficheiro de configurações do udata
-ENV UDATA_SETTINGS /udata/udata.cfg
+ENV UDATA_SETTINGS=/udata/udata.cfg
 
 # Expõe a porta 7000 do container
 EXPOSE 7000
