@@ -36,6 +36,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgnutls28-dev \
     libssl-dev \
     netcat-openbsd \
+    # --- NOVAS DEPENDÊNCIAS PARA NGINX E SUPERVISOR ---
+    nginx \
+    supervisor \
+    # ---------------------------
     # Limpeza de caches e ficheiros temporários
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -53,7 +57,8 @@ COPY . /tmp/udata_app_source/
 RUN pip install -e /tmp/udata_app_source/
 
 # Criação de diretórios necessários dentro do container
-RUN mkdir -p /udata/fs /src
+# --- ADICIONADO DIRETÓRIOS PARA SOCKET, LOGS DO SUPERVISOR E NGINX ---
+RUN mkdir -p /udata/fs /src /var/run/uwsgi /var/log/supervisor /var/log/nginx
 
 # Copia o ficheiro de configuração, ficheito de variáveis de ambiente e o script de entrada para o container
 COPY udata.cfg entrypoint.sh .env /udata/
@@ -64,6 +69,11 @@ RUN chmod +x /udata/entrypoint.sh
 # Copia os ficheiros de configuração uWSGI
 COPY uwsgi/*.ini /udata/uwsgi/
 
+# --- COPIA AS CONFIGURAÇÕES DO SUPERVISOR E NGINX ---
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY nginx-udata.conf /etc/nginx/sites-enabled/default
+# -------------------------------------
+
 # Define o diretório de trabalho padrão dentro do container
 WORKDIR /udata
 
@@ -73,11 +83,16 @@ VOLUME /udata/fs
 # Define a variável de ambiente para o caminho do ficheiro de configurações do udata
 ENV UDATA_SETTINGS=/udata/udata.cfg
 
+# --- ESTA É A CORREÇÃO ---
+# Força o Python a usar o código-fonte montado em /src/gouvfr,
+# resolvendo os conflitos de importação no entrypoint.
+ENV PYTHONPATH="/src/gouvfr:${PYTHONPATH}"
+# ---------------------------
+
 # Expõe a porta 7000 do container
 EXPOSE 7000
 
-# Define o script entrypoint.sh como o ponto de entrada principal do container
-ENTRYPOINT ["/udata/entrypoint.sh"]
-
-# Define o comando padrão a ser executado pelo entrypoint.sh se nenhum outro for especificado
-CMD ["uwsgi"]
+# --- ALTERADO: Supervisord é agora o ponto de entrada principal ---
+# Não usamos mais ENTRYPOINT porque o Supervisor gerencia os processos
+# O entrypoint.sh será chamado pelo Supervisor para iniciar o uWSGI
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
