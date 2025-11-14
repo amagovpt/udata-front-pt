@@ -150,7 +150,7 @@
                   </span>
                   <span v-else>
                     <span class="text-blue-400 fr-icon-download-line fr-icon--sm fr-mr-1v fr-mt-1v"></span>
-                    <a :href="resource.latest" class="fr-link" rel="ugc nofollow noopener">
+                    <a :href="resource.latest" class="fr-link" rel="ugc nofollow noopener" download>
                       <span>{{ $t('Format {format}', { format: resource.format }) }}<span v-if="resource.filesize"> - {{ filesize(resource.filesize) }}</span></span>
                     </a>
                   </span>
@@ -161,7 +161,7 @@
                   <dd class="fr-text--sm fr-ml-0 fr-mt-0 fr-mb-2w text-mention-grey h-4w fr-grid-row fr-grid-row--middle">
                     <span>
                       <span class="text-blue-400 fr-icon-download-line fr-icon--sm fr-mr-1v fr-mt-1v"></span>
-                      <a :href="resource.extras['analysis:parsing:parquet_url']" class="fr-link" rel="ugc nofollow noopener">
+                      <a :href="resource.extras['analysis:parsing:parquet_url']" class="fr-link" rel="ugc nofollow noopener" download>
                         <span>{{ $t('Format {format}', { format: 'parquet' }) }}<span v-if="resource.extras['analysis:parsing:parquet_size']"> - {{ filesize(resource.extras['analysis:parsing:parquet_size']) }}</span></span>
                       </a>
                     </span>
