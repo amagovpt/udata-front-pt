@@ -1,7 +1,7 @@
 import logging
 import requests
 
-from flask import request, url_for, current_app, make_response
+from flask import request, url_for, current_app, make_response, send_from_directory
 from mongoengine.errors import DoesNotExist
 from feedgenerator.django.utils.feedgenerator import Atom1Feed
 
@@ -19,6 +19,11 @@ from udata.core.site.models import current_site
 blueprint = I18nBlueprint('site', __name__)
 
 log = logging.getLogger(__name__)
+
+
+@blueprint.route('/robots.txt')
+def robots():
+    return send_from_directory(current_app.static_folder, 'robots.txt')
 
 
 @blueprint.app_context_processor
