@@ -28,16 +28,17 @@ async def run_bot(client, bot_id):
         response = await client.get(robots_url, timeout=TIMEOUT)
         if response.status_code == 200:
             rp.parse(response.text.splitlines())
+            print(f"Bot {bot_id}: Successfully fetched and parsed {robots_url}.")
             if not rp.can_fetch(USER_AGENT, TARGET_URL):
                 print(f"Bot {bot_id}: Blocked by robots.txt. Not making requests to {TARGET_URL}")
                 return [f"Blocked by robots.txt"]
             else:
                 print(f"Bot {bot_id}: Allowed by robots.txt.")
         else:
-            print(f"Bot {bot_id}: Could not fetch robots.txt (status: {response.status_code}). Assuming allowed.")
+            print(f"Bot {bot_id}: Failed to fetch robots.txt (status: {response.status_code}). Assuming allowed for now.")
 
     except httpx.RequestError as e:
-        print(f"Bot {bot_id}: Could not fetch robots.txt ({e}). Assuming allowed.")
+        print(f"Bot {bot_id}: Failed to fetch robots.txt (Connection Error: {e}). Assuming allowed for now.")
     # --- End of Robots.txt check ---
 
 
@@ -45,6 +46,7 @@ async def run_bot(client, bot_id):
         try:
             headers = {"User-Agent": USER_AGENT}
             response = await client.get(TARGET_URL, timeout=TIMEOUT, headers=headers)
+            print(f"Bot {bot_id}, Request {i+1}: Successfully connected to Udata. Status: {response.status_code}")
             statuses.append(response.status_code)
         except httpx.RequestError as e:
             print(f"Bot {bot_id}, Request {i+1}: FAILED - {type(e).__name__}")
