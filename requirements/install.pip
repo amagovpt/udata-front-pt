@@ -45,6 +45,7 @@ werkzeug==2.2.3
     # via
     #   -c requirements/udata.pip
     #   flask
+httpx==0.28.1
 gevent==25.4.2
 markdown==3.8
 owslib==0.33.0
