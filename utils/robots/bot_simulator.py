@@ -5,9 +5,9 @@ from collections import Counter
 from urllib import robotparser
 
 # --- Configuration ---
-TARGET_URL = "http://dev.local:7000/"  # CHANGE THIS TO THE SERVER YOU WANT TO TEST
-NUM_BOTS = 1  # Number of concurrent bots
-REQUESTS_PER_BOT = 1  # Number of requests each bot will make
+TARGET_URL = "http://10.55.37.38/"  # CHANGE THIS TO THE SERVER YOU WANT TO TEST
+NUM_BOTS = 10  # Number of concurrent bots
+REQUESTS_PER_BOT = 2  # Number of requests each bot will make
 TIMEOUT = 30  # seconds
 USER_AGENT = "MyTestBot/1.0"
 
