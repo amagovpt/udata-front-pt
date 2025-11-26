@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 
 
 @blueprint.route('/robots.txt')
-def robots():
+def static_from_root():
     return send_from_directory(current_app.static_folder, 'robots.txt')
 
 

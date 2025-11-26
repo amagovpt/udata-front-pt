@@ -53,6 +53,57 @@ async def run_bot(client, bot_id):
             statuses.append(str(e))
     return statuses
 
+async def verify_blocking_rules(client, base_url):
+    """Run specific blocking verification scenarios."""
+    print("\n--- Running Verification Rules ---")
+    
+    # Scenario 1: Normal user on /fr/ (Expect != 403)
+    url = f"{base_url.rstrip('/')}/fr/datasets/some-dataset"
+    print(f"1. Checking Normal User on {url}...")
+    try:
+        resp = await client.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=TIMEOUT)
+        if resp.status_code != 403:
+            print(f"   PASS: Normal user got {resp.status_code} (Expected != 403)")
+        else:
+            print(f"   FAIL: Normal user got 403!")
+    except Exception as e:
+        print(f"   ERROR: {e}")
+
+    # Scenario 2: Googlebot on /fr/ (Expect 403)
+    print(f"2. Checking Googlebot on {url}...")
+    try:
+        resp = await client.get(url, headers={'User-Agent': 'Googlebot/2.1'}, timeout=TIMEOUT)
+        if resp.status_code == 403:
+            print(f"   PASS: Googlebot got 403 (Expected 403)")
+        else:
+            print(f"   FAIL: Googlebot got {resp.status_code} (Expected 403)")
+    except Exception as e:
+        print(f"   ERROR: {e}")
+
+    # Scenario 3: Googlebot on Home (Expect 200)
+    url_home = f"{base_url.rstrip('/')}/"
+    print(f"3. Checking Googlebot on {url_home}...")
+    try:
+        resp = await client.get(url_home, headers={'User-Agent': 'Googlebot/2.1'}, timeout=TIMEOUT)
+        if resp.status_code == 200:
+            print(f"   PASS: Googlebot got 200 (Expected 200)")
+        else:
+            print(f"   FAIL: Googlebot got {resp.status_code} (Expected 200)")
+    except Exception as e:
+        print(f"   ERROR: {e}")
+
+    # Scenario 4: Bingbot on /fr/ (Expect 403)
+    print(f"4. Checking Bingbot on {url}...")
+    try:
+        resp = await client.get(url, headers={'User-Agent': 'Bingbot/2.0'}, timeout=TIMEOUT)
+        if resp.status_code == 403:
+            print(f"   PASS: Bingbot got 403 (Expected 403)")
+        else:
+            print(f"   FAIL: Bingbot got {resp.status_code} (Expected 403)")
+    except Exception as e:
+        print(f"   ERROR: {e}")
+    print("----------------------------------\n")
+
 async def main():
     """Main function to orchestrate the bots."""
     total_requests = NUM_BOTS * REQUESTS_PER_BOT
@@ -69,7 +120,10 @@ async def main():
     start_time = time.time()
 
     # Using a single client is more efficient
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(verify=False) as client:
+        # Run verification rules first
+        await verify_blocking_rules(client, TARGET_URL)
+        
         tasks = [run_bot(client, i) for i in range(NUM_BOTS)]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 

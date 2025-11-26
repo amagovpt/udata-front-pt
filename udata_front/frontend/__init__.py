@@ -47,14 +47,14 @@ def init_app(app):
     theme.init_app(app)
     init_markdown(app)
 
-    @app.before_request
-    def block_bots():
-        user_agent = request.headers.get('User-Agent', '').lower()
-        bots = ['bot', 'crawler', 'spider', 'slurp', 'wget', 'curl']
-        if any(bot in user_agent for bot in bots):
-            # Allow Googlebot if needed, but user said "barrados em qualquer url"
-            # and robots.txt has Disallow: / so we block everything.
-            abort(403)
+    # @app.before_request
+    # def block_bots():
+    #     user_agent = request.headers.get('User-Agent', '').lower()
+    #     bots = ['bot', 'crawler', 'spider', 'slurp', 'wget', 'curl']
+    #     if any(bot in user_agent for bot in bots):
+    #         # Allow Googlebot if needed, but user said "barrados em qualquer url"
+    #         # and robots.txt has Disallow: / so we block everything.
+    #         abort(403)
 
 
     from . import helpers, error_handlers, menu_helpers, resource_helpers  # noqa
