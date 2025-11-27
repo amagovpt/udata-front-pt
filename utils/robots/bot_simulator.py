@@ -98,7 +98,13 @@ async def verify_blocking_rules(client, base_url):
         "Amazonbot",
         "AWS-Crawl",
         "AzureBot",
-        "Azure-Search"
+        "Azure-Search",
+        "OAI-SearchBot",
+        "Slack-ImgProxy",
+        "Slackbot 1.0",
+        "Slackbot-LinkExpanding 1.0",
+        "MJ12bot",
+        "ChatGPT-User"
     ]
 
     print(f"2. Checking Bot List on {url}...")
