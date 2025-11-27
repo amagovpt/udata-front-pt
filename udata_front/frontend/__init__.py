@@ -1,6 +1,6 @@
 import inspect
 from importlib import import_module
-from flask import abort, current_app
+from flask import abort, current_app, request
 from flask_navigation import Navigation
 from authlib.integrations.flask_client import OAuth
 from udata import entrypoints
