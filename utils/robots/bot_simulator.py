@@ -5,7 +5,7 @@ from collections import Counter
 from urllib import robotparser
 
 # --- Configuration ---
-TARGET_URL = "http://10.55.37.38/"  # CHANGE THIS TO THE SERVER YOU WANT TO TEST
+TARGET_URL = "http://dados.gov.pt/"  # CHANGE THIS TO THE SERVER YOU WANT TO TEST
 NUM_BOTS = 10  # Number of concurrent bots
 REQUESTS_PER_BOT = 2  # Number of requests each bot will make
 TIMEOUT = 30  # seconds
