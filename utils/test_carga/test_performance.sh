@@ -149,7 +149,7 @@ check_service() {
 
 # Função para coletar métricas do sistema
 collect_system_metrics() {
-    local output_file="${RESULTS_DIR}/system_metrics_${TIMESTAMP}.txt"
+    local output_file="${RESULTS_DIR}/system_metrics_${TIMESTAMP}.log"
     
     echo -e "${YELLOW}📊 Coletando métricas do sistema...${NC}"
     
@@ -184,7 +184,10 @@ run_performance_test() {
     echo ""
     
     # Executa o teste Python
-    if python3 test_performance.py "${UDATA_URL}" | tee "${output_file}"; then
+    python3 test_performance.py "${UDATA_URL}" | tee "${output_file}"
+    test_exit_code=${PIPESTATUS[0]}
+
+    if [ $test_exit_code -eq 0 ]; then
         echo -e "${GREEN}✅ Teste concluído com sucesso!${NC}"
         echo -e "${GREEN}   Log salvo em: ${output_file}${NC}"
         return 0
