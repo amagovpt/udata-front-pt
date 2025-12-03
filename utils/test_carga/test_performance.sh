@@ -126,13 +126,14 @@ check_service() {
     echo -e "${YELLOW}🔍 Verificando se o serviço está disponível em ${UDATA_URL}...${NC}"
     
     # Adiciona flags para HTTPS com certificados auto-assinados
-    local curl_opts="-s -o /dev/null -w %{http_code}"
+    # Adiciona flags para HTTPS com certificados auto-assinados
+    local curl_opts=(-s -o /dev/null -w "%{http_code}" -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36")
     if [[ "${UDATA_URL}" =~ ^https:// ]]; then
-        curl_opts="${curl_opts} -k"  # Ignora verificação de certificado SSL
+        curl_opts+=("-k")  # Ignora verificação de certificado SSL
     fi
     
     for i in {1..5}; do
-        http_code=$(curl ${curl_opts} "${UDATA_URL}" 2>/dev/null || echo "000")
+        http_code=$(curl "${curl_opts[@]}" "${UDATA_URL}" 2>/dev/null || echo "000")
         if [[ "$http_code" =~ ^(200|302|301|404)$ ]]; then
             echo -e "${GREEN}✅ Serviço disponível! (HTTP ${http_code})${NC}"
             return 0
@@ -255,7 +256,11 @@ async def quick_test(url):
     errors_502 = 0
     success = 0
     
-    async with aiohttp.ClientSession() as session:
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+    }
+
+    async with aiohttp.ClientSession(headers=headers) as session:
         tasks = []
         for _ in range(100):
             async def req():
