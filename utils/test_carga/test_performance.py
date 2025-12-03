@@ -71,6 +71,11 @@ from datetime import datetime
 from typing import List, Dict, Tuple
 from collections import defaultdict
 
+# Configuração de Headers
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+
 
 class ProgressBar:
     """Barra de progresso para terminal"""
@@ -144,7 +149,7 @@ class PerformanceTest:
         progress = ProgressBar(num_requests, prefix="Progresso", length=40)
         
         connector = aiohttp.TCPConnector(limit=concurrency, limit_per_host=concurrency, ssl=self.ssl_context)
-        async with aiohttp.ClientSession(connector=connector, timeout=self.timeout) as session:
+        async with aiohttp.ClientSession(connector=connector, timeout=self.timeout, headers=HEADERS) as session:
             tasks = []
             for i in range(num_requests):
                 # Varia os endpoints para simular tráfego real
@@ -208,7 +213,7 @@ class PerformanceTest:
         progress = ProgressBar(total_expected, prefix="Progresso", length=40)
         
         connector = aiohttp.TCPConnector(limit=rps, limit_per_host=rps, ssl=self.ssl_context)
-        async with aiohttp.ClientSession(connector=connector, timeout=self.timeout) as session:
+        async with aiohttp.ClientSession(connector=connector, timeout=self.timeout, headers=HEADERS) as session:
             iteration_count = 0
             while time.time() - start_time < duration_seconds:
                 iteration_start = time.time()
@@ -398,7 +403,7 @@ async def check_service_availability(base_url: str) -> bool:
         ssl_context.verify_mode = ssl.CERT_NONE
         
         connector = aiohttp.TCPConnector(ssl=ssl_context)
-        async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
+        async with aiohttp.ClientSession(timeout=timeout, connector=connector, headers=HEADERS) as session:
             async with session.get(base_url) as response:
                 status = response.status
                 
