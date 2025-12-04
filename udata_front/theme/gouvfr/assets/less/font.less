@@ -1,21 +1,28 @@
 // stylelint-disable
-@font-face {
-    font-weight: 600;
-    font-family: "Public Sans";
-    font-style: normal;
-    src: url("../fonts/PublicSans-SemiBold.woff2") format("woff2"),
-        url("../fonts/PublicSans-SemiBold.woff") format("woff");
+/*
+    Use Inter variable fonts (downloaded as Inter-Variable.ttf and
+    Inter-VariableItalic.ttf). Variable fonts cover the full weight range
+    so a single font file is used with `font-weight: 100 900` and
+    appropriate style.
+*/
 
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    src: url("../fonts/Inter-Variable.woff2") format("woff2"),
+             url("../fonts/Inter-Variable.woff") format("woff"),
+             url("../fonts/Inter-Variable.ttf") format("truetype");
     font-display: swap;
 }
 
 @font-face {
-    font-weight: 800;
-    font-family: "Public Sans";
-    font-style: normal;
-    src: url("../fonts/PublicSans-ExtraBold.woff2") format("woff2"),
-        url("../fonts/PublicSans-ExtraBold.woff") format("woff");
-
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 100 900;
+    src: url("../fonts/Inter-VariableItalic.woff2") format("woff2"),
+             url("../fonts/Inter-VariableItalic.woff") format("woff"),
+             url("../fonts/Inter-VariableItalic.ttf") format("truetype");
     font-display: swap;
 }
 
@@ -25,15 +32,6 @@
     font-style: italic;
     src: url("../fonts/Spectral-Italic.woff2") format("woff2"),
         url("../fonts/Spectral-Italic.woff") format("woff");
-
-    font-display: swap;
-}
-
-@font-face {
-    font-weight: 800;
-    font-family: Marianne;
-    src: url("../fonts/Marianne-ExtraBold.woff2") format("woff2"),
-        url("../fonts/Marianne-ExtraBold.woff") format("woff");
 
     font-display: swap;
 }
