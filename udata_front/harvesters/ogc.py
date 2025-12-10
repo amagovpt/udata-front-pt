@@ -20,7 +20,7 @@ class OGCBackend(BaseBackend):
 
     def inner_harvest(self):
         """
-        Fetches OGC API collections and enqueues them for processing.
+        Fetches OGC API collections (JSON-LD) and enqueues them for processing.
         """
         headers = {
             'content-type': 'application/json',
@@ -36,20 +36,11 @@ class OGCBackend(BaseBackend):
             self.logger.error(msg)
             raise Exception(msg)
 
-        # Try to find the list of datasets/collections
-        # OGC API - Collections uses 'collections'
-        metadata = data.get("collections") or data.get("member") or data.get("datasets") or data.get("dataset")
-
-        # Handle different response structures
-        if not metadata and isinstance(data, list):
-            metadata = data
-        elif not metadata and isinstance(data, dict):
-            # Maybe it's a single collection object?
-            if data.get("id") and data.get("title"):
-                metadata = [data]
+        # OGC/Schema.org JSON-LD structure: look for 'dataset' array
+        metadata = data.get("dataset")
 
         if not metadata:
-            msg = f'Could not find collections/datasets in OGC response. Keys found: {list(data.keys())}'
+            msg = f'Could not find "dataset" in OGC response. Keys found: {list(data.keys())}'
             self.logger.error(msg)
             raise Exception(msg)
 
@@ -57,32 +48,28 @@ class OGCBackend(BaseBackend):
         if isinstance(metadata, dict):
             metadata = [metadata]
 
-        # Loop through the metadata and process each collection
+        # Loop through the metadata and process each dataset
         for each in metadata:
-            remote_id = (
-                each.get("id") or 
-                each.get("identifier") or 
-                each.get("@id")
-            )
+            remote_id = each.get("@id")
             
             if not remote_id:
-                self.logger.warning(f"Skipping OGC collection without identifier: {each.get('title')}")
+                self.logger.warning(f"Skipping OGC dataset without @id: {each.get('name')}")
                 continue
 
             item = {
                 "remote_id": str(remote_id),
-                "title": each.get("title") or each.get("dct:title") or each.get("name") or "Untitled Dataset",
-                "description": each.get("description") or each.get("abstract") or each.get("dct:description") or "",
-                "keywords": each.get("keywords") or each.get("keyword") or [],
-                "links": each.get("links") or each.get("link") or each.get("distribution") or [],
-                "extent": each.get("extent", {})
+                "title": each.get("name") or "Untitled Dataset",
+                "description": each.get("description") or "",
+                "keywords": each.get("keywords") or [],
+                "distributions": each.get("distribution") or [],
+                "spatial": each.get("spatial")
             }
 
             self.process_dataset(item["remote_id"], items=item)
 
     def inner_process_dataset(self, item: HarvestItem, **kwargs):
         """
-        Process harvested OGC collection data into a dataset.
+        Process harvested OGC JSON-LD data into a dataset.
         """
         dataset = self.get_dataset(item.remote_id)
         item_data = kwargs.get('items')
@@ -105,21 +92,20 @@ class OGCBackend(BaseBackend):
         # Recreate all resources
         dataset.resources = []
 
-        links = item_data.get("links", [])
-        if isinstance(links, list):
-            for link in links:
-                if isinstance(link, dict):
-                    url = link.get("href", "")
+        distributions = item_data.get("distributions", [])
+        if isinstance(distributions, list):
+            for dist in distributions:
+                if isinstance(dist, dict):
+                    url = dist.get("contentURL", "")
                     if not url:
                         continue
                     
-                    # Determine format from link type or URL
-                    link_type = link.get("type", "")
+                    # Determine format from encodingFormat
+                    link_type = dist.get("encodingFormat", "")
 
                     # Skip HTML and PNG resources as requested
                     if link_type in ('text/html', 'image/png'):
                         continue
-                    link_rel = link.get("rel", "")
                     
                     # Extract format from MIME type or use the type directly
                     if link_type:
@@ -129,7 +115,7 @@ class OGCBackend(BaseBackend):
                         format_value = url.split('.')[-1] if '.' in url.split('/')[-1] else "unknown"
                     
                     # Use link title or create a descriptive title
-                    resource_title = link.get("title") or f"{item_data['title']} - {link_rel}"
+                    resource_title = dist.get("description") or dist.get("name") or "Resource"
 
                     new_resource = Resource(
                         title=resource_title,
@@ -142,12 +128,10 @@ class OGCBackend(BaseBackend):
         # Add extra metadata
         dataset.extras['harvest:name'] = self.source.name
         
-        # Store extent information if available
-        extent = item_data.get('extent', {})
-        if extent:
-            spatial = extent.get('spatial', {})
-            if spatial and spatial.get('bbox'):
-                dataset.extras['spatial:bbox'] = str(spatial.get('bbox'))
+        # Store spatial information if available
+        spatial = item_data.get('spatial')
+        if spatial:
+             dataset.extras['spatial'] = spatial
 
         return dataset
 
