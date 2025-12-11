@@ -12,6 +12,30 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 /**
  * Get theme folder name
  */
+const removeMariannePlugin = {
+  postcssPlugin: 'remove-marianne-fonts',
+  AtRule: {
+    'font-face': (atRule: any) => {
+      let isMarianne = false;
+      atRule.walkDecls('font-family', (decl: any) => {
+        if (decl.value.includes('Marianne')) {
+          isMarianne = true;
+        }
+      });
+      if (isMarianne) {
+        atRule.remove();
+      }
+    }
+  },
+  Declaration: {
+    'font-family': (decl: any) => {
+      if (decl.value.includes('Marianne')) {
+        decl.value = decl.value.replace(/Marianne/g, 'Inter');
+      }
+    }
+  }
+};
+
 export function getTheme(): string {
   let theme = "gouvfr";
 
@@ -57,6 +81,11 @@ export async function getConfig(): Promise<UserConfig> {
 
   return {
     base: `/_themes/${theme}/`,
+    css: {
+      postcss: {
+        plugins: [removeMariannePlugin as any]
+      }
+    },
     plugins: [
       vue(),
       VueI18nPlugin({
