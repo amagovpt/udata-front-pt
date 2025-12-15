@@ -36,7 +36,7 @@ import statistics
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Optional, Tuple
-from collections idict
+from collections import defaultdict
 from enum import Enum
 
 # Verificar e instalar dependencias
