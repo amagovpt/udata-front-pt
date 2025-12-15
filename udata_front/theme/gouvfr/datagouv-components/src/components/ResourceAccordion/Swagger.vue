@@ -43,6 +43,6 @@ onMounted(async () => {
 .swagger-ui .info a,
 .swagger-ui .info .title,
 .swagger-ui .topbar {
-  font-family: 'Marianne', Arial, sans-serif !important;
+  font-family: 'Inter', Arial, sans-serif !important;
 }
 </style>

@@ -1,16 +1,34 @@
-import * as Sentry from '@sentry/vue';
-import { Integrations } from '@sentry/tracing';
 import { sentry } from './config';
 import { App } from 'vue';
 
-function InitSentry(app: App) {
-  if (sentry.dsn) {
+async function InitSentry(app: App) {
+  // Only load Sentry if DSN is configured
+  if (!sentry.dsn) {
+    return;
+  }
+
+  try {
+    // Dynamic import to avoid loading Sentry when not needed
+    const [Sentry, { Integrations }] = await Promise.all([
+      import('@sentry/vue'),
+      import('@sentry/tracing'),
+    ]);
+
     Sentry.init({
       app,
       dsn: sentry.dsn,
-      environment: sentry.environment,
-      integrations: [new Integrations.BrowserTracing()],
-      sampleRate: sentry.sampleRate,
+      environment: sentry.environment || '',
+      integrations: [
+        new Integrations.BrowserTracing({
+          // Specify which origins to trace to avoid 'split' errors on undefined
+          tracingOrigins: [
+            'localhost',
+            /^\//,
+            window.location?.origin,
+          ].filter(Boolean),
+        }),
+      ],
+      sampleRate: sentry.sampleRate || 0,
       release: sentry.release,
       ignoreErrors: [
         'Auth required',
@@ -20,9 +38,15 @@ function InitSentry(app: App) {
         'ResizeObserver loop completed with undelivered notifications.',
       ],
       autoSessionTracking: false,
-    })
-    Sentry.setTags(sentry.tags)
+    });
+
+    if (sentry.tags && Object.keys(sentry.tags).length > 0) {
+      Sentry.setTags(sentry.tags);
+    }
+  } catch (error) {
+    console.warn('Failed to initialize Sentry:', error);
   }
 }
 
 export default InitSentry;
+

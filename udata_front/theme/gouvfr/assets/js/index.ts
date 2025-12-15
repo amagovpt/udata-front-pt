@@ -29,11 +29,11 @@ import "./components/vanilla/dialog.js";
 import "./components/vanilla/sort-search.js";
 import fixupTabsOnStartup from "./components/vanilla/fixup-tabs-on-startup.js";
 import i18n from "./i18n.ts";
-import { admin_root, api_root, api_2_root, schema_documentation_url, schema_validata_url, tabular_api_dataservice_id, tabular_api_url, tabular_page_size, title } from "./config.ts";
+import { admin_root, api_root, api_2_root, schema_documentation_url, schema_validata_url, tabular_api_dataservice_id, tabular_api_url, tabular_page_size, title, sentry } from "./config.ts";
 import Api from "./plugins/api.ts";
 import EventBus from "./plugins/eventbus.ts";
 import Auth from "./plugins/auth.ts";
-import InitSentry from "./sentry.ts";
+// Sentry is now loaded dynamically only when DSN is configured
 import ReportModalButton from "./components/Report/ReportModalButton.vue";
 import DataservicesSearch from "./components/DataservicesSearch/DataservicesSearch.vue";
 
@@ -52,11 +52,18 @@ setupComponents({
   title,
 });
 
-const configAndMountApp = (el: HTMLElement) => {
+const configAndMountApp = async (el: HTMLElement) => {
   const app = createApp({});
 
-  // Configure as early as possible in the app's lifecycle
-  InitSentry(app);
+  // Only load and initialize Sentry if DSN is configured
+  if (sentry.dsn) {
+    try {
+      const { default: InitSentry } = await import("./sentry.ts");
+      await InitSentry(app);
+    } catch (error) {
+      console.warn('Failed to load Sentry:', error);
+    }
+  }
 
   app.use(Api);
   app.use(EventBus);
