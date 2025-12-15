@@ -33,7 +33,9 @@ const setupI18n = () => {
 }
 
 const setupI18nWithExistingInstance = (newI18n: I18n) => {
-  const locales = config.only_locales.split(",");
+  // Fallback to default_lang if only_locales is not configured
+  const onlyLocales = config.only_locales || config.default_lang || 'en';
+  const locales = onlyLocales.split(",");
   if(!locales.includes(config.default_lang)) {
     throw new Error("Default lang is not in only locales, it won't be loaded");
   }
