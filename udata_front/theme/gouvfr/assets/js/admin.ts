@@ -7,10 +7,10 @@ import "./dsfr.ts";
 import "@gouvfr/dsfr/dist/dsfr/dsfr.module";
 
 import i18n from "./i18n.ts";
-import { admin_root, schema_documentation_url, schema_validata_url, tabular_api_url, tabular_page_size, title } from "./config.ts";
+import { admin_root, schema_documentation_url, schema_validata_url, tabular_api_url, tabular_page_size, title, sentry } from "./config.ts";
 import Api from "./plugins/api.ts";
 import Auth from "./plugins/auth.ts";
-import InitSentry from "./sentry.ts";
+// Sentry is now loaded dynamically only when DSN is configured
 
 setupComponents({
   admin_root,
@@ -55,7 +55,16 @@ const router = createRouter({
 
 const app = createApp(Admin);
 
-InitSentry(app);
+// Only load and initialize Sentry if DSN is configured
+if (sentry.dsn) {
+  import("./sentry.ts").then(({ default: InitSentry }) => {
+    InitSentry(app).catch((error: unknown) => {
+      console.warn('Failed to initialize Sentry:', error);
+    });
+  }).catch((error: unknown) => {
+    console.warn('Failed to load Sentry:', error);
+  });
+}
 
 app.use(Api);
 app.use(Auth);

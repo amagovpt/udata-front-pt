@@ -33,9 +33,16 @@ const setupI18n = () => {
 }
 
 const setupI18nWithExistingInstance = (newI18n: I18n) => {
-  const locales = config.only_locales.split(",");
-  if(!locales.includes(config.default_lang)) {
-    throw new Error("Default lang is not in only locales, it won't be loaded");
+  // Fallback values when config is not yet initialized (e.g. during module loading)
+  const DEFAULT_FALLBACK_LANG = 'pt';
+  const defaultLang = config.default_lang || DEFAULT_FALLBACK_LANG;
+  const onlyLocales = config.only_locales || defaultLang;
+  const locales = onlyLocales.split(",");
+  
+  // Only warn if default_lang is explicitly set but not in locales
+  // Skip validation if using fallback values
+  if(config.default_lang && config.only_locales && !locales.includes(config.default_lang)) {
+    console.warn("Default lang is not in only locales, some features may not work correctly");
   }
 
   const modules = import.meta.glob<{default: any}>("/node_modules/dayjs/esm/locale/*.js");
@@ -55,7 +62,7 @@ const setupI18nWithExistingInstance = (newI18n: I18n) => {
     for(let loadedLocale of loadedLocales) {
       dayjs.locale(loadedLocale, undefined, true);
     }
-    dayjs.locale(config.default_lang);
+    dayjs.locale(defaultLang);
   });
 
   i18n = newI18n;
