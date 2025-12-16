@@ -1,5 +1,5 @@
 from udata.harvest.backends.base import BaseBackend
-from udata.models import Resource, Dataset, License
+from udata.models import Resource, Dataset, License, SpatialCoverage
 from udata.harvest.models import HarvestItem
 import requests
 import logging
@@ -62,7 +62,9 @@ class OGCBackend(BaseBackend):
                 "description": each.get("description") or "",
                 "keywords": each.get("keywords") or [],
                 "distributions": each.get("distribution") or [],
-                "spatial": each.get("spatial")
+                "license": each.get("license"),
+                "temporal_coverage": each.get("temporalCoverage"),
+                "provider": each.get("provider") or data.get("provider"),
             }
 
             self.process_dataset(item["remote_id"], items=item)
@@ -76,7 +78,6 @@ class OGCBackend(BaseBackend):
 
         # Set basic dataset fields
         dataset.title = item_data['title']
-        dataset.license = License.guess('cc-by')
         dataset.description = item_data['description']
         dataset.tags = ["ogcapi.dgterritorio.gov.pt"]
 
@@ -128,10 +129,24 @@ class OGCBackend(BaseBackend):
         # Add extra metadata
         dataset.extras['harvest:name'] = self.source.name
         
-        # Store spatial information if available
-        spatial = item_data.get('spatial')
-        if spatial:
-             dataset.extras['spatial'] = spatial
+        # License logic
+        license_url = item_data.get('license')
+        if license_url:
+            dataset.license = License.guess(license_url)
+        if not dataset.license:
+            # Fallback if guess failed or no license provided
+            dataset.license = License.guess('notspecified')
+
+        # Temporal Coverage
+        temporal = item_data.get('temporal_coverage')
+        if temporal:
+            dataset.extras['temporal_coverage'] = temporal
+
+        # Provider/Publisher
+        provider = item_data.get('provider')
+        if provider and isinstance(provider, dict):
+            dataset.extras['publisher_name'] = provider.get('name')
+            dataset.extras['publisher_email'] = provider.get('contactPoint', {}).get('email')
 
         return dataset
 
