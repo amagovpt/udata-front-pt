@@ -58,6 +58,7 @@ setup(
             'odspt = udata_front.harvesters.odspt:OdsBackendPT',
             'dgt = udata_front.harvesters.dgt:DGTBackend',
             'dgtIne = udata_front.harvesters.dgtIne:DGTINEBackend',
+            'ogc = udata_front.harvesters.ogc:OGCBackend',
             'inehvd = udata_front.harvesters.inehvd:INEHvdBackend',
         ],
         'udata.views': [
