@@ -1,21 +1,28 @@
 // stylelint-disable
-@font-face {
-    font-weight: 600;
-    font-family: Marianne;
-    font-style: normal;
-    src: url("@gouvfr/dsfr/dist/fonts/Marianne-Medium.woff2") format("woff2"),
-        url("@gouvfr/dsfr/dist/fonts/Marianne-Medium.woff") format("woff");
+/*
+    Use Inter variable fonts (downloaded as Inter-Variable.ttf and
+    Inter-VariableItalic.ttf). Variable fonts cover the full weight range
+    so a single font file is used with `font-weight: 100 900` and
+    appropriate style.
+*/
 
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    src: url("../fonts/Inter-Medium.woff2") format("woff2"),
+            url("../fonts/Inter-Medium.woff") format("woff");
+    
     font-display: swap;
 }
 
 @font-face {
-    font-weight: 800;
-    font-family: Marianne;
+    font-family: 'Inter';
     font-style: normal;
-    src: url("../fonts/Marianne-ExtraBold.woff2") format("woff2"),
-        url("../fonts/Marianne-ExtraBold.woff") format("woff");
-
+    font-weight: 800;
+    src: url("../fonts/Inter-ExtraBold.woff2") format("woff2"),
+            url("../fonts/Inter-ExtraBold.woff") format("woff");
+    
     font-display: swap;
 }
 
@@ -24,16 +31,7 @@
     font-family: Spectral;
     font-style: italic;
     src: url("../fonts/Spectral-Italic.woff2") format("woff2"),
-        url("../fonts/Spectral-Italic.woff") format("woff");
-
-    font-display: swap;
-}
-
-@font-face {
-    font-weight: 800;
-    font-family: Marianne;
-    src: url("../fonts/Marianne-ExtraBold.woff2") format("woff2"),
-        url("../fonts/Marianne-ExtraBold.woff") format("woff");
+            url("../fonts/Spectral-Italic.woff") format("woff");
 
     font-display: swap;
 }

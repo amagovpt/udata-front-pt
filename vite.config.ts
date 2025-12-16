@@ -9,9 +9,23 @@ import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
+
+const replaceMarianneInJsPlugin = {
+  name: 'replace-marianne-in-js',
+  transform(code: string, id: string) {
+    if (id.includes('@gouvfr/dsfr')) {
+      return {
+        code: code.replace(/Marianne/g, 'Inter'),
+        map: null
+      };
+    }
+  }
+};
+
 /**
  * Get theme folder name
  */
+
 export function getTheme(): string {
   let theme = "gouvfr";
 
@@ -58,6 +72,7 @@ export async function getConfig(): Promise<UserConfig> {
   return {
     base: `/_themes/${theme}/`,
     plugins: [
+      replaceMarianneInJsPlugin,
       vue(),
       VueI18nPlugin({
         compositionOnly: false,
