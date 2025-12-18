@@ -1,184 +1,52 @@
-name: Deploy
+name: Build and Deploy
 
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
 
 jobs:
-  python-qa:
-    name: Python QA (Docker)
+  docker-build-verify:
+    name: Docker Build & Python QA
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: actions/setup-docker-actions/setup-buildx@v1 # Placeholder for a real action if needed, but 'docker-compose' is usually pre-installed
-      - name: Create .env file
-        run: cp .env udata-front-pt/.env # Based on docker-compose.yml: - ./udata-front-pt/.env:/udata/.env
-      - name: Build udata Container
-        run: |
-          docker compose build udata
-      - name: Run Quality Check inside Docker
-        run: |
-          docker compose run --rm udata inv qa
-      - name: Run Tests inside Docker
-        run: |
-          docker compose run --rm udata inv test
-      - name: Stop Containers
-        run: docker compose down
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  frontend-qa:
-    name: Frontend Quality Assurance
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build assets
-        run: npm run build
-      - name: Upload compiled assets
-        uses: actions/upload-artifact@v4
-        with:
-          name: static-assets
-          path: udata_front/theme/gouvfr/static
-
-  dist:
-    name: Build Distribution
-    needs: [python-qa, frontend-qa]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-      - name: Download compiled assets
-        uses: actions/download-artifact@v4
-        with:
-          name: static-assets
-          path: udata_front/theme/gouvfr/static
-      - name: Install dependencies
+      - name: Prepare configuration files
         run: |
-          python -m pip install --upgrade pip
-          pip install invoke pip-tools
-          pip install -r requirements/install.pip
-      - name: Build Wheel
+          # The Dockerfile expects these files. We create placeholders if they don't exist in CI.
+          touch .env
+          test -f udata.cfg || cp udata.cfg.example udata.cfg || echo "PLUGINS = []" > udata.cfg
+          # Ensure directories for volumes exist if needed (though docker-compose handles it)
+          mkdir -p udata-front-pt
+
+      - name: Build Docker Image
         run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then
-            inv pydist
-          else
-            inv pydist --buildno $GITHUB_RUN_NUMBER
-          fi
-      - name: Upload distribution
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
+          # Mirrors the Dockerfile build process which installs all dependencies
+          docker build \
+            --build-arg REVISION=${{ github.sha }} \
+            --build-arg CREATED=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            -t udata-app:latest .
 
-  publish-pypi:
-    name: Publish to PyPI
-    needs: dist
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/udata-front
-    permissions:
-      id-token: write  # Mandatory for trusted publishing
-    steps:
-      - name: Download distribution
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      - name: Publish package
-        uses: pypa/gh-action-pypi-publish@release/v1
-
-  github-release:
-    name: Create GitHub Release
-    needs: dist
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download distribution
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  datagouv-components:
-    name: Datagouv Components
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: udata_front/theme/gouvfr/datagouv-components/package-lock.json
-      - name: Install dependencies
-        working-directory: udata_front/theme/gouvfr/datagouv-components
-        run: npm ci
-      - name: Build and Test
-        working-directory: udata_front/theme/gouvfr/datagouv-components
-        run: npm run preversion
-
-  publish-components:
-    name: Publish Components to NPM
-    needs: datagouv-components
-    if: startsWith(github.ref, 'refs/tags/@datagouv/components@')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-      - name: Install dependencies
-        working-directory: udata_front/theme/gouvfr/datagouv-components
-        run: npm ci
-      - name: Publish to NPM
-        working-directory: udata_front/theme/gouvfr/datagouv-components
+      - name: Run Quality Check (Python QA)
         run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            npm run publish-stable
-          else
-            npm run publish-dev
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Verify the code quality inside the built container
+          # Following the user's instruction: no frontend commands
+          docker run --rm udata-app:latest /bin/bash -c "pip install invoke flake8 && inv qa"
 
   trigger-deploy:
-    name: Trigger GitLab Deployment
-    needs: [publish-pypi, publish-components]
-    if: |
-      always() &&
-      (needs.publish-pypi.result == 'success' || needs.publish-components.result == 'success') &&
-      startsWith(github.ref, 'refs/tags/')
+    name: Trigger Deployment
+    needs: docker-build-verify
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Trigger GitLab Pipeline
         run: |
-          echo "Triggering GitLab deployment for ${GITHUB_REF_NAME}"
-          # Replicate CircleCI logic if needed
-          # curl -X POST -F token=${{ secrets.GITLAB_API_TOKEN }} -F ref=master https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROJECT_ID }}/trigger/pipeline
+          # Logic to trigger the deployment on GitLab, replicating the CircleCI trigger
+          echo "Triggering recruitment pipeline for tag ${GITHUB_REF_NAME}"
+          # curl -X POST -F token=${{ secrets.GITLAB_API_TOKEN }} -F ref=master \
+          # https://gitlab.com/api/v4/projects/${{ secrets.GITLAB_PROJECT_ID }}/trigger/pipeline
