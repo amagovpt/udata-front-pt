@@ -145,7 +145,7 @@ def i18n(ctx, update=False):
     header(i18n.__doc__)
 
     # Python translations
-    # TODO: Make it generic for any theme
+    #  TODO: Make it generic for any theme
     info('Extract python translations')
     with ctx.cd(ROOT):
         ctx.run('python setup.py extract_messages')
@@ -169,7 +169,6 @@ def i18n(ctx, update=False):
     with ctx.cd(COMPONENTS_ROOT):
         ctx.run('npm run i18n:extract')
     success('Updated data.gouv.fr-components translations')
-
 
 
 @task
@@ -216,6 +215,7 @@ def pydist(ctx, buildno=None):
     header(pydist.__doc__)
     perform_dist(ctx, buildno)
 
+
 @task
 def egg_info(ctx, buildno=None):
     '''Generate package egg_info'''
@@ -225,11 +225,13 @@ def egg_info(ctx, buildno=None):
     with ctx.cd(ROOT):
         ctx.run(' '.join(cmd), pty=True)
 
+
 def get_egg_info_cmd(buildno=None):
     cmd = 'egg_info'
     if buildno:
-       cmd += " -b {0}".format(buildno)
+        cmd += " -b {0}".format(buildno)
     return cmd
+
 
 def perform_dist(ctx, buildno=None):
     cmd = ['python setup.py']
