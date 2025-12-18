@@ -61,7 +61,7 @@ RUN pip install -e /tmp/udata_app_source/
 RUN mkdir -p /udata/fs /src /var/run/uwsgi /var/log/supervisor /var/log/nginx
 
 # Copia o ficheiro de configuração, ficheito de variáveis de ambiente e o script de entrada para o container
-COPY udata.cfg entrypoint.sh .env /udata/
+COPY udata.cfg entrypoint.sh .env tasks.py /udata/
 
 # Garante que o script entrypoint.sh é executável
 RUN chmod +x /udata/entrypoint.sh
