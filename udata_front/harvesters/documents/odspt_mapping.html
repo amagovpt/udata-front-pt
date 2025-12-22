@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Campos: OpenDataSoft PT para uData Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --code-bg: #f8fafc;
+            --code-text: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 64px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 6px;
+            background: var(--primary);
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            color: #334155;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+            color: #2563eb;
+        }
+
+        pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+
+        pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2.5rem 0;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border-color);
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mapa de Campos: OpenDataSoft PT para uData Database</h1>
+        <p>Este documento mapeia os campos obtidos do harvester <code>OdsBackendPT</code> (OpenDataSoft API) para os
+            campos da tabela/coleção <code>datasets</code> na base de dados do uData (modelo <code>Dataset</code>).</p>
+        <h2>Fonte de Dados</h2>
+        <p><strong>API OpenDataSoft</strong>: Plataforma OpenDataSoft
+            - Endpoint: <code>{source_url}/api/datasets/1.0/search/</code>
+            - Protocolo: REST API JSON
+            - Paginação: 50 registos por página
+            - Parâmetros:
+            - <code>start</code> - Offset de paginação
+            - <code>rows</code> - Número de registos por página
+            - <code>interopmetas</code> - Incluir metadados de interoperabilidade
+            - <code>refine.{facet}</code> - Filtro inclusivo
+            - <code>exclude.{facet}</code> - Filtro exclusivo</p>
+        <h2>Resumo do Mapeamento</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Campo Fonte (ODS API)</th>
+                    <th style="text-align: left;">Propriedade JSON</th>
+                    <th style="text-align: left;">Campo Destino (uData <code>Dataset</code>)</th>
+                    <th style="text-align: left;">Notas / Lógica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;"><strong>Dataset</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>datasetid</code></td>
+                    <td style="text-align: left;"><code>dataset['datasetid']</code></td>
+                    <td style="text-align: left;"><code>remote_id</code> (HarvestItem)</td>
+                    <td style="text-align: left;">ID único do dataset no ODS.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.title</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['title']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Título do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.description</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['description']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Descrição (HTML parseado).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.publisher</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['publisher']</code></td>
+                    <td style="text-align: left;"><code>organization.acronym</code></td>
+                    <td style="text-align: left;">Cria/associa organização.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.keyword</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['keyword']</code></td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Keywords (lista ou string).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.theme</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['theme']</code></td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Temas (divididos por vírgula).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Adiciona hostname da fonte.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.license</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['license']</code></td>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;">Mapeamento de licenças ODS.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>frequency</code></td>
+                    <td style="text-align: left;">Fixo: <code>'unknown'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>private</code></td>
+                    <td style="text-align: left;">Fixo: <code>False</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>has_records</code></td>
+                    <td style="text-align: left;"><code>ods_dataset['has_records']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Validação (skip se False).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>interop_metas.inspire</code></td>
+                    <td style="text-align: left;"><code>ods_interopmetas['inspire']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Validação (skip se presente e feature desativada).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.modified</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['modified']</code></td>
+                    <td style="text-align: left;"><code>resources[].modified</code></td>
+                    <td style="text-align: left;">Data de modificação dos recursos.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.records_count</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['records_count']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Determina se exporta Shapefile.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Extras</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['ods:url']</code></td>
+                    <td style="text-align: left;">URL de exploração do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['harvest:name']</code></td>
+                    <td style="text-align: left;">Nome da fonte de harvest.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.references</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['references']</code></td>
+                    <td style="text-align: left;"><code>extras['ods:references']</code></td>
+                    <td style="text-align: left;">Referências do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>has_records</code></td>
+                    <td style="text-align: left;"><code>ods_dataset['has_records']</code></td>
+                    <td style="text-align: left;"><code>extras['ods:has_records']</code></td>
+                    <td style="text-align: left;">Indica se tem registos.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>features</code></td>
+                    <td style="text-align: left;"><code>'geo' in ods_dataset['features']</code></td>
+                    <td style="text-align: left;"><code>extras['ods:geo']</code></td>
+                    <td style="text-align: left;">Indica se tem dados geográficos.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Resource (Exports)</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Download URL</td>
+                    <td style="text-align: left;"><code>url</code></td>
+                    <td style="text-align: left;">URL de download do export.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">"Export to {format}".</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>fields</code></td>
+                    <td style="text-align: left;"><code>data['fields']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Schema dos campos.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>filetype</code></td>
+                    <td style="text-align: left;">Fixo: <code>'remote'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>format</code></td>
+                    <td style="text-align: left;">Formato do export (csv, json, etc.).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>mime</code></td>
+                    <td style="text-align: left;">MIME type do formato.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metas.modified</code></td>
+                    <td style="text-align: left;"><code>ods_metadata['modified']</code></td>
+                    <td style="text-align: left;"><code>modified</code></td>
+                    <td style="text-align: left;">Data de modificação.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['ods:type']</code></td>
+                    <td style="text-align: left;">Fixo: <code>'api'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Resource (Extra Files)</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>alternative_exports[].id</code></td>
+                    <td style="text-align: left;"><code>export['id']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">ID do ficheiro extra.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>alternative_exports[].title</code></td>
+                    <td style="text-align: left;"><code>export['title']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Título do ficheiro.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>alternative_exports[].description</code></td>
+                    <td style="text-align: left;"><code>export['description']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Descrição do ficheiro.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>alternative_exports[].mimetype</code></td>
+                    <td style="text-align: left;"><code>export['mimetype']</code></td>
+                    <td style="text-align: left;"><code>format</code> / <code>mime</code></td>
+                    <td style="text-align: left;">Tipo de ficheiro.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>alternative_exports[].url</code></td>
+                    <td style="text-align: left;"><code>export['url']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">URL original (não usado).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['ods:type']</code></td>
+                    <td style="text-align: left;"><code>'alternative_export'</code> ou <code>'attachment'</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Detalhes Específicos</h2>
+        <h3>1. Paginação</h3>
+        <p>O harvester processa datasets em lotes de 50:</p>
+        <pre><code class="language-python">params = {
+    'start': count,
+    'rows': 50,
+    'interopmetas': 'true',
+}
+</code></pre>
+        <h3>2. Filtros</h3>
+        <p>Suporta filtros configuráveis mapeados para facets ODS:</p>
+        <pre><code class="language-python">FILTERS = {
+    'tags': 'keyword',
+    'publisher': 'publisher',
+}
+</code></pre>
+        <p><strong>Tipos de filtro:</strong>
+            - <code>refine.{facet}</code> - Inclusivo (apenas datasets com este valor)
+            - <code>exclude.{facet}</code> - Exclusivo (exclui datasets com este valor)</p>
+        <h3>3. Validações</h3>
+        <h4>3.1 Skip se Sem Registos</h4>
+        <pre><code class="language-python">if not ods_dataset.get('has_records'):
+    raise HarvestSkipException('Dataset has no record')
+</code></pre>
+        <h4>3.2 Skip INSPIRE (Opcional)</h4>
+        <p>Se a feature <code>inspire</code> não estiver ativada:</p>
+        <pre><code class="language-python">if 'inspire' in ods_interopmetas and not self.has_feature('inspire'):
+    raise HarvestSkipException('Dataset has INSPIRE metadata')
+</code></pre>
+        <h3>4. Organização</h3>
+        <p>Cria automaticamente organizações se não existirem:</p>
+        <pre><code class="language-python">organization_acronym = ods_metadata['publisher']
+orgObj = Organization.objects(acronym=organization_acronym).first()
+if orgObj:
+    dataset.organization = orgObj
+else:
+    orgObj = Organization()
+    orgObj.acronym = organization_acronym
+    orgObj.name = organization_acronym
+    orgObj.description = organization_acronym
+    orgObj.save()
+    dataset.organization = orgObj
+</code></pre>
+        <h3>5. Tags</h3>
+        <h4>5.1 Keywords</h4>
+        <p>Suporta lista ou string única:</p>
+        <pre><code class="language-python">if isinstance(ods_metadata['keyword'], list):
+    tags |= set(ods_metadata['keyword'])
+else:
+    tags.add(ods_metadata['keyword'])
+</code></pre>
+        <h4>5.2 Themes</h4>
+        <p>Temas são divididos por vírgula e convertidos para lowercase:</p>
+        <pre><code class="language-python">if isinstance(ods_metadata['theme'], list):
+    for theme in ods_metadata['theme']:
+        tags.update([t.strip().lower() for t in theme.split(',')])
+else:
+    themes = ods_metadata['theme'].split(',')
+    tags.update([t.strip().lower() for t in themes])
+</code></pre>
+        <h4>5.3 Hostname</h4>
+        <p>Adiciona o hostname da fonte:</p>
+        <pre><code class="language-python">dataset.tags.append(urlparse(self.source.url).hostname)
+</code></pre>
+        <h3>6. Licenças</h3>
+        <p>Mapeamento de licenças ODS para uData:</p>
+        <pre><code class="language-python">LICENSES = {
+    'Open Database License (ODbL)': 'odc-odbl',
+    'Licence Ouverte (Etalab)': 'fr-lo',
+    'Licence ouverte / Open Licence': 'fr-lo',
+    'CC BY-SA': 'cc-by-sa',
+    'Public Domain': 'other-pd'
+}
+
+dataset.license = License.guess(
+    license_id,
+    self.LICENSES.get(license_id),
+    default=default_license
+)
+</code></pre>
+        <h3>7. Recursos (Resources)</h3>
+        <h4>7.1 Exports Standard</h4>
+        <p>Sempre cria recursos para CSV e JSON:</p>
+        <pre><code class="language-python">self.process_resources(dataset, ods_dataset, ('csv', 'json'))
+</code></pre>
+        <h4>7.2 Exports Geográficos</h4>
+        <p>Se o dataset tem dados geográficos:</p>
+        <pre><code class="language-python">if 'geo' in ods_dataset['features']:
+    exports = ['geojson']
+    if ods_metadata['records_count'] &lt;= SHAPEFILE_RECORDS_LIMIT:
+        exports.append('shp')
+    self.process_resources(dataset, ods_dataset, exports)
+</code></pre>
+        <p><strong>Limite Shapefile:</strong> 50.000 registos (acima disto, o export seria parcial)</p>
+        <h4>7.3 Formatos Suportados</h4>
+        <pre><code class="language-python">FORMATS = {
+    'csv': ('CSV', 'csv', 'text/csv'),
+    'geojson': ('GeoJSON', 'json', 'application/vnd.geo+json'),
+    'json': ('JSON', 'json', 'application/json'),
+    'shp': ('Shapefile', 'shp', None),
+}
+</code></pre>
+        <h4>7.4 URL de Download</h4>
+        <pre><code class="language-python">url = '{explore_url}download?format={format}&amp;timezone=Europe/Berlin&amp;use_labels_for_header=true'
+</code></pre>
+        <h4>7.5 Descrição do Recurso</h4>
+        <p>Construída a partir dos campos do dataset:</p>
+        <pre><code class="language-python">def description_from_fields(fields):
+    out = ''
+    for field in fields:
+        out += '- *{label}*: {name}[{type}]'
+        if field.get('description'):
+            out += ' {description}'
+        out += '\n'
+    return out
+</code></pre>
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>- *Nome*: name[text] Nome completo
+- *Idade*: age[int] Idade em anos
+- *Localização*: location[geo_point_2d]
+</code></pre>
+        <h3>8. Ficheiros Extra</h3>
+        <h4>8.1 Alternative Exports</h4>
+        <p>Ficheiros de export alternativos fornecidos pelo publisher:</p>
+        <pre><code class="language-python">self.process_extra_files(dataset, ods_dataset, 'alternative_export')
+</code></pre>
+        <h4>8.2 Attachments</h4>
+        <p>Ficheiros anexos ao dataset:</p>
+        <pre><code class="language-python">self.process_extra_files(dataset, ods_dataset, 'attachment')
+</code></pre>
+        <h4>8.3 URL de Ficheiros Extra</h4>
+        <pre><code class="language-python">url = '{source_url}/api/datasets/1.0/{dataset_id}/{plural_type}/{file_id}'
+</code></pre>
+        <h3>9. Detecção de Formato e MIME Type</h3>
+        <pre><code class="language-python">def guess_format(mimetype, url=None):
+    ext = mimetypes.guess_extension(mimetype)
+    if not ext and url:
+        parts = os.path.splitext(url)
+        ext = parts[1] if parts[1] else None
+    return ext[1:] if ext and ext.startswith('.') else ext
+
+def guess_mimetype(mimetype, url=None):
+    if mimetype in mimetypes.types_map.values():
+        return mimetype
+    elif url:
+        mime, encoding = mimetypes.guess_type(url)
+        return mime
+</code></pre>
+        <h2>Exemplo de Mapeamento</h2>
+        <h3>Resposta ODS API (simplificado)</h3>
+        <pre><code class="language-json">{
+  &quot;nhits&quot;: 150,
+  &quot;datasets&quot;: [
+    {
+      &quot;datasetid&quot;: &quot;dados-covid-19&quot;,
+      &quot;has_records&quot;: true,
+      &quot;features&quot;: [&quot;geo&quot;],
+      &quot;metas&quot;: {
+        &quot;title&quot;: &quot;Dados COVID-19 Portugal&quot;,
+        &quot;description&quot;: &quot;&lt;p&gt;Dados diários sobre COVID-19&lt;/p&gt;&quot;,
+        &quot;publisher&quot;: &quot;dgs&quot;,
+        &quot;keyword&quot;: [&quot;covid&quot;, &quot;saúde&quot;, &quot;epidemiologia&quot;],
+        &quot;theme&quot;: &quot;Saúde, Sociedade&quot;,
+        &quot;license&quot;: &quot;Licence Ouverte (Etalab)&quot;,
+        &quot;modified&quot;: &quot;2024-01-15T10:30:00Z&quot;,
+        &quot;records_count&quot;: 1500,
+        &quot;references&quot;: &quot;https://covid19.min-saude.pt&quot;
+      },
+      &quot;fields&quot;: [
+        {&quot;name&quot;: &quot;data&quot;, &quot;label&quot;: &quot;Data&quot;, &quot;type&quot;: &quot;date&quot;},
+        {&quot;name&quot;: &quot;casos&quot;, &quot;label&quot;: &quot;Casos&quot;, &quot;type&quot;: &quot;int&quot;, &quot;description&quot;: &quot;Número de casos&quot;}
+      ]
+    }
+  ]
+}
+</code></pre>
+        <h3>Dataset uData resultante</h3>
+        <pre><code class="language-python">dataset.title = &quot;Dados COVID-19 Portugal&quot;
+dataset.description = &quot;Dados diários sobre COVID-19&quot;
+dataset.organization = Organization(acronym=&quot;dgs&quot;, name=&quot;dgs&quot;)
+dataset.tags = [&quot;covid&quot;, &quot;saúde&quot;, &quot;epidemiologia&quot;, &quot;saúde&quot;, &quot;sociedade&quot;, &quot;example.opendatasoft.com&quot;]
+dataset.license = License('fr-lo')
+dataset.frequency = 'unknown'
+dataset.private = False
+
+dataset.extras = {
+    'ods:url': 'https://example.opendatasoft.com/explore/dataset/dados-covid-19/',
+    'harvest:name': 'Nome da Fonte ODS',
+    'ods:references': 'https://covid19.min-saude.pt',
+    'ods:has_records': True,
+    'ods:geo': True
+}
+
+dataset.resources = [
+    # Exports standard
+    Resource(
+        title=&quot;Export to CSV&quot;,
+        url=&quot;https://example.opendatasoft.com/explore/dataset/dados-covid-19/download?format=csv&amp;...&quot;,
+        description=&quot;- *Data*: data[date]\n- *Casos*: casos[int] Número de casos\n&quot;,
+        filetype=&quot;remote&quot;,
+        format=&quot;csv&quot;,
+        mime=&quot;text/csv&quot;,
+        modified=datetime(2024, 1, 15, 10, 30, 0),
+        extras={'ods:type': 'api'}
+    ),
+    Resource(
+        title=&quot;Export to JSON&quot;,
+        url=&quot;https://example.opendatasoft.com/explore/dataset/dados-covid-19/download?format=json&amp;...&quot;,
+        description=&quot;- *Data*: data[date]\n- *Casos*: casos[int] Número de casos\n&quot;,
+        filetype=&quot;remote&quot;,
+        format=&quot;json&quot;,
+        mime=&quot;application/json&quot;,
+        modified=datetime(2024, 1, 15, 10, 30, 0),
+        extras={'ods:type': 'api'}
+    ),
+    # Exports geográficos (porque 'geo' in features)
+    Resource(
+        title=&quot;Export to GeoJSON&quot;,
+        url=&quot;https://example.opendatasoft.com/explore/dataset/dados-covid-19/download?format=geojson&amp;...&quot;,
+        filetype=&quot;remote&quot;,
+        format=&quot;json&quot;,
+        mime=&quot;application/vnd.geo+json&quot;,
+        extras={'ods:type': 'api'}
+    )
+    # Shapefile não incluído se records_count &gt; 50000
+]
+</code></pre>
+        <h2>Particularidades</h2>
+        <ol>
+            <li><strong>SSL Verification</strong>: Desativada por padrão (<code>verify_ssl = False</code>)</li>
+            <li><strong>Descrição como Schema</strong>: A descrição dos recursos lista os campos do dataset</li>
+            <li><strong>Múltiplos tipos de recursos</strong>: Exports API, alternative exports, attachments</li>
+            <li><strong>Limite de Shapefile</strong>: Não exporta se mais de 50.000 registos</li>
+            <li><strong>Timezone fixo</strong>: Usa <code>Europe/Berlin</code> nos exports</li>
+            <li><strong>Labels nos headers</strong>: <code>use_labels_for_header=true</code> nos exports CSV</li>
+            <li><strong>Detecção automática de geo</strong>: Cria exports geográficos se <code>'geo' in features</code>
+            </li>
+            <li><strong>Feature INSPIRE</strong>: Pode ser configurado para skip datasets INSPIRE</li>
+        </ol>
+    </div>
+</body>
+
+</html>
