@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Campos: OGC API - Collections para uData Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --code-bg: #f8fafc;
+            --code-text: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 64px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 6px;
+            background: var(--primary);
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            color: #334155;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+            color: #2563eb;
+        }
+
+        pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+
+        pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2.5rem 0;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border-color);
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mapa de Campos: OGC API - Collections para uData Database</h1>
+        <p>Este documento mapeia os campos obtidos do harvester <code>OGCBackend</code> (OGC API - Collections em
+            formato JSON-LD) para os campos da tabela/coleção <code>datasets</code> na base de dados do uData (modelo
+            <code>Dataset</code>).</p>
+        <h2>Fonte de Dados</h2>
+        <p><strong>OGC API - Collections</strong>: Open Geospatial Consortium API
+            - Formato: JSON-LD (Schema.org)
+            - Protocolo: HTTP GET
+            - Estrutura: Baseada em Schema.org Dataset
+            - Exemplo: <code>https://ogcapi.dgterritorio.gov.pt/collections</code></p>
+        <h2>Resumo do Mapeamento</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Campo Fonte (OGC JSON-LD)</th>
+                    <th style="text-align: left;">Propriedade JSON</th>
+                    <th style="text-align: left;">Campo Destino (uData <code>Dataset</code>)</th>
+                    <th style="text-align: left;">Notas / Lógica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;"><strong>Dataset</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>@id</code></td>
+                    <td style="text-align: left;"><code>each['@id']</code></td>
+                    <td style="text-align: left;"><code>remote_id</code> (HarvestItem)</td>
+                    <td style="text-align: left;">Identificador único (URI).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>name</code></td>
+                    <td style="text-align: left;"><code>each['name']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Nome do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;"><code>each['description']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Descrição do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>keywords</code></td>
+                    <td style="text-align: left;"><code>each['keywords']</code></td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Keywords (lista ou string).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">(Código)</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Adiciona tag fixa: <code>'ogcapi.dgterritorio.gov.pt'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;"><code>each['license']</code></td>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;">URL da licença (guess).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">(Código)</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;">Fallback: <code>'notspecified'</code> se não encontrar.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>temporalCoverage</code></td>
+                    <td style="text-align: left;"><code>each['temporalCoverage']</code></td>
+                    <td style="text-align: left;"><code>extras['temporal_coverage']</code></td>
+                    <td style="text-align: left;">Cobertura temporal (não parseada).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>provider</code></td>
+                    <td style="text-align: left;"><code>each['provider']</code> ou <code>data['provider']</code></td>
+                    <td style="text-align: left;"><code>extras['publisher_name']</code></td>
+                    <td style="text-align: left;">Nome do fornecedor.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>provider.contactPoint.email</code></td>
+                    <td style="text-align: left;"><code>provider['contactPoint']['email']</code></td>
+                    <td style="text-align: left;"><code>extras['publisher_email']</code></td>
+                    <td style="text-align: left;">Email de contacto.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">(Código)</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['harvest:name']</code></td>
+                    <td style="text-align: left;">Nome da fonte de harvest.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Distribution</strong></td>
+                    <td style="text-align: left;"><code>each['distribution']</code></td>
+                    <td style="text-align: left;"><strong>Resource</strong></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>contentURL</code></td>
+                    <td style="text-align: left;"><code>dist['contentURL']</code></td>
+                    <td style="text-align: left;"><code>url</code></td>
+                    <td style="text-align: left;">URL do recurso (normalizada).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;"><code>dist['description']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Descrição como título.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>name</code></td>
+                    <td style="text-align: left;"><code>dist['name']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Nome (fallback).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">(Código)</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Fallback final: <code>'Resource'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>encodingFormat</code></td>
+                    <td style="text-align: left;"><code>dist['encodingFormat']</code></td>
+                    <td style="text-align: left;"><code>format</code></td>
+                    <td style="text-align: left;">MIME type convertido para formato.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">(Código)</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>filetype</code></td>
+                    <td style="text-align: left;">Fixo: <code>'remote'</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Detalhes Específicos</h2>
+        <h3>1. Estrutura JSON-LD</h3>
+        <p>O harvester espera uma estrutura Schema.org com array <code>dataset</code>:</p>
+        <pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org/&quot;,
+  &quot;@type&quot;: &quot;DataCatalog&quot;,
+  &quot;dataset&quot;: [
+    {
+      &quot;@id&quot;: &quot;https://...&quot;,
+      &quot;name&quot;: &quot;...&quot;,
+      ...
+    }
+  ]
+}
+</code></pre>
+        <h3>2. Validação de Estrutura</h3>
+        <p>Verifica se o campo <code>dataset</code> existe:</p>
+        <pre><code class="language-python">metadata = data.get(&quot;dataset&quot;)
+if not metadata:
+    raise Exception('Could not find &quot;dataset&quot; in OGC response')
+</code></pre>
+        <h3>3. Normalização de Metadata</h3>
+        <p>Garante que metadata é sempre uma lista:</p>
+        <pre><code class="language-python">if isinstance(metadata, dict):
+    metadata = [metadata]
+</code></pre>
+        <h3>4. Identificador (@id)</h3>
+        <p>O <code>@id</code> é obrigatório. Datasets sem <code>@id</code> são ignorados:</p>
+        <pre><code class="language-python">remote_id = each.get(&quot;@id&quot;)
+if not remote_id:
+    self.logger.warning(f&quot;Skipping OGC dataset without @id&quot;)
+    continue
+</code></pre>
+        <h3>5. Fallbacks de Título e Descrição</h3>
+        <pre><code class="language-python">title = each.get(&quot;name&quot;) or &quot;Untitled Dataset&quot;
+description = each.get(&quot;description&quot;) or &quot;&quot;
+</code></pre>
+        <h3>6. Tags</h3>
+        <h4>6.1 Tag Fixa</h4>
+        <p>Todos os datasets recebem a tag de identificação:</p>
+        <pre><code class="language-python">dataset.tags = [&quot;ogcapi.dgterritorio.gov.pt&quot;]
+</code></pre>
+        <h4>6.2 Keywords</h4>
+        <p>Suporta lista ou string única:</p>
+        <pre><code class="language-python">keywords = item_data.get('keywords', [])
+if isinstance(keywords, list):
+    for keyword in keywords:
+        if keyword and isinstance(keyword, str):
+            dataset.tags.append(keyword)
+elif isinstance(keywords, str) and keywords:
+    dataset.tags.append(keywords)
+</code></pre>
+        <h3>7. Licença</h3>
+        <h4>7.1 Tentativa de Guess</h4>
+        <p>Tenta identificar a licença pela URL:</p>
+        <pre><code class="language-python">license_url = item_data.get('license')
+if license_url:
+    dataset.license = License.guess(license_url)
+</code></pre>
+        <h4>7.2 Fallback</h4>
+        <p>Se não conseguir identificar, usa <code>'notspecified'</code>:</p>
+        <pre><code class="language-python">if not dataset.license:
+    dataset.license = License.guess('notspecified')
+</code></pre>
+        <h3>8. Recursos (Distributions)</h3>
+        <h4>8.1 Validação de URL</h4>
+        <p>Apenas cria recursos com URL válida:</p>
+        <pre><code class="language-python">url = dist.get(&quot;contentURL&quot;, &quot;&quot;)
+if not url:
+    continue
+</code></pre>
+        <h4>8.2 Filtro de Formatos</h4>
+        <p><strong>Ignora</strong> recursos HTML e PNG:</p>
+        <pre><code class="language-python">link_type = dist.get(&quot;encodingFormat&quot;, &quot;&quot;)
+if link_type in ('text/html', 'image/png'):
+    continue
+</code></pre>
+        <p><strong>Razão:</strong> HTML são páginas de visualização, PNG são imagens de pré-visualização, não dados.</p>
+        <h4>8.3 Determinação do Formato</h4>
+        <p>Usa mapeamento de MIME types para formatos:</p>
+        <pre><code class="language-python">mime_to_format = {
+    'application/json': 'JSON',
+    'application/ld+json': 'JSON-LD',
+    'application/xml': 'XML',
+    'application/xls': 'XLS',
+    'application/xlsx': 'XLSX',
+    'application/csv': 'CSV',
+    'text/csv': 'CSV',
+    'text/xml': 'XML',
+    'application/geo+json': 'GeoJSON',
+    'application/gml+xml': 'GML',
+}
+</code></pre>
+        <p><strong>Fallback:</strong> Se MIME type não estiver no mapeamento:</p>
+        <pre><code class="language-python"># Extrai a parte após '/' e converte para maiúsculas
+format = mime_type.split('/')[-1].upper()
+</code></pre>
+        <p><strong>Fallback final:</strong> Se não houver <code>encodingFormat</code>, extrai da URL:</p>
+        <pre><code class="language-python">format_value = url.split('.')[-1] if '.' in url.split('/')[-1] else &quot;unknown&quot;
+</code></pre>
+        <h4>8.4 Título do Recurso</h4>
+        <p>Ordem de prioridade:
+            1. <code>description</code>
+            2. <code>name</code>
+            3. <code>"Resource"</code> (fallback)</p>
+        <pre><code class="language-python">resource_title = dist.get(&quot;description&quot;) or dist.get(&quot;name&quot;) or &quot;Resource&quot;
+</code></pre>
+        <h4>8.5 Recriação de Recursos</h4>
+        <p>Os recursos são <strong>recriados</strong> a cada execução:</p>
+        <pre><code class="language-python">dataset.resources = []
+</code></pre>
+        <h3>9. Provider/Publisher</h3>
+        <p>Informação do fornecedor é armazenada em extras:</p>
+        <pre><code class="language-python">provider = item_data.get('provider')
+if provider and isinstance(provider, dict):
+    dataset.extras['publisher_name'] = provider.get('name')
+    dataset.extras['publisher_email'] = provider.get('contactPoint', {}).get('email')
+</code></pre>
+        <p><strong>Nota:</strong> O provider pode vir do dataset individual ou do catálogo raiz:</p>
+        <pre><code class="language-python">&quot;provider&quot;: each.get(&quot;provider&quot;) or data.get(&quot;provider&quot;)
+</code></pre>
+        <h3>10. Cobertura Temporal</h3>
+        <p>Armazenada em extras sem parsing:</p>
+        <pre><code class="language-python">temporal = item_data.get('temporal_coverage')
+if temporal:
+    dataset.extras['temporal_coverage'] = temporal
+</code></pre>
+        <p><strong>Nota:</strong> Não é parseada para o campo <code>temporal_coverage</code> do modelo Dataset.</p>
+        <h2>Estrutura JSON-LD Esperada</h2>
+        <pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org/&quot;,
+  &quot;@type&quot;: &quot;DataCatalog&quot;,
+  &quot;name&quot;: &quot;OGC API Collections&quot;,
+  &quot;provider&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;DGT&quot;,
+    &quot;contactPoint&quot;: {
+      &quot;@type&quot;: &quot;ContactPoint&quot;,
+      &quot;email&quot;: &quot;info@dgterritorio.gov.pt&quot;
+    }
+  },
+  &quot;dataset&quot;: [
+    {
+      &quot;@type&quot;: &quot;Dataset&quot;,
+      &quot;@id&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop&quot;,
+      &quot;name&quot;: &quot;Carta Administrativa Oficial de Portugal&quot;,
+      &quot;description&quot;: &quot;Limites administrativos de Portugal&quot;,
+      &quot;keywords&quot;: [&quot;administrativo&quot;, &quot;limites&quot;, &quot;portugal&quot;],
+      &quot;license&quot;: &quot;https://creativecommons.org/licenses/by/4.0/&quot;,
+      &quot;temporalCoverage&quot;: &quot;2023&quot;,
+      &quot;distribution&quot;: [
+        {
+          &quot;@type&quot;: &quot;DataDownload&quot;,
+          &quot;contentURL&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop/items?f=json&quot;,
+          &quot;encodingFormat&quot;: &quot;application/geo+json&quot;,
+          &quot;description&quot;: &quot;GeoJSON export&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;DataDownload&quot;,
+          &quot;contentURL&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop/items?f=xml&quot;,
+          &quot;encodingFormat&quot;: &quot;application/gml+xml&quot;,
+          &quot;description&quot;: &quot;GML export&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+        <h2>Exemplo de Mapeamento</h2>
+        <h3>Resposta OGC API (simplificado)</h3>
+        <pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org/&quot;,
+  &quot;dataset&quot;: [
+    {
+      &quot;@id&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop&quot;,
+      &quot;name&quot;: &quot;Carta Administrativa Oficial de Portugal&quot;,
+      &quot;description&quot;: &quot;Limites administrativos de Portugal&quot;,
+      &quot;keywords&quot;: [&quot;administrativo&quot;, &quot;limites&quot;, &quot;portugal&quot;],
+      &quot;license&quot;: &quot;https://creativecommons.org/licenses/by/4.0/&quot;,
+      &quot;temporalCoverage&quot;: &quot;2023&quot;,
+      &quot;provider&quot;: {
+        &quot;name&quot;: &quot;Direção-Geral do Território&quot;,
+        &quot;contactPoint&quot;: {
+          &quot;email&quot;: &quot;info@dgterritorio.gov.pt&quot;
+        }
+      },
+      &quot;distribution&quot;: [
+        {
+          &quot;contentURL&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop/items?f=json&quot;,
+          &quot;encodingFormat&quot;: &quot;application/geo+json&quot;,
+          &quot;description&quot;: &quot;GeoJSON export&quot;
+        },
+        {
+          &quot;contentURL&quot;: &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop/items?f=html&quot;,
+          &quot;encodingFormat&quot;: &quot;text/html&quot;,
+          &quot;description&quot;: &quot;HTML viewer&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+        <h3>Dataset uData resultante</h3>
+        <pre><code class="language-python">dataset.remote_id = &quot;https://ogcapi.dgterritorio.gov.pt/collections/caop&quot;
+dataset.title = &quot;Carta Administrativa Oficial de Portugal&quot;
+dataset.description = &quot;Limites administrativos de Portugal&quot;
+dataset.tags = [
+    &quot;ogcapi.dgterritorio.gov.pt&quot;,
+    &quot;administrativo&quot;,
+    &quot;limites&quot;,
+    &quot;portugal&quot;
+]
+dataset.license = License('cc-by')  # Identificada pela URL
+
+dataset.extras = {
+    'harvest:name': 'Nome da Fonte OGC',
+    'temporal_coverage': '2023',
+    'publisher_name': 'Direção-Geral do Território',
+    'publisher_email': 'info@dgterritorio.gov.pt'
+}
+
+dataset.resources = [
+    Resource(
+        title=&quot;GeoJSON export&quot;,
+        url=&quot;https://ogcapi.dgterritorio.gov.pt/collections/caop/items?f=json&quot;,
+        filetype=&quot;remote&quot;,
+        format=&quot;GeoJSON&quot;
+    )
+    # HTML viewer é ignorado (filtrado)
+]
+</code></pre>
+        <h2>Campos Não Mapeados</h2>
+        <p>Os seguintes campos <strong>não são mapeados</strong> para o modelo Dataset:
+            - <code>temporalCoverage</code> - Armazenado em extras, não parseado para <code>temporal_coverage</code>
+            - <code>spatialCoverage</code> - Não processado
+            - <code>provider</code> - Armazenado em extras, não mapeado para <code>organization</code>
+            - <code>@type</code> - Não usado
+            - <code>@context</code> - Não usado</p>
+        <h2>Particularidades</h2>
+        <ol>
+            <li><strong>Schema.org</strong>: Usa vocabulário Schema.org em vez de DCAT</li>
+            <li><strong>Filtro de formatos</strong>: Ignora HTML e PNG automaticamente</li>
+            <li><strong>Identificador URI</strong>: Usa <code>@id</code> como identificador (pode ser URL completa)</li>
+            <li><strong>Licença por URL</strong>: Tenta identificar licença pela URL fornecida</li>
+            <li><strong>Provider não cria organização</strong>: Informação armazenada apenas em extras</li>
+            <li><strong>Temporal coverage não parseada</strong>: Armazenada como string em extras</li>
+            <li><strong>Tag fixa específica</strong>: <code>'ogcapi.dgterritorio.gov.pt'</code> (hardcoded)</li>
+            <li><strong>Mapeamento MIME extensível</strong>: Fácil adicionar novos formatos ao dicionário</li>
+        </ol>
+        <h2>Comparação com Outros Harvesters</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Aspecto</th>
+                    <th style="text-align: left;">OGC API</th>
+                    <th style="text-align: left;">DCAT</th>
+                    <th style="text-align: left;">CKAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;"><strong>Formato</strong></td>
+                    <td style="text-align: left;">JSON-LD (Schema.org)</td>
+                    <td style="text-align: left;">RDF/XML/JSON-LD (DCAT)</td>
+                    <td style="text-align: left;">JSON (CKAN API)</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Identificador</strong></td>
+                    <td style="text-align: left;"><code>@id</code> (URI)</td>
+                    <td style="text-align: left;"><code>dct:identifier</code></td>
+                    <td style="text-align: left;"><code>id</code> (UUID)</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Distribuições</strong></td>
+                    <td style="text-align: left;"><code>distribution</code></td>
+                    <td style="text-align: left;"><code>dcat:distribution</code></td>
+                    <td style="text-align: left;"><code>resources</code></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Licença</strong></td>
+                    <td style="text-align: left;">URL</td>
+                    <td style="text-align: left;"><code>dct:license</code></td>
+                    <td style="text-align: left;"><code>license_id</code></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Provider</strong></td>
+                    <td style="text-align: left;"><code>provider</code></td>
+                    <td style="text-align: left;"><code>dct:publisher</code></td>
+                    <td style="text-align: left;"><code>organization</code></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Filtro de formatos</strong></td>
+                    <td style="text-align: left;">Sim (HTML, PNG)</td>
+                    <td style="text-align: left;">Não</td>
+                    <td style="text-align: left;">Sim (resource_type)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

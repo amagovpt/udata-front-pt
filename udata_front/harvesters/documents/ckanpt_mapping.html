@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Campos: CKAN PT para uData Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --code-bg: #f8fafc;
+            --code-text: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 64px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 6px;
+            background: var(--primary);
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            color: #334155;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+            color: #2563eb;
+        }
+
+        pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+
+        pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2.5rem 0;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border-color);
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mapa de Campos: CKAN PT para uData Database</h1>
+        <p>Este documento mapeia os campos obtidos do harvester <code>CkanPTBackend</code> (CKAN API v3) para os campos
+            da tabela/coleção <code>datasets</code> na base de dados do uData (modelo <code>Dataset</code>).</p>
+        <h2>Fonte de Dados</h2>
+        <p><strong>API CKAN</strong>: Plataforma CKAN (Comprehensive Knowledge Archive Network)
+            - Protocolo: CKAN API v3 (REST JSON)
+            - Endpoints principais:
+            - <code>package_list</code> - Lista de datasets
+            - <code>package_show</code> - Detalhes de um dataset
+            - <code>package_search</code> - Pesquisa com filtros
+            - Biblioteca: Requests HTTP (implementação customizada)</p>
+        <h2>Resumo do Mapeamento</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Campo Fonte (CKAN API)</th>
+                    <th style="text-align: left;">Propriedade JSON</th>
+                    <th style="text-align: left;">Campo Destino (uData <code>Dataset</code>)</th>
+                    <th style="text-align: left;">Notas / Lógica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;"><strong>Dataset</strong></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>id</code></td>
+                    <td style="text-align: left;"><code>data['id']</code></td>
+                    <td style="text-align: left;"><code>remote_id</code> (HarvestItem)</td>
+                    <td style="text-align: left;">UUID do dataset no CKAN.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>name</code></td>
+                    <td style="text-align: left;"><code>data['name']</code></td>
+                    <td style="text-align: left;"><code>slug</code></td>
+                    <td style="text-align: left;">Nome técnico/slug do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;"><code>data['title']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Título do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>notes</code></td>
+                    <td style="text-align: left;"><code>data['notes']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Descrição (HTML parseado).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>license_id</code></td>
+                    <td style="text-align: left;"><code>data['license_id']</code></td>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;">Identificador da licença.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>license_title</code></td>
+                    <td style="text-align: left;"><code>data['license_title']</code></td>
+                    <td style="text-align: left;"><code>license</code></td>
+                    <td style="text-align: left;">Título da licença (fallback).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>tags[].name</code></td>
+                    <td style="text-align: left;"><code>data['tags']</code></td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Lista de tags.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>tags</code></td>
+                    <td style="text-align: left;">Adiciona hostname da fonte.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metadata_created</code></td>
+                    <td style="text-align: left;"><code>data['metadata_created']</code></td>
+                    <td style="text-align: left;"><code>created_at_internal</code></td>
+                    <td style="text-align: left;">Data de criação.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>metadata_modified</code></td>
+                    <td style="text-align: left;"><code>data['metadata_modified']</code></td>
+                    <td style="text-align: left;"><code>last_modified_internal</code></td>
+                    <td style="text-align: left;">Data de modificação.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>organization.name</code></td>
+                    <td style="text-align: left;"><code>data['organization']['name']</code></td>
+                    <td style="text-align: left;"><code>organization.acronym</code></td>
+                    <td style="text-align: left;">Acrónimo da organização.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>organization.title</code></td>
+                    <td style="text-align: left;"><code>data['organization']['title']</code></td>
+                    <td style="text-align: left;"><code>organization.name</code></td>
+                    <td style="text-align: left;">Nome da organização.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>organization.description</code></td>
+                    <td style="text-align: left;"><code>data['organization']['description']</code></td>
+                    <td style="text-align: left;"><code>organization.description</code></td>
+                    <td style="text-align: left;">Descrição da organização.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>url</code></td>
+                    <td style="text-align: left;"><code>data['url']</code></td>
+                    <td style="text-align: left;"><code>extras['remote_url']</code></td>
+                    <td style="text-align: left;">URL remota do dataset.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['ckan:name']</code></td>
+                    <td style="text-align: left;">Nome CKAN original.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>extras['harvest:name']</code></td>
+                    <td style="text-align: left;">Nome da fonte de harvest.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>frequency</code></td>
+                    <td style="text-align: left;">Fixo: <code>'unknown'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Extras</strong></td>
+                    <td style="text-align: left;"><code>data['extras']</code></td>
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;">Campos adicionais CKAN.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>spatial</code></td>
+                    <td style="text-align: left;"><code>extra['value']</code> (GeoJSON)</td>
+                    <td style="text-align: left;"><code>spatial.geom</code></td>
+                    <td style="text-align: left;">Cobertura espacial (desativado).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>temporal_start</code></td>
+                    <td style="text-align: left;"><code>extra['value']</code></td>
+                    <td style="text-align: left;"><code>temporal_coverage.start</code></td>
+                    <td style="text-align: left;">Início da cobertura temporal.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>temporal_end</code></td>
+                    <td style="text-align: left;"><code>extra['value']</code></td>
+                    <td style="text-align: left;"><code>temporal_coverage.end</code></td>
+                    <td style="text-align: left;">Fim da cobertura temporal.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>frequency</code></td>
+                    <td style="text-align: left;"><code>extra['value']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Não mapeado (apenas log).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Outros extras</td>
+                    <td style="text-align: left;"><code>extra['key']</code> / <code>extra['value']</code></td>
+                    <td style="text-align: left;"><code>extras[key]</code></td>
+                    <td style="text-align: left;">Copiados para extras.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><strong>Resource</strong></td>
+                    <td style="text-align: left;"><code>data['resources']</code></td>
+                    <td style="text-align: left;"><strong>Resource</strong></td>
+                    <td style="text-align: left;"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>id</code></td>
+                    <td style="text-align: left;"><code>res['id']</code></td>
+                    <td style="text-align: left;"><code>id</code></td>
+                    <td style="text-align: left;">UUID do recurso.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>name</code></td>
+                    <td style="text-align: left;"><code>res['name']</code></td>
+                    <td style="text-align: left;"><code>title</code></td>
+                    <td style="text-align: left;">Título do recurso.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;"><code>res['description']</code></td>
+                    <td style="text-align: left;"><code>description</code></td>
+                    <td style="text-align: left;">Descrição (HTML parseado).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>url</code></td>
+                    <td style="text-align: left;"><code>res['url']</code></td>
+                    <td style="text-align: left;"><code>url</code></td>
+                    <td style="text-align: left;">URL do recurso (normalizada).</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>format</code></td>
+                    <td style="text-align: left;"><code>res['format']</code></td>
+                    <td style="text-align: left;"><code>format</code></td>
+                    <td style="text-align: left;">Formato do ficheiro.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>mimetype</code></td>
+                    <td style="text-align: left;"><code>res['mimetype']</code></td>
+                    <td style="text-align: left;"><code>mime</code></td>
+                    <td style="text-align: left;">MIME type.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>hash</code></td>
+                    <td style="text-align: left;"><code>res['hash']</code></td>
+                    <td style="text-align: left;"><code>hash</code></td>
+                    <td style="text-align: left;">Hash do ficheiro.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>created</code></td>
+                    <td style="text-align: left;"><code>res['created']</code></td>
+                    <td style="text-align: left;"><code>created</code></td>
+                    <td style="text-align: left;">Data de criação.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>last_modified</code></td>
+                    <td style="text-align: left;"><code>res['last_modified']</code></td>
+                    <td style="text-align: left;"><code>modified</code></td>
+                    <td style="text-align: left;">Data de modificação.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;"><code>filetype</code></td>
+                    <td style="text-align: left;">Fixo: <code>'remote'</code>.</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><code>resource_type</code></td>
+                    <td style="text-align: left;"><code>res['resource_type']</code></td>
+                    <td style="text-align: left;">-</td>
+                    <td style="text-align: left;">Filtro (apenas tipos permitidos).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Detalhes Específicos</h2>
+        <h3>1. Identificador do Dataset</h3>
+        <p>O harvester usa inicialmente o <code>name</code> (slug) para identificar o dataset, mas depois atualiza para
+            o <code>id</code> (UUID):</p>
+        <pre><code class="language-python">item.remote_id = data['id']
+</code></pre>
+        <h3>2. Organização</h3>
+        <p>O harvester <strong>cria automaticamente</strong> organizações se não existirem:</p>
+        <pre><code class="language-python">organization_acronym = data['organization']['name']
+orgObj = Organization.objects(acronym=organization_acronym).first()
+if orgObj:
+    dataset.organization = orgObj
+else:
+    orgObj = Organization()
+    orgObj.acronym = organization_acronym
+    orgObj.name = data['organization']['title']
+    orgObj.description = data['organization']['description']
+    orgObj.save()
+    dataset.organization = orgObj
+</code></pre>
+        <h3>3. Licença</h3>
+        <p>A licença é determinada por heurística, com fallback configurável:</p>
+        <pre><code class="language-python">default_license = self.harvest_config.get('license', License.default())
+dataset.license = License.guess(
+    data['license_id'],
+    data['license_title'],
+    default=default_license
+)
+</code></pre>
+        <h3>4. Tags</h3>
+        <p>As tags incluem:
+            - Tags originais do CKAN: <code>data['tags']</code>
+            - Hostname da fonte: <code>urlparse(self.source.url).hostname</code></p>
+        <pre><code class="language-python">dataset.tags = [t['name'] for t in data['tags'] if t['name']]
+dataset.tags.append(urlparse(self.source.url).hostname)
+</code></pre>
+        <h3>5. Cobertura Espacial</h3>
+        <p>A cobertura espacial pode ser definida de duas formas:</p>
+        <h4>5.1 Por Configuração (Geozones)</h4>
+        <p>Se configurado no <code>harvest_config</code>, usa zonas geográficas predefinidas:</p>
+        <pre><code class="language-python">if self.harvest_config.get('geozones', False):
+    dataset.spatial = SpatialCoverage()
+    dataset.spatial.zones = []
+    for zone in self.harvest_config.get('geozones'):
+        geo_zone = GeoZone.objects.get(id=zone)
+        dataset.spatial.zones.append(geo_zone)
+</code></pre>
+        <h4>5.2 Por GeoJSON (Desativado)</h4>
+        <p>O código para processar GeoJSON do extra <code>spatial</code> está comentado.</p>
+        <h3>6. Cobertura Temporal</h3>
+        <p>Extraída dos extras <code>temporal_start</code> e <code>temporal_end</code>:</p>
+        <pre><code class="language-python">if temporal_start and temporal_end:
+    dataset.temporal_coverage = db.DateRange(
+        start=temporal_start,
+        end=temporal_end,
+    )
+</code></pre>
+        <h3>7. Recursos (Resources)</h3>
+        <h4>7.1 Filtro de Tipos</h4>
+        <p>Apenas recursos com tipos permitidos são processados:</p>
+        <pre><code class="language-python">ALLOWED_RESOURCE_TYPES = ('dkan', 'file', 'file.upload', 'api', 'metadata')
+
+if res['resource_type'] not in ALLOWED_RESOURCE_TYPES:
+    continue
+</code></pre>
+        <h4>7.2 Validação de URL</h4>
+        <p>URLs inválidas são ignoradas:</p>
+        <pre><code class="language-python">try:
+    url = uris.validate(res['url'])
+except uris.ValidationError:
+    continue
+</code></pre>
+        <h4>7.3 Preservação de ID</h4>
+        <p>Os recursos mantêm o UUID original do CKAN:</p>
+        <pre><code class="language-python">resource = Resource(id=res['id'])
+</code></pre>
+        <h4>7.4 Limpeza de Recursos Removidos</h4>
+        <p>Recursos que já não existem na fonte são removidos:</p>
+        <pre><code class="language-python">for resource_id in current_resources:
+    if resource_id not in fetched_resources:
+        dataset.resources.remove(resource)
+</code></pre>
+        <h3>8. Extras CKAN</h3>
+        <p>Todos os extras do CKAN são copiados para <code>dataset.extras</code>, exceto:
+            - <code>spatial</code> (processado separadamente)
+            - <code>spatial-text</code> (ignorado)
+            - <code>spatial-uri</code> (ignorado)
+            - <code>temporal_start</code> (processado separadamente)
+            - <code>temporal_end</code> (processado separadamente)
+            - <code>frequency</code> (apenas logged, não mapeado)</p>
+        <h3>9. Filtros de Harvest</h3>
+        <p>O harvester suporta filtros configuráveis:
+            - <strong>Organization</strong>: Filtra por organização CKAN
+            - <strong>Tag</strong>: Filtra por tag</p>
+        <p>Exemplo de query com filtros:</p>
+        <pre><code class="language-python">q = &quot;organization:my-org AND tags:environment&quot;
+</code></pre>
+        <h3>10. Validação de Schema</h3>
+        <p>O harvester valida os dados recebidos contra um schema Voluptuous:</p>
+        <pre><code class="language-python">data = self.validate(response['result'], self.schema)
+</code></pre>
+        <h2>Exemplo de Mapeamento</h2>
+        <h3>Resposta CKAN API (simplificado)</h3>
+        <pre><code class="language-json">{
+  &quot;id&quot;: &quot;123e4567-e89b-12d3-a456-426614174000&quot;,
+  &quot;name&quot;: &quot;dados-ambientais&quot;,
+  &quot;title&quot;: &quot;Dados Ambientais de Portugal&quot;,
+  &quot;notes&quot;: &quot;&lt;p&gt;Descrição dos dados ambientais&lt;/p&gt;&quot;,
+  &quot;license_id&quot;: &quot;cc-by&quot;,
+  &quot;license_title&quot;: &quot;Creative Commons Attribution&quot;,
+  &quot;metadata_created&quot;: &quot;2023-01-15T10:30:00&quot;,
+  &quot;metadata_modified&quot;: &quot;2024-01-20T14:45:00&quot;,
+  &quot;organization&quot;: {
+    &quot;name&quot;: &quot;apa&quot;,
+    &quot;title&quot;: &quot;Agência Portuguesa do Ambiente&quot;,
+    &quot;description&quot;: &quot;Entidade responsável...&quot;
+  },
+  &quot;tags&quot;: [
+    {&quot;name&quot;: &quot;ambiente&quot;},
+    {&quot;name&quot;: &quot;qualidade-ar&quot;}
+  ],
+  &quot;extras&quot;: [
+    {&quot;key&quot;: &quot;temporal_start&quot;, &quot;value&quot;: &quot;2020-01-01&quot;},
+    {&quot;key&quot;: &quot;temporal_end&quot;, &quot;value&quot;: &quot;2023-12-31&quot;}
+  ],
+  &quot;resources&quot;: [
+    {
+      &quot;id&quot;: &quot;abc-123&quot;,
+      &quot;name&quot;: &quot;Dados CSV&quot;,
+      &quot;url&quot;: &quot;https://example.pt/data.csv&quot;,
+      &quot;format&quot;: &quot;CSV&quot;,
+      &quot;mimetype&quot;: &quot;text/csv&quot;,
+      &quot;resource_type&quot;: &quot;file&quot;,
+      &quot;created&quot;: &quot;2023-01-15T10:30:00&quot;,
+      &quot;last_modified&quot;: &quot;2024-01-20T14:45:00&quot;
+    }
+  ]
+}
+</code></pre>
+        <h3>Dataset uData resultante</h3>
+        <pre><code class="language-python">dataset.slug = &quot;dados-ambientais&quot;
+dataset.title = &quot;Dados Ambientais de Portugal&quot;
+dataset.description = &quot;Descrição dos dados ambientais&quot;
+dataset.license = License('cc-by')
+dataset.tags = [&quot;ambiente&quot;, &quot;qualidade-ar&quot;, &quot;example.pt&quot;]
+dataset.created_at_internal = datetime(2023, 1, 15, 10, 30, 0)
+dataset.last_modified_internal = datetime(2024, 1, 20, 14, 45, 0)
+dataset.organization = Organization(acronym=&quot;apa&quot;, name=&quot;Agência Portuguesa do Ambiente&quot;)
+dataset.temporal_coverage = DateRange(start=date(2020, 1, 1), end=date(2023, 12, 31))
+dataset.extras = {
+    'ckan:name': 'dados-ambientais',
+    'harvest:name': 'Nome da Fonte',
+    'remote_url': 'https://ckan.example.pt/dataset/dados-ambientais'
+}
+dataset.resources = [
+    Resource(
+        id=&quot;abc-123&quot;,
+        title=&quot;Dados CSV&quot;,
+        url=&quot;https://example.pt/data.csv&quot;,
+        format=&quot;CSV&quot;,
+        mime=&quot;text/csv&quot;,
+        filetype=&quot;remote&quot;,
+        created=datetime(2023, 1, 15, 10, 30, 0),
+        modified=datetime(2024, 1, 20, 14, 45, 0)
+    )
+]
+</code></pre>
+    </div>
+</body>
+
+</html>
