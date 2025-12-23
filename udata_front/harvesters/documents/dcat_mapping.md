@@ -1,59 +1,119 @@
-# Mapa de Campos: evian.json para uData Database
+# Mapa de Campos: DCAT para uData Database
 
-Este documento mapeia os campos do arquivo fonte `udata/harvest/tests/dcat/evian.json` (formato DCAT-AP JSON-LD) para os campos da tabela/coleção `datasets` na base de dados do uData (modelo `Dataset`).
+Este documento mapeia os campos obtidos do harvester `DcatBackend` (e seus derivados como `evian.json`) para os campos da tabela/coleção `datasets` na base de dados do uData (modelo `Dataset`).
+
+## Fonte de Dados
+
+**DCAT / RDF**: Data Catalog Vocabulary
+- Formatos suportados: RDF/XML, Turtle, JSON-LD, etc.
+- O harvester processa o grafo RDF e extrai as entidades `dcat:Dataset`, `dcat:Distribution` (Resource) e `dcat:DataService`.
 
 ## Resumo do Mapeamento
 
-| Campo Fonte (`evian.json`) | Caminho RDF | Campo Destino (uData `Dataset`) | Notas / Lógica |
+| Campo Fonte (DCAT/RDF) | Propriedade JSON (Ex: `evian.json`) | Campo Destino (uData `Dataset`) | Notas / Lógica |
 | :--- | :--- | :--- | :--- |
-| **Dataset** | | | |
-| `title` | `dct:title` | `title` | |
-| `description` | `dct:description` | `description` | Sanitizado (HTML permitido mas limpo). Se ausente, usa `dct:abstract`. |
-| `identifier` | `dct:identifier` | `harvest.dct_identifier` | O identificador remoto é armazenado nos metadados de harvest. |
-| `landingPage` | `dcat:landingPage` | `harvest.remote_url` | |
-| `keyword` | `dcat:keyword` | `tags` | |
-| `theme` | `dcat:theme` | `tags` | Os temas são misturados com as keywords nas `tags`. |
-| `issued` | `dct:issued` | `harvest.issued_at` | Armazenado em `dataset.harvest`. A data de criação do dataset (`created_at`) pode assumir este valor se for criação. |
-| `modified` | `dct:modified` | `harvest.modified_at` | Armazenado em `dataset.harvest`. |
-| `spatial` | `dct:spatial` | `spatial` | Convertido para GeoJSON (MultiPolygon). |
-| `license` | `dct:license` | `license` | Tenta corresponder a uma licença existente via URL ou título. Também armazenado em `extras.dcat.license`. |
-| `publisher.name` | `dct:publisher` | `organization` (Contextual) | O mapeamento para a `organization` do uData geralmente depende da configuração do harvester ou contexto, não é automático apenas pelo nome no JSON. Se mapeado, o dataset pertence a essa organização. |
-| `contactPoint` | `dcat:contactPoint` | `contact_points` | Cria objetos `ContactPoint`. |
-| &nbsp;&nbsp;`fn` | `vcard:fn` | `ContactPoint.name` | Role: "contact". |
-| &nbsp;&nbsp;`hasEmail` | `vcard:hasEmail` | `ContactPoint.email` | |
-| **Distribution** | `dcat:distribution` | **Resource** | Item na lista `resources` do Dataset. |
-| `title` | `dct:title` | `title` | |
-| `description` | `dct:description` | `description` | |
-| `accessURL` | `dcat:accessURL` | `url` | URL principal do recurso. |
-| `downloadURL` | `dcat:downloadURL` | `url` | Se `accessURL` não existir. |
-| `format` | `dct:format` | `format` | Normalizado (ex: 'csv', 'json'). |
-| `mediaType` | `dcat:mediaType` | `mime` | Ex: 'text/csv'. |
-| `byteSize` | `dcat:byteSize` | `filesize` | |
-| `checksum` | `spdx:checksum` | `checksum` | Objeto com `type` e `value`. |
-| `issued` | `dct:issued` | `harvest.issued_at` | No recurso. |
-| `modified` | `dct:modified` | `harvest.modified_at` | No recurso. |
+| **Dataset** | `dataset` | | Entidade `dcat:Dataset` |
+| `dct:identifier` | `identifier` | `harvest.dct_identifier` | Identificador único no catálogo de origem. Também usado para `harvest.uri`. |
+| `dct:title` | `title` | `title` | Título do dataset. |
+| `dct:description` | `description` | `description` | Descrição (HTML sanitizado). Fallback para `dct:abstract`. |
+| `dcat:keyword` | `keyword` | `tags` | Lista de palavras-chave. |
+| `dct:issued` | `issued` | `harvest.issued_at` | Data de publicação original. |
+| `dct:created` | `created` | `harvest.created_at` | Data de criação original. |
+| `dct:modified` | `modified` | `harvest.modified_at` | Data de modificação. Datas futuras são ignoradas. |
+| `dct:spatial` | `spatial` | `spatial.geom` | Cobertura espacial. Suporta GeoJSON, WKT ou String BBox ("w,s,e,n"). |
+| `dct:temporal` | `temporal` | `temporal_coverage` | Cobertura temporal (`dct:PeriodOfTime`). |
+| `dct:accrualPeriodicity` | `accrualPeriodicity` | `frequency` | Frequência de atualização (mapeada de URIs `freq:` ou `eufreq:`). |
+| `dct:publisher` | `publisher` | `contact_points` | Organização publicadora (mapeada para role `publisher`). |
+| `vcard:Contact` | `contactPoint` | `contact_points` | Pontos de contacto (mapeados para role `contact`). |
+| `dcat:landingPage` | `landingPage` | `harvest.remote_url` | URL da página do dataset na fonte. |
+| `dct:license` | `license` | `license` | Licença. Tenta `License.guess` usando `dct:license` e `dct:rights`. |
+| `dct:rights` | `rights` | `extras['dcat']['rights']` | Direitos de uso / Acesso. |
+| `dct:accessRights` | `accessLevel`* | `extras['dcat']['accessRights']` | Nível de acesso (se mapeado corretamente no Contexto JSON-LD). |
+| `dct:provenance` | `provenance` | `extras['dcat']['provenance']` | Informação de proveniência. |
+| **Distribution** | `distribution` | **Resource** | Entidade `dcat:Distribution` |
+| `dct:identifier` | `identifier` | `harvest.dct_identifier` | Identificador da distribuição. |
+| `dct:title` | `title` | `title` | Título do recurso. Fallback para nome do ficheiro ou formato. |
+| `dct:description` | `description` | `description` | Descrição do recurso. |
+| `dcat:accessURL` | `accessURL` | `url` | URL de acesso (usado se `downloadURL` não existir). |
+| `dcat:downloadURL` | `downloadURL` | `url` | URL de download direto (prioritário). |
+| `dct:format` | `format` | `format` | Formato do ficheiro. |
+| `dcat:mediaType` | `mediaType` | `mime` | MIME type (IANA). |
+| `dcat:byteSize` | `byteSize` | `filesize` | Tamanho do ficheiro em bytes. |
+| `spdx:checksum` | `checksum` | `checksum` | Checksum e algoritmo (MD5, SHA1, etc.). |
+| `dct:issued` | `issued` | `harvest.issued_at` | Data de publicação do recurso. |
+| `dct:modified` | `modified` | `harvest.modified_at` | Data de modificação do recurso. |
+| `dct:license` | `license` | `extras['dcat']['license']` | Licença específica do recurso. |
+| `ostros` | - | - | Recursos OGC (`dcat:accessService`) podem gerar recursos do tipo `api`. |
 
-## Detalhes Específicos
+*Nota sobre `accessLevel`: Em `evian.json`, o campo `accessLevel` é comummente usado, mas o uData procura especificamente `dct:accessRights`. A menos que o `@context` faça esse mapeamento, o campo pode ser ignorado.
 
-### 1. Datas (`issued`, `modified`)
-No uData, as datas de harvest não sobrescrevem diretamente `dataset.created_at_internal` ou `dataset.last_modified_internal` (que são datas de sistema), mas são armazenadas na estrutura `harvest`:
-- `dataset.harvest.issued_at`
-- `dataset.harvest.modified_at`
+## Referências e Dependências
 
-### 2. Identificadores
-O `identifier` do DCAT ("https://www.arcgis.com/...") é armazenado em `dataset.harvest.dct_identifier`.
-A URL de origem (`landingPage`) vai para `dataset.harvest.remote_url`.
+A lógica de extração reside principalmente em `udata.core.dataset.rdf`:
 
-### 3. Organização (`publisher`)
-O campo `publisher` no JSON:
+1.  **Dataset**:
+    *   Criado/Atualizado em `dataset_from_rdf`.
+    *   `dataset.license` é inferido de `dct:license` e `dct:rights` tanto do Dataset como das Distributions.
+    *   `dataset.extras['dcat']` armazena metadados RDF originais que não têm campo direto no modelo (ex: `provenance`, `accessRights`).
+
+2.  **Resource**:
+    *   Criado em `resource_from_rdf`.
+    *   `filetype` é fixado como `"remote"`.
+    *   Deteta automaticamente serviços OGC e define `resource.type = "api"`.
+
+3.  **Spatial**:
+    *   `spatial_from_rdf` lida com múltiplos formatos:
+        *   Literal BBox: `"6.5735,46.3912,6.6069,46.4028"` (Visto em `evian.json`) -> Convertido para MultiPolygon.
+        *   GeoJSON Literal.
+        *   WKT Literal.
+
+4.  **Temporal**:
+    *   `temporal_from_rdf` suporta:
+        *   Literais ISO 8601 (ano, mês, intervalo "start/end").
+        *   Recursos `dct:PeriodOfTime` com `dcat:startDate`/`endDate`.
+
+## Exemplo Prático (`evian.json`)
+
+### Fonte (JSON-LD Parcial)
 ```json
-"publisher": {
-    "name": "Ville d'Evian-les-Bains"
+{
+  "@type": "dcat:Dataset",
+  "identifier": "https://www.arcgis.com/home/item.html?id=f656...",
+  "title": "stationnement velos",
+  "description": "<DIV>...</DIV>",
+  "keyword": ["mobilite"],
+  "spatial": "6.5735,46.3912,6.6069,46.4028",
+  "distribution": [
+    {
+      "@type": "dcat:Distribution",
+      "title": "CSV",
+      "format": "CSV",
+      "mediaType": "text/csv",
+      "accessURL": "https://.../csv?layers=5"
+    }
+  ]
 }
 ```
-Não garante a atribuição automática à organização "Ville d'Evian-les-Bains" a menos que o backend de harvest (DcatBackend) consiga resolver este nome para uma organização existente na base do uData, ou se a harvest for executada especificamente para essa organização. O código de parsing RDF (`dataset_from_rdf`) usa o publisher para criar um `ContactPoint` com role="publisher".
 
-### 4. Distribuições (`distribution`)
-Cada item em `distribution` se torna um `Resource`.
-- O `accessURL` é preferido como a URL do recurso.
-- Metadados como `format` e `mediaType` são preenchidos.
+### Destino (uData Dataset)
+```python
+dataset.title = "stationnement velos"
+dataset.description = "Emplacement et description..." # HTML limpo
+dataset.tags = ["mobilite"]
+dataset.spatial = {
+    "geom": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[6.5735, 46.3912], ...]]]
+    }
+}
+dataset.harvest.dct_identifier = "https://www.arcgis.com/home/item.html?id=f656..."
+dataset.resources = [
+    Resource(
+        title="CSV",
+        format="csv",
+        mime="text/csv",
+        url="https://.../csv?layers=5",
+        filetype="remote"
+    )
+]
+```
