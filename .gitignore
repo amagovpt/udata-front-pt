@@ -92,5 +92,9 @@ utils/catalog.txt
 /utils/*.txt
 /utils/*.json
 
-GEMINI.md
+# Environment variables
 .env
+
+# AI rules
+GEMINI.md
+.antigravity
