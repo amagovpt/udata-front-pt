@@ -68,8 +68,11 @@ storybook-static/
 .lighthouseci/*.json
 .lighthouseci/*.html
 
-# VSCode
-.vscode/
+# IDEs
+.cursor
+.idea
+.vscode
+.antigravity
 
 # Python
 venv/
@@ -97,4 +100,3 @@ utils/catalog.txt
 
 # AI rules
 GEMINI.md
-.antigravity
