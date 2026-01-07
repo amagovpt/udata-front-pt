@@ -75,6 +75,7 @@
             :href="resource.latest"
             rel="ugc nofollow noopener"
             :title="downloadButtonTitle"
+            target="_blank"
             download
             class="relative text-transform-uppercase fr-btn fr-btn--sm matomo_download z-2"
             :aria-describedby="resourceTitleId"
