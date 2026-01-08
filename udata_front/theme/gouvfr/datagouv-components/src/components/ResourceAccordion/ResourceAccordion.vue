@@ -77,7 +77,7 @@
             :title="downloadButtonTitle"
             target="_blank"
             download
-            class="relative text-transform-uppercase fr-btn fr-btn--sm matomo_download z-2"
+            class="relative text-transform-uppercase fr-btn fr-btn--sm matomo_download z-2 fr-link--no-after"
             :aria-describedby="resourceTitleId"
           >
             <OhVueIcon
