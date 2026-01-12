@@ -4,7 +4,7 @@ import logo from '../../templates/svg/logotype.svg';
 export default create({
   base: 'light',
   // Typography
-  fontBase: 'Inter, sans-serif',
+  fontBase: 'NotoSans, sans-serif',
   fontCode: 'monospace',
 
   brandTitle: 'data.gouv.fr-components Storybook',
