@@ -15,7 +15,7 @@ const replaceMarianneInJsPlugin = {
   transform(code: string, id: string) {
     if (id.includes('@gouvfr/dsfr')) {
       return {
-        code: code.replace(/Marianne/g, 'Inter'),
+        code: code.replace(/Marianne/g, 'NotoSans'),
         map: null
       };
     }
