@@ -9,6 +9,7 @@ import shutil
 import tempfile
 import unicodedata
 import xml.etree.ElementTree as ET
+from io import BytesIO
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -47,8 +48,6 @@ class INEBackend(BaseBackend):
     TIMEOUT_CONNECT = 15
     TIMEOUT_READ = 300
 
-    INE_XML_PATH = "/home/babel/workspace/temp/INE.xml"
-
     HVD_INDICATOR_IDS: set[str] = set()
 
     _KW_SPLIT_RE = re.compile(r"\s*(?:;|,|/|\n|\r|\t|\s+-\s+)\s*")
@@ -61,7 +60,8 @@ class INEBackend(BaseBackend):
         self._bulk_size = int(os.getenv("INE_BULK_SIZE", "500"))
         self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
         self._size_check_concurrency = int(os.getenv("INE_SIZE_CHECK_CONCURRENCY", "12")) # Threads para HEAD requests
-        self._check_changes = os.getenv("INE_CHECK_CHANGES", "False").lower() == "true"
+        self._check_changes = os.getenv("INE_CHECK_CHANGES", "false").lower() == "true"
+        self._stream_memory = os.getenv("INE_STREAM_MEMORY", "false").lower() == "true"
 
         self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
         self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
@@ -80,8 +80,8 @@ class INEBackend(BaseBackend):
             self._log = logging.getLogger(__name__)
 
         self._log.info(
-            "[INE] FAST MODE (2 fases) ativo: bulk_size=%s, log_every=%s, xml=%s, chunk=%sKB",
-            self._bulk_size, self._log_every, self.INE_XML_PATH, int(self._chunk_size / 1024)
+            "[INE] FAST MODE (2 fases) ativo: bulk_size=%s, log_every=%s, stream_memory=%s, chunk=%sKB",
+            self._bulk_size, self._log_every, self._stream_memory, int(self._chunk_size / 1024)
         )
 
     # --------------------------
@@ -132,32 +132,6 @@ class INEBackend(BaseBackend):
         except Exception:
             pass # Ignora falhas de rede na verificacao de tamanho (mantem como None)
         return None
-
-    # --------------------------
-    # XML local preferencial
-    # --------------------------
-    def _ensure_local_xml(self) -> str:
-        xml_path = self.INE_XML_PATH
-
-        if os.path.exists(xml_path) and os.path.getsize(xml_path) > 0:
-            self._log.info("[INE] Usando XML local: %s (%.2f MB)",
-                           xml_path, os.path.getsize(xml_path) / (1024 * 1024))
-            return xml_path
-
-        os.makedirs(os.path.dirname(xml_path), exist_ok=True)
-        self._log.info("[INE] XML local não encontrado. Fazendo download de %s ...", self.source.url)
-
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp_path = tmp.name
-            resp = self._make_request_with_retry(self.source.url, stream=True)
-            resp.raw.decode_content = True
-            shutil.copyfileobj(resp.raw, tmp)
-
-        os.replace(tmp_path, xml_path)
-        self._log.info("[INE] Download concluído. XML salvo em: %s (%.2f MB)",
-                       xml_path, os.path.getsize(xml_path) / (1024 * 1024))
-
-        return xml_path
 
     # --------------------------
     # Normalização de tags
@@ -444,64 +418,68 @@ class INEBackend(BaseBackend):
     # inner_harvest (2 fases)
     # --------------------------
     def inner_harvest(self):
-        start = time.time()
+        self._log.info("[INE] Iniciando harvester de %s", self.source.url)
+        self._log.info(
+            "[INE] Config: BulkSize=%s, LogEvery=%s, MaxWorkers=%s, CheckChanges=%s, StreamMemory=%s", 
+            self._bulk_size, self._log_every, self._size_check_concurrency, self._check_changes, self._stream_memory
+        )
+
+        start_time = time.time()
         self.HVD_INDICATOR_IDS = self._fetch_hvd_ids()
+        
+        # Prepare Streaming Source
+        temp_file_path = None
+        source_context = None
+        
+        try:
+            if self._stream_memory:
+                self._log.info("[INE] Modo Memória: Baixando XML para RAM...")
+                resp = self._session.get(self.source.url)
+                resp.raise_for_status()
+                # Cria BytesIO
+                source_context = BytesIO(resp.content)
+            else:
+                self._log.info("[INE] Modo Disco: Baixando XML para Temp File...")
+                with tempfile.NamedTemporaryFile(delete=False) as tmp:
+                    temp_file_path = tmp.name
+                    with self._session.get(self.source.url, stream=True) as r:
+                        r.raise_for_status()
+                        shutil.copyfileobj(r.raw, tmp)
+                self._log.info("[INE] Download concluído: %s", temp_file_path)
+                source_context = temp_file_path
 
-        # 1) XML local primeiro
-        xml_path = self._ensure_local_xml()
-        file_size = os.path.getsize(xml_path)
-        self._log.info("[INE] FAST MODE - Fase 1: parsing XML -> memória (%s, %.2f MB)",
-                       xml_path, file_size / (1024 * 1024))
+            # Fase 1: Criação do iterador sobre o XML
+            # source_context pode ser file path ou file-like object (BytesIO)
+            context = ET.iterparse(source_context, events=("start", "end"))
+            context = iter(context)
+            event, root = next(context)  # Pega o elemento raiz
 
-        # --------------------------
-        # FASE 1: parse e build metadata_map
-        # --------------------------
-        metadata_map: dict[str, dict] = {}
-
-        parser = ET.XMLPullParser(events=("end",))
-        last_progress = time.time()
-        count = 0
-        first_indicator_seen = False
-
-        with open(xml_path, "rb") as f:
-            while True:
-                chunk = f.read(self._chunk_size)
-                if not chunk:
-                    break
-
-                parser.feed(chunk)
-                for _event, elem in parser.read_events():
-                    if elem.tag != "indicator" or "id" not in elem.attrib:
-                        continue
-
-                    if not first_indicator_seen:
-                        first_indicator_seen = True
-                        self._log.info("[INE] Primeiro <indicator> após %.1fs (lido %.2f MB)",
-                                       time.time() - start, f.tell() / (1024 * 1024))
-
-                    remote_id = str(elem.attrib["id"])
-                    metadata_map[remote_id] = self._extract_metadata(elem)
-                    count += 1
+            metadata_map = {}  # {remote_id: metadata_dict}
+            total_parsed = 0
+            
+            for event, elem in context:
+                if event == "end" and elem.tag == "indicator":
+                    total_parsed += 1
+                    md = self._extract_metadata(elem)
+                    remote_id = elem.get("id")
+                    if remote_id:
+                         metadata_map[remote_id] = md
+                    
                     elem.clear()
+                    root.clear() # Limpa memoria da arvore XML
+            
+            self._log.info("[INE] Parsing XML concluído. Total items: %s. Iniciando processamento...", total_parsed)
 
-                    if count % self._log_every == 0:
-                        self._log.info("[INE] Fase 1: %s indicadores carregados em memória", count)
+        except Exception as e:
+             self._log.error("[INE] Erro no download/parsing do XML: %s", e)
+             raise e
+        finally:
+             if temp_file_path and os.path.exists(temp_file_path):
+                 try:
+                     os.remove(temp_file_path)
+                 except: pass
 
-                now = time.time()
-                if now - last_progress >= self._progress_interval_s:
-                    bytes_read = f.tell()
-                    pct = (bytes_read / file_size * 100) if file_size else 0
-                    self._log.info("[INE] Fase 1: progresso XML %.1f%% (%s/%s MB)",
-                                   pct,
-                                   round(bytes_read / (1024 * 1024), 2),
-                                   round(file_size / (1024 * 1024), 2))
-                    last_progress = now
-
-        self._log.info("[INE] FAST MODE - Fase 1 concluída: %s indicadores em memória", len(metadata_map))
-
-        # --------------------------
-        # FASE 2: change detection + bulk_write
-        # --------------------------
+        # --- Fim Fase 1, Inicio Fase 2 (Processamento) ---
         self._log.info("[INE] FAST MODE - Fase 2: change detection + bulk_write (bulk_size=%s)", self._bulk_size)
 
         from pymongo import ReplaceOne, UpdateOne
@@ -617,7 +595,6 @@ class INEBackend(BaseBackend):
                         dataset_collection = dataset._get_collection()
 
                     # Se a flag estiver desligada -> assume changed=True sempre
-                    # Se estiver ligada -> usa logica normal
                     should_update = True
                     if self._check_changes:
                          if not self._has_changed(dataset, md, remote_id):
@@ -696,10 +673,9 @@ class INEBackend(BaseBackend):
             after_len = len(self.job.items)
             self._log.info("[INE] Final Job Save: items grew from %s to %s (added %s)", before_len, after_len, len(batch_harvest_items))
 
-        total_time = time.time() - start
+        total_time = time.time() - start_time
         self._log.info(
-            "[INE] FAST MODE concluído em %ss (%.1f min) | processed=%s changed=%s created=%s skipped=%s failed=%s | XML mantido em %s",
+            "[INE] FAST MODE concluído em %ss (%.1f min) | processed=%s changed=%s created=%s skipped=%s failed=%s",
             round(total_time, 1), total_time / 60,
-            processed, changed, created, skipped, failed,
-            xml_path
+            processed, changed, created, skipped, failed
         )
