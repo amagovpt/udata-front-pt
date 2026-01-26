@@ -61,7 +61,8 @@ class INEBackend(BaseBackend):
         self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
         self._size_check_concurrency = int(os.getenv("INE_SIZE_CHECK_CONCURRENCY", "12")) # Threads para HEAD requests
         self._check_changes = os.getenv("INE_CHECK_CHANGES", "false").lower() == "true"
-        self._stream_memory = os.getenv("INE_STREAM_MEMORY", "false").lower() == "true"
+        self._check_file_sizes = os.getenv("INE_CHECK_FILE_SIZES", "false").lower() == "true"
+        self._stream_memory = os.getenv("INE_STREAM_MEMORY", "true").lower() == "true"
 
         self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
         self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
@@ -420,8 +421,8 @@ class INEBackend(BaseBackend):
     def inner_harvest(self):
         self._log.info("[INE] Iniciando harvester de %s", self.source.url)
         self._log.info(
-            "[INE] Config: BulkSize=%s, LogEvery=%s, MaxWorkers=%s, CheckChanges=%s, StreamMemory=%s", 
-            self._bulk_size, self._log_every, self._size_check_concurrency, self._check_changes, self._stream_memory
+            "[INE] Config: BulkSize=%s, LogEvery=%s, MaxWorkers=%s, CheckChanges=%s, CheckSizes=%s, StreamMemory=%s", 
+            self._bulk_size, self._log_every, self._size_check_concurrency, self._check_changes, self._check_file_sizes, self._stream_memory
         )
 
         start_time = time.time()
@@ -551,7 +552,9 @@ class INEBackend(BaseBackend):
                                  if cur_urls != set(md.get("resource_urls") or []): is_shallow_changed = True
                         
                         if not is_shallow_changed:
-                            candidates_for_size_check.append((remote_id, md))
+                            # Se nao mudou metadados, so verificamos tamanho se a flag estiver ativa
+                            if self._check_file_sizes:
+                                candidates_for_size_check.append((remote_id, md))
             else:
                 # Se nao verificamos, precisamos garantir que o dataset obj esta no cache para o loop principal
                 for remote_id, md in chunk:
