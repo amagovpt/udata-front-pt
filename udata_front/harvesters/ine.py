@@ -10,6 +10,7 @@ import tempfile
 import unicodedata
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 from flask import current_app
@@ -59,6 +60,7 @@ class INEBackend(BaseBackend):
 
         self._bulk_size = int(os.getenv("INE_BULK_SIZE", "500"))
         self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
+        self._size_check_concurrency = int(os.getenv("INE_SIZE_CHECK_CONCURRENCY", "12")) # Threads para HEAD requests
 
         self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
         self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
@@ -110,6 +112,25 @@ class INEBackend(BaseBackend):
                 raise
 
         raise requests.exceptions.RequestException("Falha desconhecida na requisição")
+
+    # --------------------------
+    # Check Content-Length (HEAD)
+    # --------------------------
+    def _get_content_length(self, url: str) -> int | None:
+        """
+        Executa HEAD request. Retorna int se Content-Length válido, ou None.
+        Tenta seguir redirects.
+        """
+        try:
+            # timeout curto para não bloquear muito tempo
+            resp = self._session.head(url, allow_redirects=True, timeout=(5, 10))
+            if resp.status_code == 200:
+                cl = resp.headers.get("Content-Length")
+                if cl and cl.isdigit():
+                    return int(cl)
+        except Exception:
+            pass # Ignora falhas de rede na verificacao de tamanho (mantem como None)
+        return None
 
     # --------------------------
     # XML local preferencial
@@ -244,7 +265,7 @@ class INEBackend(BaseBackend):
         return md
 
     # --------------------------
-    # Change detection (barato)
+    # Change detection (barato + deep size check)
     # --------------------------
     def _has_changed(self, dataset, new_md: dict, remote_id: str) -> bool:
         if not getattr(dataset, "id", None):
@@ -271,6 +292,26 @@ class INEBackend(BaseBackend):
         if current_sig != (new_md.get("resource_sig") or set()):
             return True
 
+        # === Deep Check: File Sizes ===
+        # Se chegou aqui, os metadados textuais e URLs são iguais.
+        # Verifica se algum tamanho de ficheiro mudou.
+        new_sizes = new_md.get("resource_sizes", {}) # map {url: size}
+        if not new_sizes:
+            return False # Sem dados de tamanho, assume sem mudança
+
+        for res in dataset.resources:
+            url = res.url
+            if url in new_sizes:
+                new_size = new_sizes[url]
+                # Recupera tamanho guardado anteriormente
+                old_size = res.extras.get("check:content_length")
+                
+                # Se tamanho mudou (e ambos sao validos), marca changed
+                if new_size is not None and old_size != new_size:
+                    # Log debug apenas para confirmar funcionamento
+                    # print(f"DEBUG Size Changed {dataset.slug} {url}: {old_size} -> {new_size}")
+                    return True
+        
         return False
 
     # --------------------------
@@ -296,10 +337,31 @@ class INEBackend(BaseBackend):
             dataset.title = md["title"]
         if "description" in md:
             dataset.description = md["description"]
+        
+        # Map de novos tamanhos (se disponiveis)
+        new_sizes = md.get("resource_sizes", {})
 
         dataset.resources = []
         for res_data in (md.get("resources") or []):
-            dataset.resources.append(Resource(**res_data))
+            r = Resource(**res_data)
+            
+            # Persiste o tamanho detectado (se houver) no extra 'check:content_length'
+            # Isso serve de base para a proxima comparacao
+            url = r.url
+            if url in new_sizes and new_sizes[url] is not None:
+                if not r.extras: r.extras = {}
+                r.extras["check:content_length"] = new_sizes[url]
+            
+            # Se o dataset existente tinha esse extra e o HEAD falhou (None),
+            # poderiamos tentar manter o valor antigo? 
+            # Por agora, opto por atualizar apenas se tivermos valor novo.
+            # Se vier None, nao escrevemos, mantendo o que estava (se nao recriarmos o objeto).
+            # Como estamos a recriar o Resource object (Resource(**res_data)), 
+            # o valor antigo perde-se a menos que o copiemos.
+            # Mas como o _has_changed ja validou a mudanca, se nao mudou, nao chegamos aqui (skipped).
+            # Se chegamos aqui, e porque MUDOU ou e NOVO. Entao guardamos o tamanho novo.
+            
+            dataset.resources.append(r)
 
         # garante extras
         if not hasattr(dataset, "extras") or dataset.extras is None:
@@ -460,72 +522,143 @@ class INEBackend(BaseBackend):
         if not hasattr(self, 'job') or self.job is None:
             self._log.warning("[INE] Atenção: self.job não existe. O progresso não será visível na UI.")
 
-        for remote_id, md in metadata_map.items():
-            processed += 1
-            item_status = "done"  # default
+        processed = 0
+
+        # Para reporting no Job
+        if not hasattr(self, 'job') or self.job is None:
+            self._log.warning("[INE] Atenção: self.job não existe. O progresso não será visível na UI.")
+
+        # Convertermos para lista para poder iterar em chunks se quisermos, 
+        # mas como e dict, iteramos items().
+        # Para paralelizar os HEAD requests, precisamos saber QUAIS precisam de check.
+        # Estrategia:
+        # Iterar todos. Se metadata basico difere -> changed (sem check de tamanho).
+        # Se metadata igual -> check tamanho.
+        # Isto implica que temos de fazer o check ANTES de decidir.
+        
+        # Para ser eficiente com Threads, vamos processar em batches.
+        all_items = list(metadata_map.items())
+        total_items = len(all_items)
+        
+        # Executor para HEAD requests
+        head_executor = ThreadPoolExecutor(max_workers=self._size_check_concurrency)
+
+        # Processar em chunks do tamanho do bulk_size
+        for i in range(0, total_items, self._bulk_size):
+            chunk = all_items[i : i + self._bulk_size]
             
-            try:
+            # --- Passo A: Identificar candidatos a Size Check ---
+            # Candidatos sao datasets que existem e cujos metadados "leves" sao iguais.
+            candidates_for_size_check = [] # [(remote_id, dataset_obj, metadata_dict)]
+            
+            for remote_id, md in chunk:
+                # Pre-fetch dataset
                 dataset = self.get_dataset(remote_id)
-
-                if dataset_collection is None:
-                    dataset_collection = dataset._get_collection()
-
-                if not self._has_changed(dataset, md, remote_id):
-                    skipped += 1
-                    item_status = "skipped"
-                    # Mesmo skipped, precisamos registar no Job para não ser arquivado
-                else:
-                    self._apply_metadata_to_dataset(dataset, remote_id, md)
-                    doc = dataset.to_mongo()
-                    doc_dict = dict(doc)  # SON -> dict
-
-                    if getattr(dataset, "id", None):
-                        _id = doc_dict.get("_id", dataset.id)
-                        ops.append(ReplaceOne({"_id": _id}, doc_dict, upsert=True))
-                        op_ids.append(remote_id)
-                        changed += 1
-                    else:
-                        # upsert por chave de harvest
-                        d = dict(doc_dict)
-                        d.pop("_id", None)
-                        ops.append(UpdateOne(
-                            {
-                                "extras.harvest:remote_id": str(remote_id),
-                                "extras.harvest:source_id": str(getattr(self.source, "id", "")),
-                            },
-                            {"$set": d},
-                            upsert=True
-                        ))
-                        op_ids.append(remote_id)
-                        created += 1
-            
-            except Exception:
-                failed += 1
-                item_status = "failed"
-                self._log.exception("[INE] Falha na fase 2 para remote_id=%s", remote_id)
-
-            # Criar HarvestItem para o Job reporting
-            # Necessário para: 
-            # 1. UI mostrar progresso e contagens
-            # 2. Udata saber que o dataset existe e NÃO o arquivar
-            if self.job:
-                h_item = HarvestItem(
-                    remote_id=remote_id,
-                    status=item_status
-                )
-                if dataset and getattr(dataset, 'id', None):
-                    h_item.dataset = dataset.id
+                md['__dataset_obj'] = dataset # cache no dict para nao buscar de novo
                 
-                # Adiciona ao batch local
-                batch_harvest_items.append(h_item)
+                # Se for novo ou mudou metadados basicos -> ja sabemos que e changed.
+                # Se nao mudou metadados basicos -> verificar tamanho.
+                if getattr(dataset, "id", None):
+                    # Check "shallow" changes (usa logica existente manual ou chama _has_changed modificado - CUIDADO recursao)
+                    # Vamos replicar a logica shallow aqui para decidir se fazemos HEAD
+                    is_shallow_changed = False
+                    
+                    if (dataset.title or "") != (md.get("title") or ""): is_shallow_changed = True
+                    elif (dataset.description or "") != (md.get("description") or ""): is_shallow_changed = True
+                    else:
+                        cur_tags = set(dataset.tags or [])
+                        des_tags = set(md.get("tags_norm") or [])
+                        if remote_id in self.HVD_INDICATOR_IDS: des_tags.update({"estatisticas", "hvd"})
+                        if cur_tags != des_tags: is_shallow_changed = True
+                        else:
+                             cur_urls = {r.url for r in dataset.resources}
+                             if cur_urls != set(md.get("resource_urls") or []): is_shallow_changed = True
+                    
+                    if not is_shallow_changed:
+                        candidates_for_size_check.append((remote_id, md))
+            
+            # --- Passo B: Executar HEAD requests em paralelo ---
+            if candidates_for_size_check:
+                # Coletar todas as URLs unicas
+                urls_to_check = set()
+                for _, md in candidates_for_size_check:
+                    urls_to_check.update(md.get("resource_urls", []))
+                
+                # Disparar Futures
+                future_to_url = {head_executor.submit(self._get_content_length, u): u for u in urls_to_check}
+                
+                # Coletar resultados
+                url_sizes = {}
+                for f in as_completed(future_to_url):
+                    u = future_to_url[f]
+                    try:
+                        sz = f.result()
+                        url_sizes[u] = sz
+                    except Exception:
+                        url_sizes[u] = None
+                
+                # Injetar resultados nos metadados
+                for _, md in candidates_for_size_check:
+                    md['resource_sizes'] = url_sizes # map {url: size}
+            
+            
+            # --- Passo C: Processamento Normal do Chunk ---
+            for remote_id, md in chunk:
+                processed += 1
+                item_status = "done"
+                dataset = md.pop('__dataset_obj') # recupera e limpa
+                
+                try:
+                    if dataset_collection is None:
+                        dataset_collection = dataset._get_collection()
 
-            # Flush MongoDB Ops
+                    # Agora _has_changed vai olhar para 'resource_sizes' se presente
+                    if not self._has_changed(dataset, md, remote_id):
+                        skipped += 1
+                        item_status = "skipped"
+                    else:
+                        self._apply_metadata_to_dataset(dataset, remote_id, md)
+                        doc = dataset.to_mongo()
+                        doc_dict = dict(doc)
+
+                        if getattr(dataset, "id", None):
+                            _id = doc_dict.get("_id", dataset.id)
+                            ops.append(ReplaceOne({"_id": _id}, doc_dict, upsert=True))
+                            op_ids.append(remote_id)
+                            changed += 1
+                        else:
+                            d = dict(doc_dict)
+                            d.pop("_id", None)
+                            ops.append(UpdateOne(
+                                {
+                                    "extras.harvest:remote_id": str(remote_id),
+                                    "extras.harvest:source_id": str(getattr(self.source, "id", "")),
+                                },
+                                {"$set": d},
+                                upsert=True
+                            ))
+                            op_ids.append(remote_id)
+                            created += 1
+                
+                except Exception:
+                    failed += 1
+                    item_status = "failed"
+                    self._log.exception("[INE] Falha na fase 2 para remote_id=%s", remote_id)
+
+                # Criar HarvestItem
+                if self.job:
+                    h_item = HarvestItem(remote_id=remote_id, status=item_status)
+                    if dataset and getattr(dataset, 'id', None):
+                        h_item.dataset = dataset.id
+                    batch_harvest_items.append(h_item)
+            
+            # --- Fim do loop do chunk ---
+            
+            # Flush Ops e HarvestItems (igual a antes)
             if len(ops) >= self._bulk_size and dataset_collection is not None:
                 self._flush_bulk(dataset_collection, ops, op_ids)
                 ops, op_ids = [], []
 
-            # Flush HarvestItems para o Job (menos frequente para não sobrecarregar)
-            # Acumula items no job.items e salva a cada X processados
             if self.job and len(batch_harvest_items) >= (self._bulk_size * 2):
                 before_len = len(self.job.items)
                 self.job.items.extend(batch_harvest_items)
@@ -535,10 +668,11 @@ class INEBackend(BaseBackend):
                 batch_harvest_items = []
 
             if processed % (self._log_every * 5) == 0:
-                self._log.info(
-                    "[INE] Fase 2 progresso: processed=%s changed=%s created=%s skipped=%s failed=%s",
-                    processed, changed, created, skipped, failed
-                )
+                self._log.info("[INE] Fase 2 progresso: processed=%s changed=%s created=%s skipped=%s failed=%s",
+                    processed, changed, created, skipped, failed)
+        
+        # Shutdown thread pool
+        head_executor.shutdown()
 
         # Final Flush Ops
         if ops and dataset_collection is not None:
