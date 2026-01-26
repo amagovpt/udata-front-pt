@@ -61,6 +61,7 @@ class INEBackend(BaseBackend):
         self._bulk_size = int(os.getenv("INE_BULK_SIZE", "500"))
         self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
         self._size_check_concurrency = int(os.getenv("INE_SIZE_CHECK_CONCURRENCY", "12")) # Threads para HEAD requests
+        self._check_changes = os.getenv("INE_CHECK_CHANGES", "False").lower() == "true"
 
         self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
         self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
@@ -548,36 +549,39 @@ class INEBackend(BaseBackend):
             chunk = all_items[i : i + self._bulk_size]
             
             # --- Passo A: Identificar candidatos a Size Check ---
-            # Candidatos sao datasets que existem e cujos metadados "leves" sao iguais.
-            candidates_for_size_check = [] # [(remote_id, dataset_obj, metadata_dict)]
+            # Se a flag self._check_changes for False, saltamos toda a verificacao
+            candidates_for_size_check = [] 
             
-            for remote_id, md in chunk:
-                # Pre-fetch dataset
-                dataset = self.get_dataset(remote_id)
-                md['__dataset_obj'] = dataset # cache no dict para nao buscar de novo
-                
-                # Se for novo ou mudou metadados basicos -> ja sabemos que e changed.
-                # Se nao mudou metadados basicos -> verificar tamanho.
-                if getattr(dataset, "id", None):
-                    # Check "shallow" changes (usa logica existente manual ou chama _has_changed modificado - CUIDADO recursao)
-                    # Vamos replicar a logica shallow aqui para decidir se fazemos HEAD
-                    is_shallow_changed = False
+            if self._check_changes:
+                for remote_id, md in chunk:
+                    # Pre-fetch dataset
+                    dataset = self.get_dataset(remote_id)
+                    md['__dataset_obj'] = dataset 
                     
-                    if (dataset.title or "") != (md.get("title") or ""): is_shallow_changed = True
-                    elif (dataset.description or "") != (md.get("description") or ""): is_shallow_changed = True
-                    else:
-                        cur_tags = set(dataset.tags or [])
-                        des_tags = set(md.get("tags_norm") or [])
-                        if remote_id in self.HVD_INDICATOR_IDS: des_tags.update({"estatisticas", "hvd"})
-                        if cur_tags != des_tags: is_shallow_changed = True
+                    if getattr(dataset, "id", None):
+                        is_shallow_changed = False
+                        
+                        if (dataset.title or "") != (md.get("title") or ""): is_shallow_changed = True
+                        elif (dataset.description or "") != (md.get("description") or ""): is_shallow_changed = True
                         else:
-                             cur_urls = {r.url for r in dataset.resources}
-                             if cur_urls != set(md.get("resource_urls") or []): is_shallow_changed = True
-                    
-                    if not is_shallow_changed:
-                        candidates_for_size_check.append((remote_id, md))
+                            cur_tags = set(dataset.tags or [])
+                            des_tags = set(md.get("tags_norm") or [])
+                            if remote_id in self.HVD_INDICATOR_IDS: des_tags.update({"estatisticas", "hvd"})
+                            if cur_tags != des_tags: is_shallow_changed = True
+                            else:
+                                 cur_urls = {r.url for r in dataset.resources}
+                                 if cur_urls != set(md.get("resource_urls") or []): is_shallow_changed = True
+                        
+                        if not is_shallow_changed:
+                            candidates_for_size_check.append((remote_id, md))
+            else:
+                # Se nao verificamos, precisamos garantir que o dataset obj esta no cache para o loop principal
+                for remote_id, md in chunk:
+                    if '__dataset_obj' not in md:
+                         md['__dataset_obj'] = self.get_dataset(remote_id)
             
             # --- Passo B: Executar HEAD requests em paralelo ---
+            # Apenas se tivermos candidatos (o que implica _check_changes=True)
             if candidates_for_size_check:
                 # Coletar todas as URLs unicas
                 urls_to_check = set()
@@ -612,8 +616,14 @@ class INEBackend(BaseBackend):
                     if dataset_collection is None:
                         dataset_collection = dataset._get_collection()
 
-                    # Agora _has_changed vai olhar para 'resource_sizes' se presente
-                    if not self._has_changed(dataset, md, remote_id):
+                    # Se a flag estiver desligada -> assume changed=True sempre
+                    # Se estiver ligada -> usa logica normal
+                    should_update = True
+                    if self._check_changes:
+                         if not self._has_changed(dataset, md, remote_id):
+                            should_update = False
+                    
+                    if not should_update:
                         skipped += 1
                         item_status = "skipped"
                     else:
