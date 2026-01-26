@@ -9,14 +9,13 @@ import shutil
 import tempfile
 import unicodedata
 import xml.etree.ElementTree as ET
-from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+from datetime import datetime, timezone
 
 import requests
 from flask import current_app
 
 from udata.models import Resource, License
 from udata.harvest.backends.base import BaseBackend
-from udata.harvest.exceptions import HarvestSkipException
 from udata.harvest.models import HarvestItem
 
 from .tools.harvester_utils import normalize_url_slashes
@@ -24,19 +23,19 @@ from .tools.harvester_utils import normalize_url_slashes
 
 class INEBackend(BaseBackend):
     """
-    Harvester INE otimizado e robusto contra bloqueios de escrita no MongoDB.
+    INE Harvester - modo FAST (2 fases):
+    1) Parse XML -> metadados em memória
+    2) Change detection + bulk_write no Mongo (muito mais rápido)
 
-    Features:
-    - Processamento sequencial (evita contenção/locks do Mongo e do pipeline udata).
-    - Fonte preferencial: /home/babel/workspace/temp/INE.xml
-      - Se existir: usa local
-      - Se não existir: baixa da web e salva nesse caminho
-      - Não remove no final
-    - Parsing com XMLPullParser em chunks: mostra progresso antes do primeiro </indicator>.
-    - Watchdog/timeout por dataset: se um dataset "travar" em save/hook, aborta e continua.
-    - Normalização de tags na extração (tags_norm) e comparação barata (resource_sig).
-    - Consistência de tags: sempre 'ine-pt' (não usa 'ine.pt').
-    - save_job batching para reduzir overhead de persistência do job.
+    Fonte XML:
+    - Usa /home/babel/workspace/temp/INE.xml se existir
+    - Caso contrário baixa self.source.url e grava nesse caminho
+    - Não remove o ficheiro no final
+
+    Robustez:
+    - Captura BulkWriteError, extrai bwe.details['writeErrors'] e isola operação falhada
+      sem abortar o harvest inteiro. [1](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/crud/bulk-write/)[2](https://pymongo.readthedocs.io/en/4.11/examples/bulk.html)
+    - Força slug único para datasets novos (ine-{remote_id}) para evitar E11000.
     """
 
     display_name = "Instituto nacional de estatística"
@@ -58,30 +57,19 @@ class INEBackend(BaseBackend):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # save_job batching
-        self._save_job_counter = 0
-        self._save_job_interval = int(os.getenv("INE_SAVE_JOB_INTERVAL", "50"))
-        self._original_save_job = super().save_job
+        self._bulk_size = int(os.getenv("INE_BULK_SIZE", "500"))
+        self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
 
-        # logging/parsing tuning
-        self._log_every = int(os.getenv("INE_LOG_EVERY", "50"))  # datasets
-        self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))  # segundos
+        self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
         self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
 
-        # watchdog por dataset (segundos)
-        # se queres mesmo agressivo p/ 2s, põe INE_DATASET_TIMEOUT_S=10/20
-        self._dataset_timeout_s = int(os.getenv("INE_DATASET_TIMEOUT_S", "120"))
-
-        # cache licença
         self._cc_by_license = None
 
-        # session HTTP
         self._session = requests.Session()
         adapter = requests.adapters.HTTPAdapter(pool_connections=16, pool_maxsize=16, max_retries=0)
         self._session.mount("http://", adapter)
         self._session.mount("https://", adapter)
 
-        # logger
         try:
             self._log = current_app.logger
         except Exception:
@@ -89,17 +77,9 @@ class INEBackend(BaseBackend):
             self._log = logging.getLogger(__name__)
 
         self._log.info(
-            "[INE] sequencial + watchdog ativo. save_job_interval=%s log_every=%s timeout_dataset=%ss xml_path=%s chunk=%sKB",
-            self._save_job_interval, self._log_every, self._dataset_timeout_s, self.INE_XML_PATH, int(self._chunk_size / 1024)
+            "[INE] FAST MODE (2 fases) ativo: bulk_size=%s, log_every=%s, xml=%s, chunk=%sKB",
+            self._bulk_size, self._log_every, self.INE_XML_PATH, int(self._chunk_size / 1024)
         )
-
-    # --------------------------
-    # save_job batching
-    # --------------------------
-    def save_job(self):
-        self._save_job_counter += 1
-        if self._save_job_counter % self._save_job_interval == 0:
-            self._original_save_job()
 
     # --------------------------
     # HTTP com retry
@@ -130,6 +110,32 @@ class INEBackend(BaseBackend):
                 raise
 
         raise requests.exceptions.RequestException("Falha desconhecida na requisição")
+
+    # --------------------------
+    # XML local preferencial
+    # --------------------------
+    def _ensure_local_xml(self) -> str:
+        xml_path = self.INE_XML_PATH
+
+        if os.path.exists(xml_path) and os.path.getsize(xml_path) > 0:
+            self._log.info("[INE] Usando XML local: %s (%.2f MB)",
+                           xml_path, os.path.getsize(xml_path) / (1024 * 1024))
+            return xml_path
+
+        os.makedirs(os.path.dirname(xml_path), exist_ok=True)
+        self._log.info("[INE] XML local não encontrado. Fazendo download de %s ...", self.source.url)
+
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            tmp_path = tmp.name
+            resp = self._make_request_with_retry(self.source.url, stream=True)
+            resp.raw.decode_content = True
+            shutil.copyfileobj(resp.raw, tmp)
+
+        os.replace(tmp_path, xml_path)
+        self._log.info("[INE] Download concluído. XML salvo em: %s (%.2f MB)",
+                       xml_path, os.path.getsize(xml_path) / (1024 * 1024))
+
+        return xml_path
 
     # --------------------------
     # Normalização de tags
@@ -165,32 +171,7 @@ class INEBackend(BaseBackend):
             return set()
 
     # --------------------------
-    # XML local preferencial
-    # --------------------------
-    def _ensure_local_xml(self) -> str:
-        xml_path = self.INE_XML_PATH
-        if os.path.exists(xml_path) and os.path.getsize(xml_path) > 0:
-            self._log.info("[INE] Usando XML local: %s (%.2f MB)",
-                           xml_path, os.path.getsize(xml_path) / (1024 * 1024))
-            return xml_path
-
-        os.makedirs(os.path.dirname(xml_path), exist_ok=True)
-        self._log.info("[INE] XML local não encontrado. Fazendo download de %s ...", self.source.url)
-
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp_path = tmp.name
-            resp = self._make_request_with_retry(self.source.url, stream=True)
-            resp.raw.decode_content = True
-            shutil.copyfileobj(resp.raw, tmp)
-
-        os.replace(tmp_path, xml_path)
-
-        self._log.info("[INE] Download concluído. XML salvo em: %s (%.2f MB)",
-                       xml_path, os.path.getsize(xml_path) / (1024 * 1024))
-        return xml_path
-
-    # --------------------------
-    # Extração de metadados
+    # Extrai metadados do indicator (já normalizados)
     # --------------------------
     def _extract_metadata(self, elem: ET.Element) -> dict:
         md = {}
@@ -265,8 +246,8 @@ class INEBackend(BaseBackend):
     # --------------------------
     # Change detection (barato)
     # --------------------------
-    def _has_changed(self, dataset, new_md: dict, remote_id: str | None = None) -> bool:
-        if not dataset.id:
+    def _has_changed(self, dataset, new_md: dict, remote_id: str) -> bool:
+        if not getattr(dataset, "id", None):
             return True
 
         if (dataset.title or "") != (new_md.get("title") or ""):
@@ -276,7 +257,7 @@ class INEBackend(BaseBackend):
             return True
 
         desired = set(new_md.get("tags_norm") or [])
-        if remote_id and remote_id in self.HVD_INDICATOR_IDS:
+        if remote_id in self.HVD_INDICATOR_IDS:
             desired.update({"estatisticas", "hvd"})
 
         if set(dataset.tags or []) != desired:
@@ -293,68 +274,131 @@ class INEBackend(BaseBackend):
         return False
 
     # --------------------------
-    # Dataset fetch: save(validate=False)
+    # Aplica metadata ao dataset (sem salvar)
     # --------------------------
-    def get_dataset(self, remote_id):
-        dataset = super().get_dataset(remote_id)
-        original_save = dataset.save
+    def _apply_metadata_to_dataset(self, dataset, remote_id: str, md: dict):
+        if self._cc_by_license is None:
+            self._cc_by_license = License.guess("cc-by")
 
-        def save_without_validation(*args, **kwargs):
-            kwargs["validate"] = False
-            return original_save(*args, **kwargs)
+        dataset.license = self._cc_by_license
+        dataset.frequency = "unknown"
 
-        dataset.save = save_without_validation
+        tags = list(md.get("tags_norm") or [])
+        if remote_id in self.HVD_INDICATOR_IDS:
+            for t in ("estatisticas", "hvd"):
+                if t not in tags:
+                    tags.append(t)
+        if "ine-pt" not in tags:
+            tags.append("ine-pt")
+        dataset.tags = tags
+
+        if "title" in md:
+            dataset.title = md["title"]
+        if "description" in md:
+            dataset.description = md["description"]
+
+        dataset.resources = []
+        for res_data in (md.get("resources") or []):
+            dataset.resources.append(Resource(**res_data))
+
+        # garante extras
+        if not hasattr(dataset, "extras") or dataset.extras is None:
+            dataset.extras = {}
+
+        dataset.extras["harvest:remote_id"] = str(remote_id)
+        dataset.extras["harvest:source_id"] = str(getattr(self.source, "id", ""))
+        dataset.extras["harvest:last_update"] = datetime.now(timezone.utc).isoformat()
+
+        try:
+            dataset.extras["harvest:domain"] = current_app.config.get("SERVER_NAME") or ""
+        except Exception:
+            dataset.extras["harvest:domain"] = ""
+
+        # 🔥 slug seguro para novos (evita unique index comum)
+        if not getattr(dataset, "id", None):
+            if not getattr(dataset, "slug", None):
+                dataset.slug = f"ine-{remote_id}"
+
         return dataset
 
     # --------------------------
-    # Watchdog / timeout por dataset
+    # Flush bulk com tratamento de BulkWriteError
     # --------------------------
-    def _process_dataset_with_timeout(self, remote_id: str, md: dict):
+    def _flush_bulk(self, collection, ops, op_ids):
         """
-        Executa process_dataset com timeout (Linux, thread principal).
-        Se estourar, levanta TimeoutError e segue.
+        Executa bulk_write e trata BulkWriteError:
+        - Loga bwe.details['writeErrors'] com o remote_id correspondente (via índice)
+        - Reprocessa o batch em modo "divide and conquer" para salvar o máximo possível.
         """
-        import signal
+        from pymongo.errors import BulkWriteError
 
-        class _Timeout(Exception):
-            pass
+        if not ops:
+            return 0, 0, 0  # matched, modified, upserted
 
-        def _handler(_signum, _frame):
-            raise _Timeout()
-
-        old_handler = signal.signal(signal.SIGALRM, _handler)
-        signal.alarm(self._dataset_timeout_s)
-
+        t0 = time.time()
         try:
-            return self.process_dataset(remote_id, **md)
-        finally:
-            signal.alarm(0)
-            signal.signal(signal.SIGALRM, old_handler)
+            res = collection.bulk_write(ops, ordered=False)
+            dt = time.time() - t0
+            upserted = len(getattr(res, "upserted_ids", {}) or {})
+            self._log.info(
+                "[INE] bulk_write OK: ops=%s em %.2fs | matched=%s modified=%s upserted=%s",
+                len(ops), dt,
+                getattr(res, "matched_count", "?"),
+                getattr(res, "modified_count", "?"),
+                upserted
+            )
+            return getattr(res, "matched_count", 0), getattr(res, "modified_count", 0), upserted
+
+        except BulkWriteError as bwe:
+            dt = time.time() - t0
+            details = getattr(bwe, "details", {}) or {}
+            werrors = details.get("writeErrors", []) or []
+
+            self._log.error("[INE] BulkWriteError em %.2fs (ops=%s). writeErrors=%s",
+                            dt, len(ops), len(werrors))
+
+            # log detalhado por erro (inclui código/mensagem/índice)
+            for err in werrors[:10]:  # limita para não explodir logs
+                idx = err.get("index")
+                rid = op_ids[idx] if isinstance(idx, int) and idx < len(op_ids) else "?"
+                self._log.error(
+                    "[INE] writeError remote_id=%s idx=%s code=%s errmsg=%s",
+                    rid, idx, err.get("code"), err.get("errmsg")
+                )
+
+            # Estratégia: dividir o batch e tentar salvar a maioria
+            if len(ops) == 1:
+                # não há como dividir mais; já logamos
+                return 0, 0, 0
+
+            mid = len(ops) // 2
+            self._flush_bulk(collection, ops[:mid], op_ids[:mid])
+            self._flush_bulk(collection, ops[mid:], op_ids[mid:])
+
+            return 0, 0, 0
 
     # --------------------------
-    # inner_harvest (sequencial + progresso + watchdog)
+    # inner_harvest (2 fases)
     # --------------------------
     def inner_harvest(self):
         start = time.time()
-
         self.HVD_INDICATOR_IDS = self._fetch_hvd_ids()
 
+        # 1) XML local primeiro
         xml_path = self._ensure_local_xml()
         file_size = os.path.getsize(xml_path)
+        self._log.info("[INE] FAST MODE - Fase 1: parsing XML -> memória (%s, %.2f MB)",
+                       xml_path, file_size / (1024 * 1024))
 
-        processed = 0
-        skipped = 0
-        failed = 0
-
-        last_progress = time.time()
-        first_indicator_seen = False
-
-        self._log.info(
-            "[INE] Iniciando parse streaming (sequencial) do XML: %s (%.2f MB)",
-            xml_path, file_size / (1024 * 1024)
-        )
+        # --------------------------
+        # FASE 1: parse e build metadata_map
+        # --------------------------
+        metadata_map: dict[str, dict] = {}
 
         parser = ET.XMLPullParser(events=("end",))
+        last_progress = time.time()
+        count = 0
+        first_indicator_seen = False
 
         with open(xml_path, "rb") as f:
             while True:
@@ -363,172 +407,155 @@ class INEBackend(BaseBackend):
                     break
 
                 parser.feed(chunk)
-
                 for _event, elem in parser.read_events():
                     if elem.tag != "indicator" or "id" not in elem.attrib:
                         continue
 
                     if not first_indicator_seen:
                         first_indicator_seen = True
-                        self._log.info(
-                            "[INE] Primeiro <indicator> encontrado após %.1fs (lido %.2f MB)",
-                            time.time() - start, f.tell() / (1024 * 1024)
-                        )
+                        self._log.info("[INE] Primeiro <indicator> após %.1fs (lido %.2f MB)",
+                                       time.time() - start, f.tell() / (1024 * 1024))
 
-                    remote_id = elem.attrib["id"]
-                    t0 = time.time()
+                    remote_id = str(elem.attrib["id"])
+                    metadata_map[remote_id] = self._extract_metadata(elem)
+                    count += 1
+                    elem.clear()
 
-                    # LOG CRÍTICO: indica dataset em processamento
-                    self._log.info("[INE] Processando dataset %s ...", remote_id)
-
-                    try:
-                        md = self._extract_metadata(elem)
-
-                        # process_dataset com watchdog
-                        self._process_dataset_with_timeout(remote_id, md)
-
-                        processed += 1
-                        dt = time.time() - t0
-                        self._log.info("[INE] OK dataset %s em %.2fs", remote_id, dt)
-
-                    except HarvestSkipException:
-                        skipped += 1
-                        dt = time.time() - t0
-                        self._log.info("[INE] SKIP dataset %s em %.2fs (sem mudanças)", remote_id, dt)
-
-                    except Exception as e:
-                        failed += 1
-                        dt = time.time() - t0
-                        self._log.exception("[INE] FAIL dataset %s após %.2fs (%s)", remote_id, dt, type(e).__name__)
-
-                    finally:
-                        elem.clear()
-
-                    total = processed + skipped + failed
-                    if total % self._log_every == 0:
-                        elapsed = time.time() - start
-                        rate = total / elapsed if elapsed else 0
-                        self._log.info(
-                            "[INE] progresso datasets: total=%s (ok=%s skip=%s fail=%s) | %.2f ds/s",
-                            total, processed, skipped, failed, rate
-                        )
+                    if count % self._log_every == 0:
+                        self._log.info("[INE] Fase 1: %s indicadores carregados em memória", count)
 
                 now = time.time()
                 if now - last_progress >= self._progress_interval_s:
                     bytes_read = f.tell()
-                    elapsed = now - start
-                    mb_read = bytes_read / (1024 * 1024)
-                    mb_total = file_size / (1024 * 1024)
-                    mbps = mb_read / elapsed if elapsed else 0
                     pct = (bytes_read / file_size * 100) if file_size else 0
-                    remaining_mb = (mb_total - mb_read)
-                    eta = (remaining_mb / mbps) if mbps > 0 else None
-                    eta_str = "ETA=indisponível" if eta is None else f"ETA~{eta:.0f}s (~{eta/60:.1f}min)"
-                    self._log.info(
-                        "[INE] progresso XML: %.1f%% | lido %.2f/%.2f MB | %.2f MB/s | %s",
-                        pct, mb_read, mb_total, mbps, eta_str
-                    )
+                    self._log.info("[INE] Fase 1: progresso XML %.1f%% (%s/%s MB)",
+                                   pct,
+                                   round(bytes_read / (1024 * 1024), 2),
+                                   round(file_size / (1024 * 1024), 2))
                     last_progress = now
 
-        try:
-            parser.close()
-        except Exception:
-            pass
+        self._log.info("[INE] FAST MODE - Fase 1 concluída: %s indicadores em memória", len(metadata_map))
 
-        # save final do job
-        if getattr(self, "job", None):
-            self._original_save_job()
+        # --------------------------
+        # FASE 2: change detection + bulk_write
+        # --------------------------
+        self._log.info("[INE] FAST MODE - Fase 2: change detection + bulk_write (bulk_size=%s)", self._bulk_size)
+
+        from pymongo import ReplaceOne, UpdateOne
+
+        ops = []
+        op_ids = []
+        # Lista temporária para HarvestItems deste batch
+        batch_harvest_items = []
+        
+        dataset_collection = None
+
+        changed = 0
+        created = 0
+        skipped = 0
+        failed = 0
+        processed = 0
+
+        # Para reporting no Job
+        if not hasattr(self, 'job') or self.job is None:
+            self._log.warning("[INE] Atenção: self.job não existe. O progresso não será visível na UI.")
+
+        for remote_id, md in metadata_map.items():
+            processed += 1
+            item_status = "done"  # default
+            
+            try:
+                dataset = self.get_dataset(remote_id)
+
+                if dataset_collection is None:
+                    dataset_collection = dataset._get_collection()
+
+                if not self._has_changed(dataset, md, remote_id):
+                    skipped += 1
+                    item_status = "skipped"
+                    # Mesmo skipped, precisamos registar no Job para não ser arquivado
+                else:
+                    self._apply_metadata_to_dataset(dataset, remote_id, md)
+                    doc = dataset.to_mongo()
+                    doc_dict = dict(doc)  # SON -> dict
+
+                    if getattr(dataset, "id", None):
+                        _id = doc_dict.get("_id", dataset.id)
+                        ops.append(ReplaceOne({"_id": _id}, doc_dict, upsert=True))
+                        op_ids.append(remote_id)
+                        changed += 1
+                    else:
+                        # upsert por chave de harvest
+                        d = dict(doc_dict)
+                        d.pop("_id", None)
+                        ops.append(UpdateOne(
+                            {
+                                "extras.harvest:remote_id": str(remote_id),
+                                "extras.harvest:source_id": str(getattr(self.source, "id", "")),
+                            },
+                            {"$set": d},
+                            upsert=True
+                        ))
+                        op_ids.append(remote_id)
+                        created += 1
+            
+            except Exception:
+                failed += 1
+                item_status = "failed"
+                self._log.exception("[INE] Falha na fase 2 para remote_id=%s", remote_id)
+
+            # Criar HarvestItem para o Job reporting
+            # Necessário para: 
+            # 1. UI mostrar progresso e contagens
+            # 2. Udata saber que o dataset existe e NÃO o arquivar
+            if self.job:
+                h_item = HarvestItem(
+                    remote_id=remote_id,
+                    status=item_status
+                )
+                if dataset and getattr(dataset, 'id', None):
+                    h_item.dataset = dataset.id
+                
+                # Adiciona ao batch local
+                batch_harvest_items.append(h_item)
+
+            # Flush MongoDB Ops
+            if len(ops) >= self._bulk_size and dataset_collection is not None:
+                self._flush_bulk(dataset_collection, ops, op_ids)
+                ops, op_ids = [], []
+
+            # Flush HarvestItems para o Job (menos frequente para não sobrecarregar)
+            # Acumula items no job.items e salva a cada X processados
+            if self.job and len(batch_harvest_items) >= (self._bulk_size * 2):
+                before_len = len(self.job.items)
+                self.job.items.extend(batch_harvest_items)
+                self.job.save()
+                after_len = len(self.job.items)
+                self._log.info("[INE] Job Save: items grew from %s to %s (added %s)", before_len, after_len, len(batch_harvest_items))
+                batch_harvest_items = []
+
+            if processed % (self._log_every * 5) == 0:
+                self._log.info(
+                    "[INE] Fase 2 progresso: processed=%s changed=%s created=%s skipped=%s failed=%s",
+                    processed, changed, created, skipped, failed
+                )
+
+        # Final Flush Ops
+        if ops and dataset_collection is not None:
+            self._flush_bulk(dataset_collection, ops, op_ids)
+
+        # Final Flush Job Items
+        if self.job and batch_harvest_items:
+            before_len = len(self.job.items)
+            self.job.items.extend(batch_harvest_items)
+            self.job.save()
+            after_len = len(self.job.items)
+            self._log.info("[INE] Final Job Save: items grew from %s to %s (added %s)", before_len, after_len, len(batch_harvest_items))
 
         total_time = time.time() - start
         self._log.info(
-            "[INE] Harvest concluído: %ss (%.1f min) | ok=%s skip=%s fail=%s | XML mantido em %s",
-            round(total_time, 1), total_time / 60, processed, skipped, failed, xml_path
+            "[INE] FAST MODE concluído em %ss (%.1f min) | processed=%s changed=%s created=%s skipped=%s failed=%s | XML mantido em %s",
+            round(total_time, 1), total_time / 60,
+            processed, changed, created, skipped, failed,
+            xml_path
         )
-
-    # --------------------------
-    # inner_process_dataset
-    # --------------------------
-    def inner_process_dataset(self, item: HarvestItem, **kwargs):
-        dataset = self.get_dataset(item.remote_id)
-
-        if "tags_norm" in kwargs and not self._has_changed(dataset, kwargs, item.remote_id):
-            raise HarvestSkipException("sem mudanças nos metadados")
-
-        if self._cc_by_license is None:
-            self._cc_by_license = License.guess("cc-by")
-
-        dataset.license = self._cc_by_license
-        dataset.resources = []
-        dataset.frequency = "unknown"
-
-        if "tags_norm" in kwargs:
-            tags = list(kwargs.get("tags_norm") or [])
-
-            if item.remote_id in self.HVD_INDICATOR_IDS:
-                for t in ("estatisticas", "hvd"):
-                    if t not in tags:
-                        tags.append(t)
-
-            if "ine-pt" not in tags:
-                tags.append("ine-pt")
-
-            dataset.tags = tags
-
-            if "title" in kwargs:
-                dataset.title = kwargs["title"]
-            if "description" in kwargs:
-                dataset.description = kwargs["description"]
-            for res_data in (kwargs.get("resources") or []):
-                dataset.resources.append(Resource(**res_data))
-
-            return dataset
-
-        # fallback (não deveria acontecer no fluxo normal)
-        base_url = self.source.url
-        parsed = urlparse(base_url)
-        qs = parse_qs(parsed.query)
-        qs["lang"] = ["PT"]
-        qs["varcd"] = [str(item.remote_id)]
-        new_query = urlencode({k: v[0] for k, v in qs.items()})
-        final_url = urlunparse(parsed._replace(query=new_query))
-
-        resp = self._make_request_with_retry(final_url, headers={"charset": "utf8"}, stream=True)
-        resp.raw.decode_content = True
-
-        pull = ET.XMLPullParser(events=("end",))
-        target = None
-        while True:
-            chunk = resp.raw.read(self._chunk_size)
-            if not chunk:
-                break
-            pull.feed(chunk)
-            for _event, el in pull.read_events():
-                if el.tag == "indicator" and el.get("id") == str(item.remote_id):
-                    target = el
-                    break
-                el.clear()
-            if target is not None:
-                break
-
-        if target is not None:
-            md = self._extract_metadata(target)
-            tags = list(md.get("tags_norm") or [])
-            if item.remote_id in self.HVD_INDICATOR_IDS:
-                for t in ("estatisticas", "hvd"):
-                    if t not in tags:
-                        tags.append(t)
-            if "ine-pt" not in tags:
-                tags.append("ine-pt")
-
-            dataset.tags = tags
-            if "title" in md:
-                dataset.title = md["title"]
-            if "description" in md:
-                dataset.description = md["description"]
-            for res_data in (md.get("resources") or []):
-                dataset.resources.append(Resource(**res_data))
-            target.clear()
-        else:
-            dataset.tags = ["ine-pt"]
-
-        return dataset
