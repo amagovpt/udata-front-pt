@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from flask import current_app
 
-from udata.models import Resource, License
+from udata.models import Resource, License, Dataset
 from udata.harvest.backends.base import BaseBackend
 from udata.harvest.models import HarvestItem
 from slugify import slugify
@@ -296,20 +296,17 @@ class INEBackend(BaseBackend):
             r = Resource(**res_data)
             dataset.resources.append(r)
 
-        # garante extras
-        if not hasattr(dataset, "extras") or dataset.extras is None:
-            dataset.extras = {}
+        if not dataset.harvest:
+            dataset.harvest = Dataset.harvest.document_type_obj()
 
-        dataset.extras["harvest:remote_id"] = str(remote_id)
-        dataset.extras["harvest:source_id"] = str(getattr(self.source, "id", ""))
-        dataset.extras["harvest:last_update"] = datetime.now(timezone.utc).isoformat()
+        dataset.harvest.remote_id = str(remote_id)
+        dataset.harvest.source_id = getattr(self.source, "id", None)
+        dataset.harvest.last_update = datetime.now(timezone.utc)
 
         try:
-            dataset.extras["harvest:domain"] = (
-                current_app.config.get("SERVER_NAME") or ""
-            )
+            dataset.harvest.domain = current_app.config.get("SERVER_NAME") or ""
         except Exception:
-            dataset.extras["harvest:domain"] = ""
+            dataset.harvest.domain = ""
 
         # Gera slug a partir do título para novos datasets
         # Adiciona remote_id ao final para garantir unicidade
@@ -563,9 +560,9 @@ class INEBackend(BaseBackend):
                             ops.append(
                                 UpdateOne(
                                     {
-                                        "extras.harvest:remote_id": str(remote_id),
-                                        "extras.harvest:source_id": str(
-                                            getattr(self.source, "id", "")
+                                        "harvest.remote_id": str(remote_id),
+                                        "harvest.source_id": getattr(
+                                            self.source, "id", None
                                         ),
                                     },
                                     {"$set": d},
