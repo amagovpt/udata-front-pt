@@ -127,17 +127,7 @@ class INEBackend(BaseBackend):
     def _normalize_tag(self, tag: str) -> str:
         if not tag:
             return ""
-        tag = (
-            tag.replace("º", "o")
-            .replace("ª", "a")
-            .replace("²", "2")
-            .replace("³", "3")
-            .replace("¹", "1")
-            .replace("€", "eur")
-            .replace("$", "usd")
-            .replace("£", "gbp")
-            .replace(".", "-")
-        )
+
         nfd = unicodedata.normalize("NFD", tag)
         tag = "".join(ch for ch in nfd if unicodedata.category(ch) != "Mn")
         tag = tag.lower()
@@ -322,9 +312,13 @@ class INEBackend(BaseBackend):
             dataset.extras["harvest:domain"] = ""
 
         # Gera slug a partir do título para novos datasets
+        # Adiciona remote_id ao final para garantir unicidade
         if not getattr(dataset, "id", None):
             if not getattr(dataset, "slug", None) and dataset.title:
-                dataset.slug = slugify(dataset.title)
+                base_slug = slugify(dataset.title)
+                dataset.slug = (
+                    f"{base_slug}-{remote_id}" if base_slug else f"ine-{remote_id}"
+                )
 
         return dataset
 
