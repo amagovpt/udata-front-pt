@@ -312,7 +312,7 @@ class INEBackend(BaseBackend):
         # Adiciona remote_id ao final para garantir unicidade
         if not getattr(dataset, "id", None):
             if not getattr(dataset, "slug", None) and dataset.title:
-                base_slug = slugify(dataset.title)
+                base_slug = slugify(dataset.title, to_lower=True)
                 dataset.slug = (
                     f"{base_slug}-{remote_id}" if base_slug else f"ine-{remote_id}"
                 )
