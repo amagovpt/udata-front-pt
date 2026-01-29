@@ -407,7 +407,7 @@ class INEBackend(BaseBackend):
         temp_file_path = None
         source_context = None
 
-        local_file_path = "/home/adbrum/workspace/temp/INE.xml"
+        local_file_path = "/tmp/INE.xml"
 
         try:
             if os.path.exists(local_file_path):
