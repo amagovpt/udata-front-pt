@@ -1,16 +1,9 @@
 from __future__ import annotations
 
-import os
 import re
-import time
-import random
-import shutil
-import tempfile
 import unicodedata
 import xml.etree.ElementTree as ET
-from io import BytesIO
 from datetime import datetime, timezone
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 from flask import current_app
@@ -42,28 +35,31 @@ class INEBackend(BaseBackend):
 
     display_name = "Instituto nacional de estatística"
 
+    # HTTP Configuration
     MAX_RETRIES = 5
     INITIAL_RETRY_DELAY = 2
     MAX_RETRY_DELAY = 60
     TIMEOUT_CONNECT = 15
     TIMEOUT_READ = 300
 
-    HVD_INDICATOR_IDS: set[str] = set()
+    # Harvester Configuration
+    BULK_SIZE = 500
+    LOG_EVERY = 200
+    CHECK_CHANGES = True
+    USE_LOCAL_FILE = (
+        True  # True: salva/reutiliza /tmp/ine.xml | False: baixa direto para RAM
+    )
+    LOCAL_FILE_PATH = "/tmp/ine.xml"
 
+    # Regex patterns
     _KW_SPLIT_RE = re.compile(r"\s*(?:;|,|/|\n|\r|\t|\s+-\s+)\s*")
     _NON_ALNUM_DASH_RE = re.compile(r"[^a-z0-9\-]+")
     _MULTI_DASH_RE = re.compile(r"\-+")
 
+    HVD_INDICATOR_IDS: set[str] = set()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self._bulk_size = int(os.getenv("INE_BULK_SIZE", "500"))
-        self._log_every = int(os.getenv("INE_FAST_MODE_LOG_EVERY", "200"))
-        self._check_changes = os.getenv("INE_CHECK_CHANGES", "true").lower() == "true"
-        self._stream_memory = os.getenv("INE_STREAM_MEMORY", "true").lower() == "true"
-
-        self._progress_interval_s = int(os.getenv("INE_PROGRESS_INTERVAL_S", "10"))
-        self._chunk_size = int(os.getenv("INE_XML_CHUNK_SIZE", str(1024 * 1024)))  # 1MB
 
         self._cc_by_license = None
 
@@ -82,17 +78,17 @@ class INEBackend(BaseBackend):
             self._log = logging.getLogger(__name__)
 
         self._log.info(
-            "[INE] FAST MODE (2 fases) ativo: bulk_size=%s, log_every=%s, stream_memory=%s, chunk=%sKB",
-            self._bulk_size,
-            self._log_every,
-            self._stream_memory,
-            int(self._chunk_size / 1024),
+            "[INE] Harvester iniciado: bulk_size=%s, log_every=%s, check_changes=%s",
+            self.BULK_SIZE,
+            self.LOG_EVERY,
+            self.CHECK_CHANGES,
         )
 
     # --------------------------
     # HTTP com retry
     # --------------------------
     def _make_request_with_retry(self, url: str, headers=None, stream=True, **kwargs):
+        """Faz request HTTP com retry automático em caso de falhas de rede."""
         if headers is None:
             headers = {}
         if "timeout" not in kwargs:
@@ -110,9 +106,13 @@ class INEBackend(BaseBackend):
                 requests.exceptions.ChunkedEncodingError,
                 ConnectionResetError,
                 ConnectionAbortedError,
-            ):
+            ) as e:
                 if attempt >= self.MAX_RETRIES:
+                    self._log.error("[INE] Falha após %s tentativas: %s", attempt, e)
                     raise
+                import time
+                import random
+
                 jitter = random.uniform(0, 0.1 * delay)
                 time.sleep(min(delay + jitter, self.MAX_RETRY_DELAY))
                 delay = min(delay * 2, self.MAX_RETRY_DELAY)
@@ -387,43 +387,48 @@ class INEBackend(BaseBackend):
     # inner_harvest (2 fases)
     # --------------------------
     def inner_harvest(self):
+        import time
+
         self._log.info("[INE] Iniciando harvester de %s", self.source.url)
         self._log.info(
-            "[INE] Config: BulkSize=%s, LogEvery=%s, CheckChanges=%s, StreamMemory=%s",
-            self._bulk_size,
-            self._log_every,
-            self._check_changes,
-            self._stream_memory,
+            "[INE] Config: BulkSize=%s, LogEvery=%s, CheckChanges=%s",
+            self.BULK_SIZE,
+            self.LOG_EVERY,
+            self.CHECK_CHANGES,
         )
 
         start_time = time.time()
         self.HVD_INDICATOR_IDS = self._fetch_hvd_ids()
 
-        # Prepare Streaming Source
-        temp_file_path = None
-        source_context = None
-
-        local_file_path = "/tmp/INE.xml"
-
         try:
-            if os.path.exists(local_file_path):
-                self._log.info("[INE] Usando ficheiro local: %s", local_file_path)
-                source_context = local_file_path
-            elif self._stream_memory:
-                self._log.info("[INE] Modo Memória: Baixando XML para RAM...")
+            import os
+            from io import BytesIO
+
+            # Determina a fonte do XML baseado na flag USE_LOCAL_FILE
+            if self.USE_LOCAL_FILE:
+                # Modo ficheiro local: reutiliza se existir, senão baixa e salva
+                if os.path.exists(self.LOCAL_FILE_PATH):
+                    self._log.info(
+                        "[INE] Usando ficheiro local existente: %s",
+                        self.LOCAL_FILE_PATH,
+                    )
+                    source_context = self.LOCAL_FILE_PATH
+                else:
+                    self._log.info(
+                        "[INE] Baixando XML e salvando em %s...", self.LOCAL_FILE_PATH
+                    )
+                    resp = self._session.get(self.source.url)
+                    resp.raise_for_status()
+                    with open(self.LOCAL_FILE_PATH, "wb") as f:
+                        f.write(resp.content)
+                    self._log.info("[INE] Download concluído.")
+                    source_context = self.LOCAL_FILE_PATH
+            else:
+                # Modo memória: baixa direto para RAM
+                self._log.info("[INE] Baixando XML para memória...")
                 resp = self._session.get(self.source.url)
                 resp.raise_for_status()
-                # Cria BytesIO
                 source_context = BytesIO(resp.content)
-            else:
-                self._log.info("[INE] Modo Disco: Baixando XML para Temp File...")
-                with tempfile.NamedTemporaryFile(delete=False) as tmp:
-                    temp_file_path = tmp.name
-                    with self._session.get(self.source.url, stream=True) as r:
-                        r.raise_for_status()
-                        shutil.copyfileobj(r.raw, tmp)
-                self._log.info("[INE] Download concluído: %s", temp_file_path)
-                source_context = temp_file_path
 
             # Fase 1: Criação do iterador sobre o XML
             # source_context pode ser file path ou file-like object (BytesIO)
@@ -458,18 +463,12 @@ class INEBackend(BaseBackend):
 
         except Exception as e:
             self._log.error("[INE] Erro no download/parsing do XML: %s", e)
-            raise e
-        finally:
-            if temp_file_path and os.path.exists(temp_file_path):
-                try:
-                    os.remove(temp_file_path)
-                except:
-                    pass
+            raise
 
         # --- Fim Fase 1, Inicio Fase 2 (Processamento) ---
         self._log.info(
-            "[INE] FAST MODE - Fase 2: change detection + bulk_write (bulk_size=%s)",
-            self._bulk_size,
+            "[INE] Fase 2: change detection + bulk_write (bulk_size=%s)",
+            self.BULK_SIZE,
         )
 
         from pymongo import ReplaceOne, UpdateOne
@@ -514,8 +513,8 @@ class INEBackend(BaseBackend):
         total_items = len(all_items)
 
         # Processar em chunks do tamanho do bulk_size
-        for i in range(0, total_items, self._bulk_size):
-            chunk = all_items[i : i + self._bulk_size]
+        for i in range(0, total_items, self.BULK_SIZE):
+            chunk = all_items[i : i + self.BULK_SIZE]
 
             # --- Passo A: Pre-fetch datasets (simplificado) ---
             for remote_id, md in chunk:
@@ -547,7 +546,7 @@ class INEBackend(BaseBackend):
                     # ========================================
                     if is_existing:
                         # Verificar se houve alterações nos metadados
-                        if self._check_changes and not self._has_changed(
+                        if self.CHECK_CHANGES and not self._has_changed(
                             dataset, md, remote_id
                         ):
                             # Sem alterações -> SKIP
@@ -620,7 +619,7 @@ class INEBackend(BaseBackend):
             # --- Fim do loop do chunk ---
 
             # Flush Ops
-            if len(ops) >= self._bulk_size and dataset_collection is not None:
+            if len(ops) >= self.BULK_SIZE and dataset_collection is not None:
                 self._flush_bulk(dataset_collection, ops, op_ids)
                 ops, op_ids = [], []
 
@@ -643,7 +642,7 @@ class INEBackend(BaseBackend):
                         h_item = HarvestItem(remote_id=rid, status="done")
                         batch_harvest_items.append(h_item)
 
-            if self.job and len(batch_harvest_items) >= (self._bulk_size * 2):
+            if self.job and len(batch_harvest_items) >= (self.BULK_SIZE * 2):
                 before_len = len(self.job.items)
                 self.job.items.extend(batch_harvest_items)
                 self.job.save()
@@ -656,7 +655,7 @@ class INEBackend(BaseBackend):
                 )
                 batch_harvest_items = []
 
-            if processed % (self._log_every * 5) == 0:
+            if processed % (self.LOG_EVERY * 5) == 0:
                 self._log.info(
                     "[INE] Fase 2 progresso: processed=%s changed=%s created=%s skipped=%s failed=%s",
                     processed,
