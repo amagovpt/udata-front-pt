@@ -300,13 +300,9 @@ class INEBackend(BaseBackend):
             dataset.harvest = Dataset.harvest.document_type_obj()
 
         dataset.harvest.remote_id = str(remote_id)
-        dataset.harvest.source_id = getattr(self.source, "id", None)
+        dataset.harvest.source_id = str(self.source.id) if self.source.id else None
         dataset.harvest.last_update = datetime.now(timezone.utc)
-
-        try:
-            dataset.harvest.domain = current_app.config.get("SERVER_NAME") or ""
-        except Exception:
-            dataset.harvest.domain = ""
+        dataset.harvest.domain = getattr(self.source, "domain", "") or ""
 
         # Gera slug a partir do título para novos datasets
         # Adiciona remote_id ao final para garantir unicidade
@@ -526,6 +522,9 @@ class INEBackend(BaseBackend):
                 md["__dataset_obj"] = self.get_dataset(remote_id)
 
             # --- Passo C: Processamento Normal do Chunk ---
+            # Guarda remote_ids de datasets criados para buscar IDs depois
+            created_remote_ids = []
+
             for remote_id, md in chunk:
                 processed += 1
                 item_status = "done"
@@ -535,42 +534,77 @@ class INEBackend(BaseBackend):
                     if dataset_collection is None:
                         dataset_collection = dataset._get_collection()
 
-                    # Se a flag estiver desligada -> assume changed=True sempre
-                    should_update = True
-                    if self._check_changes:
-                        if not self._has_changed(dataset, md, remote_id):
-                            should_update = False
+                    # Verifica se o dataset existe baseado no harvest.remote_id
+                    # O get_dataset retorna um dataset existente (com id) ou um novo (sem id)
+                    is_existing = (
+                        getattr(dataset, "harvest", None) is not None
+                        and getattr(dataset.harvest, "remote_id", None) == remote_id
+                        and getattr(dataset, "id", None) is not None
+                    )
 
-                    if not should_update:
-                        skipped += 1
-                        item_status = "skipped"
+                    # ========================================
+                    # CASO 1: Dataset já existe na base de dados
+                    # ========================================
+                    if is_existing:
+                        # Verificar se houve alterações nos metadados
+                        if self._check_changes and not self._has_changed(
+                            dataset, md, remote_id
+                        ):
+                            # Sem alterações -> SKIP
+                            skipped += 1
+                            item_status = "skipped"
+                            self._log.debug(
+                                "[INE] SKIP: remote_id=%s (sem alterações)", remote_id
+                            )
+                        else:
+                            # Com alterações -> UPDATE
+                            self._apply_metadata_to_dataset(dataset, remote_id, md)
+                            doc = dataset.to_mongo()
+                            doc_dict = dict(doc)
+                            _id = doc_dict.get("_id", dataset.id)
+                            ops.append(ReplaceOne({"_id": _id}, doc_dict, upsert=False))
+                            op_ids.append(remote_id)
+                            changed += 1
+                            self._log.debug(
+                                "[INE] UPDATE: remote_id=%s (metadados alterados)",
+                                remote_id,
+                            )
+
+                        # HarvestItem para datasets existentes
+                        if self.job:
+                            h_item = HarvestItem(
+                                remote_id=remote_id, status=item_status
+                            )
+                            h_item.dataset = dataset.id
+                            batch_harvest_items.append(h_item)
+
+                    # ========================================
+                    # CASO 2: Dataset não existe -> CREATE
+                    # ========================================
                     else:
                         self._apply_metadata_to_dataset(dataset, remote_id, md)
                         doc = dataset.to_mongo()
                         doc_dict = dict(doc)
-
-                        if getattr(dataset, "id", None):
-                            _id = doc_dict.get("_id", dataset.id)
-                            ops.append(ReplaceOne({"_id": _id}, doc_dict, upsert=True))
-                            op_ids.append(remote_id)
-                            changed += 1
-                        else:
-                            d = dict(doc_dict)
-                            d.pop("_id", None)
-                            ops.append(
-                                UpdateOne(
-                                    {
-                                        "harvest.remote_id": str(remote_id),
-                                        "harvest.source_id": getattr(
-                                            self.source, "id", None
-                                        ),
-                                    },
-                                    {"$set": d},
-                                    upsert=True,
-                                )
+                        # Remover _id pois será gerado pelo MongoDB
+                        doc_dict.pop("_id", None)
+                        ops.append(
+                            UpdateOne(
+                                {
+                                    "harvest.remote_id": str(remote_id),
+                                    "harvest.source_id": (
+                                        str(self.source.id) if self.source.id else None
+                                    ),
+                                },
+                                {"$setOnInsert": doc_dict},
+                                upsert=True,
                             )
-                            op_ids.append(remote_id)
-                            created += 1
+                        )
+                        op_ids.append(remote_id)
+                        created += 1
+                        created_remote_ids.append(remote_id)
+                        self._log.debug(
+                            "[INE] CREATE: remote_id=%s (novo dataset)", remote_id
+                        )
 
                 except Exception:
                     failed += 1
@@ -578,20 +612,36 @@ class INEBackend(BaseBackend):
                     self._log.exception(
                         "[INE] Falha na fase 2 para remote_id=%s", remote_id
                     )
-
-                # Criar HarvestItem
-                if self.job:
-                    h_item = HarvestItem(remote_id=remote_id, status=item_status)
-                    if dataset and getattr(dataset, "id", None):
-                        h_item.dataset = dataset.id
-                    batch_harvest_items.append(h_item)
+                    # HarvestItem para falhas
+                    if self.job:
+                        h_item = HarvestItem(remote_id=remote_id, status=item_status)
+                        batch_harvest_items.append(h_item)
 
             # --- Fim do loop do chunk ---
 
-            # Flush Ops e HarvestItems (igual a antes)
+            # Flush Ops
             if len(ops) >= self._bulk_size and dataset_collection is not None:
                 self._flush_bulk(dataset_collection, ops, op_ids)
                 ops, op_ids = [], []
+
+            # Buscar IDs dos datasets criados e criar HarvestItems
+            if self.job and created_remote_ids and dataset_collection is not None:
+                for rid in created_remote_ids:
+                    try:
+                        ds_doc = dataset_collection.find_one(
+                            {"harvest.remote_id": str(rid)}, {"_id": 1}
+                        )
+                        h_item = HarvestItem(remote_id=rid, status="done")
+                        if ds_doc:
+                            h_item.dataset = ds_doc["_id"]
+                        batch_harvest_items.append(h_item)
+                    except Exception:
+                        self._log.warning(
+                            "[INE] Não foi possível buscar ID do dataset criado: %s",
+                            rid,
+                        )
+                        h_item = HarvestItem(remote_id=rid, status="done")
+                        batch_harvest_items.append(h_item)
 
             if self.job and len(batch_harvest_items) >= (self._bulk_size * 2):
                 before_len = len(self.job.items)
