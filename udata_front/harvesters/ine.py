@@ -23,7 +23,7 @@ class INEBackend(BaseBackend):
     2) Change detection + bulk_write no Mongo (muito mais rápido)
 
     Fonte XML:
-    - Usa /home/babel/workspace/temp/INE.xml se existir
+    - Usa /tmp/ine.xml se existir
     - Caso contrário baixa self.source.url e grava nesse caminho
     - Não remove o ficheiro no final
 
