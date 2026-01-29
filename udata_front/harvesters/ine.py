@@ -165,6 +165,7 @@ class INEBackend(BaseBackend):
             md["title"] = node.text
 
         desc = ""
+        remote_url = None
         node = elem.find("description")
         if node is not None and node.text:
             desc = node.text
@@ -173,10 +174,13 @@ class INEBackend(BaseBackend):
         if html_node is not None:
             bdd_url = html_node.find("bdd_url")
             if bdd_url is not None and bdd_url.text:
+                remote_url = bdd_url.text.strip()
                 desc = (desc + "\n" + bdd_url.text) if desc else bdd_url.text
 
         if desc:
             md["description"] = desc
+        if remote_url:
+            md["remote_url"] = remote_url
 
         resources = []
         json_node = elem.find("json")
@@ -299,10 +303,31 @@ class INEBackend(BaseBackend):
         if not dataset.harvest:
             dataset.harvest = Dataset.harvest.document_type_obj()
 
+        # Campos obrigatórios
         dataset.harvest.remote_id = str(remote_id)
         dataset.harvest.source_id = str(self.source.id) if self.source.id else None
         dataset.harvest.last_update = datetime.now(timezone.utc)
         dataset.harvest.domain = getattr(self.source, "domain", "") or ""
+
+        # Identificador do backend
+        dataset.harvest.backend = "ine"
+
+        # URL remota do dataset no portal de origem
+        if md.get("remote_url"):
+            dataset.harvest.remote_url = md["remote_url"]
+
+        # Identificador DCT (Dublin Core Terms)
+        dataset.harvest.dct_identifier = f"ine:{remote_id}"
+
+        # URI única para o dataset
+        dataset.harvest.uri = f"https://www.ine.pt/indicador/{remote_id}"
+
+        # Data de criação (apenas se for novo)
+        if not dataset.harvest.created_at:
+            dataset.harvest.created_at = datetime.now(timezone.utc)
+
+        # Data de modificação (sempre atualizada)
+        dataset.harvest.modified_at = datetime.now(timezone.utc)
 
         # Gera slug a partir do título para novos datasets
         # Adiciona remote_id ao final para garantir unicidade
