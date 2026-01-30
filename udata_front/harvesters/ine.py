@@ -112,7 +112,7 @@ class INEBackend(BaseBackend):
                 if attempt >= self.MAX_RETRIES:
                     self._log.error("[INE] Falha após %s tentativas: %s", attempt, e)
                     raise
-                
+
                 jitter = random.uniform(0, 0.1 * delay)
                 time.sleep(min(delay + jitter, self.MAX_RETRY_DELAY))
                 delay = min(delay * 2, self.MAX_RETRY_DELAY)
@@ -446,17 +446,18 @@ class INEBackend(BaseBackend):
                     "[INE] Baixando XML e salvando em %s (será removido após processamento)...",
                     self.LOCAL_FILE_PATH,
                 )
-                resp = self._session.get(self.source.url)
-                resp.raise_for_status()
+                # Usar _make_request_with_retry para robustez e stream=True para memória
+                resp = self._make_request_with_retry(self.source.url, stream=True)
                 with open(self.LOCAL_FILE_PATH, "wb") as f:
-                    f.write(resp.content)
+                    for chunk in resp.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
                 self._log.info("[INE] Download concluído.")
                 source_context = self.LOCAL_FILE_PATH
             else:
                 # Modo memória: baixa direto para RAM
                 self._log.info("[INE] Baixando XML para memória...")
-                resp = self._session.get(self.source.url)
-                resp.raise_for_status()
+                resp = self._make_request_with_retry(self.source.url, stream=False)
                 source_context = BytesIO(resp.content)
 
             # Fase 1: Criação do iterador sobre o XML
@@ -496,10 +497,15 @@ class INEBackend(BaseBackend):
             if not self.IS_TEST_MODE and self.USE_LOCAL_FILE:
                 try:
                     import os
+
                     if os.path.exists(self.LOCAL_FILE_PATH):
-                        os.remove(self.LOCAL_FILE_PATH)
+                        # os.remove(self.LOCAL_FILE_PATH)
                         self._log.info(
-                            "[INE] Ficheiro descarregado removido após erro: %s",
+                            "[INE] Ficheiro mantido para debug após erro: %s",
+                            self.LOCAL_FILE_PATH,
+                        )
+                        self._log.info(
+                            "[INE] Ficheiro mantido para debug após erro: %s",
                             self.LOCAL_FILE_PATH,
                         )
                 except Exception as cleanup_e:
@@ -730,6 +736,7 @@ class INEBackend(BaseBackend):
         if not self.IS_TEST_MODE and self.USE_LOCAL_FILE:
             try:
                 import os
+
                 if os.path.exists(self.LOCAL_FILE_PATH):
                     os.remove(self.LOCAL_FILE_PATH)
                     self._log.info(
