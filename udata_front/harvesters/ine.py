@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 import unicodedata
 import xml.etree.ElementTree as ET
+import time
+import random
 from datetime import datetime, timezone
 
 import requests
@@ -47,7 +49,7 @@ class INEBackend(BaseBackend):
     LOG_EVERY = 200
     CHECK_CHANGES = True
     USE_LOCAL_FILE = (
-        True  # True: salva/reutiliza /tmp/ine.xml | False: baixa direto para RAM
+        False  # True: salva/reutiliza /tmp/ine.xml | False: baixa direto para RAM
     )
     LOCAL_FILE_PATH = "/tmp/ine.xml"
 
@@ -110,9 +112,7 @@ class INEBackend(BaseBackend):
                 if attempt >= self.MAX_RETRIES:
                     self._log.error("[INE] Falha após %s tentativas: %s", attempt, e)
                     raise
-                import time
-                import random
-
+                
                 jitter = random.uniform(0, 0.1 * delay)
                 time.sleep(min(delay + jitter, self.MAX_RETRY_DELAY))
                 delay = min(delay * 2, self.MAX_RETRY_DELAY)
@@ -412,8 +412,6 @@ class INEBackend(BaseBackend):
     # inner_harvest (2 fases)
     # --------------------------
     def inner_harvest(self):
-        import time
-
         self._log.info("[INE] Iniciando harvester de %s", self.source.url)
         self._log.info(
             "[INE] Config: BulkSize=%s, LogEvery=%s, CheckChanges=%s",
@@ -517,23 +515,9 @@ class INEBackend(BaseBackend):
                 "[INE] Atenção: self.job não existe. O progresso não será visível na UI."
             )
 
-        processed = 0
-
-        # Para reporting no Job
-        if not hasattr(self, "job") or self.job is None:
-            self._log.warning(
-                "[INE] Atenção: self.job não existe. O progresso não será visível na UI."
-            )
-
-        # Convertermos para lista para poder iterar em chunks se quisermos,
-        # mas como e dict, iteramos items().
-        # Para paralelizar os HEAD requests, precisamos saber QUAIS precisam de check.
-        # Estrategia:
-        # Iterar todos. Se metadata basico difere -> changed (sem check de tamanho).
-        # Se metadata igual -> check tamanho.
-        # Isto implica que temos de fazer o check ANTES de decidir.
-
-        # Para ser eficiente com Threads, vamos processar em batches.
+        # Processar em batches para eficiência com escrita em massa.
+        # Estratégia: iterar metadados em chunks, fazer change detection,
+        # acumular operações Mongo, e fazer flush quando atinge BULK_SIZE.
         all_items = list(metadata_map.items())
         total_items = len(all_items)
 
@@ -541,11 +525,11 @@ class INEBackend(BaseBackend):
         for i in range(0, total_items, self.BULK_SIZE):
             chunk = all_items[i : i + self.BULK_SIZE]
 
-            # --- Passo A: Pre-fetch datasets (simplificado) ---
+            # --- Passo A: Pré-buscar datasets ---
             for remote_id, md in chunk:
                 md["__dataset_obj"] = self.get_dataset(remote_id)
 
-            # --- Passo C: Processamento Normal do Chunk ---
+            # --- Passo B: Processamento do chunk ---
             # Guarda remote_ids de datasets criados para buscar IDs depois
             created_remote_ids = []
 
