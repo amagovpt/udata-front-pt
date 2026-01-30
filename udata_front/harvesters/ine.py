@@ -24,10 +24,9 @@ class INEBackend(BaseBackend):
     1) Parse XML -> metadados em memória
     2) Change detection + bulk_write no Mongo (muito mais rápido)
 
-    Fonte XML:
-    - Usa /tmp/ine.xml se existir
-    - Caso contrário baixa self.source.url e grava nesse caminho
-    - Não remove o ficheiro no final
+    Configuração de ficheiro:
+    - IS_TEST_MODE = True: usa /tmp/ine.xml (você adiciona/remove manualmente)
+    - IS_TEST_MODE = False: descarrega de self.source.url, processa e remove automaticamente
 
     Robustez:
     - Captura BulkWriteError, extrai bwe.details['writeErrors'] e isola operação falhada
@@ -45,11 +44,12 @@ class INEBackend(BaseBackend):
     TIMEOUT_READ = 300
 
     # Harvester Configuration
+    IS_TEST_MODE = False  # True: usa ficheiro em /tmp/ine.xml (você gere) | False: download automático com limpeza
     BULK_SIZE = 500
     LOG_EVERY = 200
     CHECK_CHANGES = True
     USE_LOCAL_FILE = (
-        False  # True: salva/reutiliza /tmp/ine.xml | False: baixa direto para RAM
+        True  # True: salva/reutiliza /tmp/ine.xml | False: baixa direto para RAM
     )
     LOCAL_FILE_PATH = "/tmp/ine.xml"
 
@@ -414,10 +414,11 @@ class INEBackend(BaseBackend):
     def inner_harvest(self):
         self._log.info("[INE] Iniciando harvester de %s", self.source.url)
         self._log.info(
-            "[INE] Config: BulkSize=%s, LogEvery=%s, CheckChanges=%s",
+            "[INE] Config: BulkSize=%s, LogEvery=%s, CheckChanges=%s, TestMode=%s",
             self.BULK_SIZE,
             self.LOG_EVERY,
             self.CHECK_CHANGES,
+            self.IS_TEST_MODE,
         )
 
         start_time = time.time()
@@ -427,25 +428,30 @@ class INEBackend(BaseBackend):
             import os
             from io import BytesIO
 
-            # Determina a fonte do XML baseado na flag USE_LOCAL_FILE
-            if self.USE_LOCAL_FILE:
-                # Modo ficheiro local: reutiliza se existir, senão baixa e salva
-                if os.path.exists(self.LOCAL_FILE_PATH):
-                    self._log.info(
-                        "[INE] Usando ficheiro local existente: %s",
-                        self.LOCAL_FILE_PATH,
+            # Determina a fonte do XML baseado no modo de operação
+            if self.IS_TEST_MODE:
+                # Modo teste: usa ficheiro em /tmp/ine.xml (usuário responsável por gerenciá-lo)
+                if not os.path.exists(self.LOCAL_FILE_PATH):
+                    raise FileNotFoundError(
+                        f"[INE] Modo teste ativo mas ficheiro não encontrado: {self.LOCAL_FILE_PATH}"
                     )
-                    source_context = self.LOCAL_FILE_PATH
-                else:
-                    self._log.info(
-                        "[INE] Baixando XML e salvando em %s...", self.LOCAL_FILE_PATH
-                    )
-                    resp = self._session.get(self.source.url)
-                    resp.raise_for_status()
-                    with open(self.LOCAL_FILE_PATH, "wb") as f:
-                        f.write(resp.content)
-                    self._log.info("[INE] Download concluído.")
-                    source_context = self.LOCAL_FILE_PATH
+                self._log.info(
+                    "[INE] Modo TESTE: usando ficheiro local %s (você gere remoção)",
+                    self.LOCAL_FILE_PATH,
+                )
+                source_context = self.LOCAL_FILE_PATH
+            elif self.USE_LOCAL_FILE:
+                # Modo produção com ficheiro local: baixa, processa e remove
+                self._log.info(
+                    "[INE] Baixando XML e salvando em %s (será removido após processamento)...",
+                    self.LOCAL_FILE_PATH,
+                )
+                resp = self._session.get(self.source.url)
+                resp.raise_for_status()
+                with open(self.LOCAL_FILE_PATH, "wb") as f:
+                    f.write(resp.content)
+                self._log.info("[INE] Download concluído.")
+                source_context = self.LOCAL_FILE_PATH
             else:
                 # Modo memória: baixa direto para RAM
                 self._log.info("[INE] Baixando XML para memória...")
@@ -486,6 +492,22 @@ class INEBackend(BaseBackend):
 
         except Exception as e:
             self._log.error("[INE] Erro no download/parsing do XML: %s", e)
+            # Remover ficheiro descarregado em caso de erro (não remover em modo teste)
+            if not self.IS_TEST_MODE and self.USE_LOCAL_FILE:
+                try:
+                    import os
+                    if os.path.exists(self.LOCAL_FILE_PATH):
+                        os.remove(self.LOCAL_FILE_PATH)
+                        self._log.info(
+                            "[INE] Ficheiro descarregado removido após erro: %s",
+                            self.LOCAL_FILE_PATH,
+                        )
+                except Exception as cleanup_e:
+                    self._log.warning(
+                        "[INE] Falha ao remover ficheiro após erro %s: %s",
+                        self.LOCAL_FILE_PATH,
+                        cleanup_e,
+                    )
             raise
 
         # --- Fim Fase 1, Inicio Fase 2 (Processamento) ---
@@ -702,3 +724,21 @@ class INEBackend(BaseBackend):
             skipped,
             failed,
         )
+
+        # Remover ficheiro descarregado após processamento bem-sucedido
+        # (não remover em modo teste)
+        if not self.IS_TEST_MODE and self.USE_LOCAL_FILE:
+            try:
+                import os
+                if os.path.exists(self.LOCAL_FILE_PATH):
+                    os.remove(self.LOCAL_FILE_PATH)
+                    self._log.info(
+                        "[INE] Ficheiro descarregado removido após processamento: %s",
+                        self.LOCAL_FILE_PATH,
+                    )
+            except Exception as e:
+                self._log.warning(
+                    "[INE] Falha ao remover ficheiro %s: %s",
+                    self.LOCAL_FILE_PATH,
+                    e,
+                )
