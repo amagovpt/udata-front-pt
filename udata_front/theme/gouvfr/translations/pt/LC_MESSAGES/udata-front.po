@@ -1,2813 +1,1932 @@
-# English translations for udata-front.
-# Copyright (C) 2026 Etalab
-# This file is distributed under the same license as the udata-front
-# project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: udata-front 6.2.4\n"
-"Report-Msgid-Bugs-To: data.gouv@data.gouv.fr\n"
-"POT-Creation-Date: 2026-02-03 11:57+0000\n"
-"PO-Revision-Date: 2026-02-03 11:58+0000\n"
-"Last-Translator: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
+"Project-Id-Version: udata\n"
+"Report-Msgid-Bugs-To: i18n@opendata.team\n"
+"POT-Creation-Date: 2025-10-08 15:31+0200\n"
+"PO-Revision-Date: 2025-10-08 14:00\n"
+"Last-Translator: Open Data Team <i18n@opendata.team>\n"
 "Language: pt\n"
-"Language-Team: Data.gouv.fr Team <data.gouv@data.gouv.fr>\n"
+"Language-Team: Portuguese\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+"X-Crowdin-Project: udata\n"
+"X-Crowdin-Project-ID: 291291\n"
+"X-Crowdin-Language: pt-PT\n"
+"X-Crowdin-File: /master/udata/translations/udata.pot\n"
+"X-Crowdin-File-ID: 6\n"
 
-#: udata_front/forms.py:10
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:21
+#: udata/settings.py:129
+msgid "Welcome"
+msgstr "Bem-vindo"
+
+#: udata/settings.py:130
+msgid "Please confirm your email"
+msgstr "Por favor confirme o seu e-mail"
+
+#: udata/settings.py:131
+msgid "Login instructions"
+msgstr "Instruções de login"
+
+#: udata/settings.py:132
+msgid "Your password has been reset"
+msgstr "A sua palavra-passe foi redefinida"
+
+#: udata/settings.py:133
+msgid "Your password has been changed"
+msgstr "A sua palavra-passe foi alterada"
+
+#: udata/settings.py:134
+msgid "Password reset instructions"
+msgstr "Instruções para recuperação da palavra-passe"
+
+#: udata/settings.py:547
+msgid "This dataset has been archived"
+msgstr "O seu conjunto de dados foi arquivado"
+
+#: udata/uris.py:54
+#, python-brace-format
+msgid "Invalid URL \"{url}\": {reason}"
+msgstr ""
+
+#: udata/tests/api/test_datasets_api.py:1155 udata/tests/test_model.py:403
+#: udata/uris.py:56
+#, python-brace-format
+msgid "Invalid URL \"{url}\""
+msgstr ""
+
+#: udata/uris.py:130
+#, python-brace-format
+msgid "Invalid scheme {0}, allowed schemes: {1}"
+msgstr ""
+
+#: udata/uris.py:133
+msgid "Credentials in URL are not allowed"
+msgstr ""
+
+#: udata/uris.py:137
+#, python-brace-format
+msgid "Invalid TLD {0}"
+msgstr ""
+
+#: udata/uris.py:146
+#, python-brace-format
+msgid "{0} is a multicast IP"
+msgstr ""
+
+#: udata/uris.py:148
+#, python-brace-format
+msgid "{0} is a mask IP"
+msgstr ""
+
+#: udata/uris.py:152
+msgid "is a local URL"
+msgstr ""
+
+#: udata/tests/test_model.py:421 udata/uris.py:159
+msgid "is a private URL"
+msgstr ""
+
+#: udata/api/errors.py:4
+msgid "Validation error: your data cannot be updated for now, we have been notified of the error and we will fix it as soon as possible."
+msgstr "Erro de validação: Os seus dados não podem ser atualizados de momento, fomos notificados do erro e vamos corrigir logo que possível."
+
+#: udata/api/oauth2.py:56
+msgid "Bearer Token"
+msgstr "Bearer Token"
+
+#: udata/api/oauth2.py:59
+msgid "Default scope"
+msgstr "Âmbito predefinido"
+
+#: udata/api/oauth2.py:59
+msgid "System administrator rights"
+msgstr "Direitos do administrador de sistema"
+
+#: udata/auth/forms.py:23
+msgid "Captcha code"
+msgstr ""
+
+#: udata/auth/forms.py:24
+msgid "Captcha ID"
+msgstr ""
+
+#: udata/auth/forms.py:30
+msgid "Invalid Captcha"
+msgstr ""
+
+#: udata/auth/forms.py:36 udata/core/user/forms.py:14
 msgid "First name"
-msgstr ""
+msgstr "Nome"
 
-#: udata_front/forms.py:10
+#: udata/auth/forms.py:38
 msgid "First name is required"
-msgstr ""
+msgstr "O primeiro nome é obrigatório"
 
-#: udata_front/forms.py:11 udata_front/forms.py:14
+#: udata/auth/forms.py:39 udata/auth/forms.py:46
+#: udata/core/contact_point/forms.py:13 udata/core/user/forms.py:15
+#: udata/core/user/forms.py:19
 msgid "URLs not allowed in this field"
-msgstr ""
+msgstr "URLs não permitidas neste campo"
 
-#: udata_front/forms.py:13
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:28
+#: udata/auth/forms.py:43 udata/core/user/forms.py:18
 msgid "Last name"
-msgstr ""
+msgstr "Apelido"
 
-#: udata_front/forms.py:13
+#: udata/auth/forms.py:45
 msgid "Last name is required"
+msgstr "O último nome é obrigatório"
+
+#: udata/auth/forms.py:50
+msgid "J'accepte les conditions générales d'utilisation"
 msgstr ""
 
-#: udata_front/models.py:16
-msgid "Reference Data"
+#: udata/auth/forms.py:52
+msgid "Vous devez accepter les CGU pour continuer."
 msgstr ""
 
-#: udata_front/models.py:17
-msgid "Transport"
+#: udata/auth/forms.py:73 udata/tests/forms/test_current_user_field.py:192
+msgid "Password must be changed for security reasons"
+msgstr "A senha deve ser alterada por razões de segurança"
+
+#: udata/auth/forms.py:104
+msgid "New email"
 msgstr ""
 
-#: udata_front/faqs_plugin/views.py:61
-msgid "Thank you for your message. We'll get back to you shortly."
+#: udata/auth/forms.py:106
+msgid "Retype email"
 msgstr ""
 
-#: udata_front/frontend/helpers.py:192
-msgid "Anonymous user"
+#: udata/auth/forms.py:107
+msgid "Email does not match"
 msgstr ""
 
-#: udata_front/frontend/helpers.py:321
-msgctxt "month-format"
-msgid "yyyy/MM"
+#: udata/auth/forms.py:109 udata/templates/security/change_email.html:10
+#: udata/templates/security/change_email.html:16
+msgid "Change email"
 msgstr ""
 
-#: udata_front/frontend/helpers.py:325
-msgctxt "day-format"
-msgid "yyyy/MM/dd"
-msgstr ""
-
-#: udata_front/frontend/helpers.py:349
-#, python-format
-msgid "%(start)s to %(end)s"
-msgstr ""
-
-#: udata_front/frontend/helpers.py:351 udata_front/frontend/helpers.py:377
-#: udata_front/tests/frontend/test_frontend_filters.py:197
-#: udata_front/tests/frontend/test_frontend_filters.py:198
-#: udata_front/tests/frontend/test_frontend_filters.py:226
-#: udata_front/tests/frontend/test_frontend_filters.py:227
-#, python-format
-msgid "since %(start)s"
-msgstr ""
-
-#: udata_front/frontend/helpers.py:389
-msgid "today"
-msgstr ""
-
-#: udata_front/frontend/helpers.py:401
-#, python-format
-msgid "on %(date)s"
-msgstr ""
-
-#: udata_front/frontend/resource_helpers.py:23
-msgid "B"
-msgstr ""
-
-#: udata_front/harvesters/ckanpt.py:53 udata_front/harvesters/ogc.py:34
-msgid "Organization"
-msgstr ""
-
-#: udata_front/harvesters/ckanpt.py:54
-msgid "A CKAN Organization name"
-msgstr ""
-
-#: udata_front/harvesters/ckanpt.py:55 udata_front/harvesters/odspt.py:46
-#: udata_front/harvesters/ogc.py:36
-msgid "Tag"
-msgstr ""
-
-#: udata_front/harvesters/ckanpt.py:55
-msgid "A CKAN tag name"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:46
-msgid "A tag name"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:47
-msgid "Publisher"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:47
-msgid "A publisher name"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:50
-msgid "Harvest Inspire datasets"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:51
-msgid "Whether this harvester should import datasets coming from Inspire"
-msgstr ""
-
-#: udata_front/harvesters/odspt.py:255
+#: udata/auth/password_validation.py:26
 #, python-brace-format
-msgid "Export to {format}"
+msgid "Password must be at least {pass_length} characters long"
 msgstr ""
 
-#: udata_front/harvesters/ogc.py:34
-msgid "A OGC Organization name"
+#: udata/auth/password_validation.py:33
+msgid "Password must contain lowercases"
+msgstr "A senha deve conter letras minúsculas"
+
+#: udata/auth/password_validation.py:39
+msgid "Password must contain digits"
+msgstr "Password deve conter um ou mais dígitos"
+
+#: udata/auth/password_validation.py:45
+msgid "Password must contain uppercases"
+msgstr "A senha deve conter maiúsculas"
+
+#: udata/auth/password_validation.py:51
+msgid "Password must contain symbols"
+msgstr "A palavra-passe pode conter símbolos"
+
+#: udata/auth/views.py:52
+msgid "Confirm change of email instructions"
 msgstr ""
 
-#: udata_front/harvesters/ogc.py:36
-msgid "A OGC tag name"
+#: udata/commands/init.py:32
+msgid "Do you want to create a superadmin user?"
+msgstr "Deseja criar um utilizador superadmin?"
+
+#: udata/commands/init.py:37
+msgid "Do you want to import some data-related license?"
+msgstr "Quer importar dados relacionados com licenças?"
+
+#: udata/commands/init.py:41
+msgid "Do you want to import some spatial zones (countries)?"
+msgstr "Você deseja importar algumas zonas espaciais (países)?"
+
+#: udata/commands/init.py:45
+msgid "Do you want to create some sample data?"
+msgstr "Quer criar alguns dados de exemplo?"
+
+#: udata/commands/init.py:49
+msgid "Your udata instance is ready!"
+msgstr "O uData foi iniciado com sucesso!"
+
+#: udata/core/owned.py:64 udata/forms/fields.py:759
+#: udata/tests/api/test_dataservices_api.py:550
+msgid "You can only set yourself as owner"
+msgstr "Apenas pode definir-se como proprietário"
+
+#: udata/core/owned.py:73
+msgid "Unknown organization"
 msgstr ""
 
-#: udata_front/harvesters/ogc.py:37
-msgid "Remote ID"
+#: udata/core/owned.py:77 udata/forms/fields.py:791
+#: udata/tests/api/test_dataservices_api.py:563
+msgid "Permission denied for this organization"
+msgstr "Permissão recusada para esta organização"
+
+#: udata/core/badges/forms.py:12
+msgid "Kind"
+msgstr "Tipo"
+
+#: udata/core/badges/forms.py:15
+msgid "Kind of badge (certified, etc)"
+msgstr "Tipo de insígnia (certificada, etc)"
+
+#: udata/core/contact_point/api.py:62
+msgid "An existing contact point already exists with these informations."
 msgstr ""
 
-#: udata_front/harvesters/ogc.py:37
-msgid "A dataset remote id"
+#: udata/core/contact_point/forms.py:12 udata/core/jobs/forms.py:27
+#: udata/core/organization/forms.py:46 udata/core/post/forms.py:15
+#: udata/core/topic/forms.py:37 udata/harvest/forms.py:78
+#: udata/templates/api/admin.html:10
+msgid "Name"
+msgstr "Nome"
+
+#: udata/core/contact_point/forms.py:15 udata/core/user/forms.py:21
+msgid "Email"
+msgstr "E-mail"
+
+#: udata/core/contact_point/forms.py:17
+msgid "Contact form"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:46
-#: udata_front/theme/gouvfr/__init__.py:116
-msgid "Data"
+#: udata/core/contact_point/forms.py:17
+msgid "The organization web contact form"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:47
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:11
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:27
-msgid "API"
-msgstr ""
+#: udata/core/contact_point/forms.py:20 udata/core/dataset/forms.py:115
+#: udata/core/dataset/forms.py:189 udata/core/discussions/forms.py:13
+#: udata/core/discussions/forms.py:29 udata/core/topic/forms.py:35
+#: udata/harvest/forms.py:87
+msgid "Publish as"
+msgstr "Publicar como"
 
-#: udata_front/theme/gouvfr/__init__.py:48
-#: udata_front/theme/gouvfr/__init__.py:117
-#: udata_front/theme/gouvfr/templates/dataset/display.html:284
-#: udata_front/theme/gouvfr/templates/home.html:61
-#: udata_front/theme/gouvfr/templates/organization/display.html:28
-#: udata_front/theme/gouvfr/templates/organization/display.html:145
-#: udata_front/theme/gouvfr/templates/organization/display.html:199
-#: udata_front/theme/gouvfr/templates/organization/list.html:25
-#: udata_front/theme/gouvfr/templates/page.html:39
-#: udata_front/theme/gouvfr/templates/post/display.html:81
-#: udata_front/theme/gouvfr/templates/reuse/display.html:37
-#: udata_front/theme/gouvfr/templates/reuse/list.html:6
-#: udata_front/theme/gouvfr/templates/reuse/list.html:16
-#: udata_front/theme/gouvfr/templates/reuse/list.html:48
-#: udata_front/theme/gouvfr/templates/topic/browse.html:15
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:25
-#: udata_front/theme/gouvfr/templates/user/following.html:32
-#: udata_front/theme/gouvfr/templates/user/reuses.html:17
-#: udata_front/views/site.py:94
-msgid "Reuses"
-msgstr ""
+#: udata/core/contact_point/forms.py:21 udata/core/organization/forms.py:94
+msgid "Role"
+msgstr "Perfil"
 
-#: udata_front/theme/gouvfr/__init__.py:49
-#: udata_front/theme/gouvfr/__init__.py:118
-#: udata_front/theme/gouvfr/templates/home.html:63
-#: udata_front/theme/gouvfr/templates/organization/display.html:37
-#: udata_front/theme/gouvfr/templates/organization/list.html:6
-#: udata_front/theme/gouvfr/templates/organization/list.html:16
-#: udata_front/theme/gouvfr/templates/organization/list.html:30
-#: udata_front/theme/gouvfr/templates/user/base.html:111
-#: udata_front/theme/gouvfr/templates/user/following.html:33
-#: udata_front/views/site.py:91
-msgid "Organizations"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:50
-msgid "Getting started"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:54
-msgid "About open data"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:59
-#, python-brace-format
-msgid "What is {site}?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:66
-#: udata_front/theme/gouvfr/templates/home.html:139
-msgid "How to publish data?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:71
-msgid "How to use data?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:78
-msgid "Documentation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:82
-#: udata_front/theme/gouvfr/__init__.py:168
-msgid "Licenses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:85
-#: udata_front/theme/gouvfr/__init__.py:169
-msgid "Terms of use"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:88
-#: udata_front/theme/gouvfr/__init__.py:172
-msgid "Accessibility"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:93
-msgid "Acesso Catalogo via SPARQL"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:98
-#: udata_front/theme/gouvfr/__init__.py:139
-msgid "API Tutorial"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:101
-msgid "API Reference"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:107
-#: udata_front/theme/gouvfr/templates/home.html:26
-#: udata_front/theme/gouvfr/templates/post/display.html:19
-msgid "News"
-msgstr ""
-
-#: udata_front/theme/gouvfr/__init__.py:108
-#: udata_front/theme/gouvfr/templates/custom/contact.html:11
+#: udata/core/contact_point/models.py:9
 msgid "Contact"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:115
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:15
-#: udata_front/theme/gouvfr/templates/topic/display.html:16
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:15
-msgid "Topics"
+#: udata/core/contact_point/models.py:10
+msgid "Creator"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:129
-msgid "Data catalog"
+#: udata/core/contact_point/models.py:11
+msgid "Publisher"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:131
-msgid "Portal for European data"
+#: udata/core/contact_point/models.py:26 udata/tests/api/test_contact_points.py:142
+msgid "At least an email or a contact form is required for a contact point"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:138
-msgid "About us"
+#: udata/core/dataservices/activities.py:23
+msgid "created a dataservice"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:140
-msgid "Roadmap and news"
+#: udata/core/dataservices/activities.py:29
+msgid "updated a dataservice"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:141
-msgid "Webinars"
+#: udata/core/dataservices/activities.py:36
+msgid "deleted a dataservice"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:142
-msgid "Statistics"
+#: udata/core/dataservices/api.py:62
+msgid "Latest APIs"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:143
-msgid "Contact us"
+#: udata/core/dataservices/models.py:132
+msgid "You can only set one condition for a given access audience role"
 msgstr ""
 
-#: udata_front/theme/gouvfr/__init__.py:170
-msgid "Tracking and privacy"
+#: udata/core/dataservices/models.py:181
+msgid "dataservice"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/base.html:9
-msgid "You must be connected to do this action."
+#: udata/core/dataservices/models.py:270 udata/core/dataset/models.py:605
+#: udata/mongo/datetime_fields.py:60
+msgid "Creation date"
+msgstr "Data de criação"
+
+#: udata/core/dataservices/models.py:276 udata/core/dataset/models.py:610
+#: udata/mongo/datetime_fields.py:66
+msgid "Last modification date"
+msgstr "Data da última modificação"
+
+#: udata/core/dataset/activities.py:24
+msgid "created a dataset"
+msgstr "criou um dataset"
+
+#: udata/core/dataset/activities.py:30
+msgid "updated a dataset"
+msgstr "atualizou um dataset"
+
+#: udata/core/dataset/activities.py:37
+msgid "deleted a dataset"
+msgstr "apagou um dataset"
+
+#: udata/core/dataset/activities.py:43
+msgid "added a resource to a dataset"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/carousel.html:6
-msgid "Best reuse cases"
+#: udata/core/dataset/activities.py:49
+msgid "updated a resource"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataset-apis.html:3
-#: udata_front/theme/gouvfr/templates/dataset/display.html:394
-#: udata_front/views/dataset.py:160
-#, python-format
-msgid "%(num)d API"
-msgid_plural "%(num)d APIs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:169
-msgid "Download from "
+#: udata/core/dataset/activities.py:55
+msgid "removed a resource from a dataset"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:95
-#: udata_front/theme/gouvfr/templates/dataset/display.html:122
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:177
-msgid "Producer"
+#: udata/core/dataset/api.py:328
+msgid "Latest datasets"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:183
-msgid "Uploader"
+#: udata/core/dataset/constants.py:19
+msgid "Real time"
+msgstr "Tempo real"
+
+#: udata/core/dataset/constants.py:20
+msgid "Every minute"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:205
-msgid "Add to your own website"
+#: udata/core/dataset/constants.py:21
+msgid "Every five minutes"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:206
-#: udata_front/theme/gouvfr/templates/header.html:139
-#: udata_front/theme/gouvfr/templates/header.html:177
-msgid "Close"
+#: udata/core/dataset/constants.py:22
+msgid "Every ten minutes"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataset/display.html:656
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:206
-msgid "Embed"
+#: udata/core/dataset/constants.py:25
+msgid "Every fifteen minutes"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataset/display.html:590
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:209
+#: udata/core/dataset/constants.py:28
+msgid "Every thirty minute"
+msgstr ""
+
+#: udata/core/dataset/constants.py:29
+msgid "Every hour"
+msgstr ""
+
+#: udata/core/dataset/constants.py:30
+msgid "Every two hours"
+msgstr ""
+
+#: udata/core/dataset/constants.py:31
+msgid "Every three hours"
+msgstr ""
+
+#: udata/core/dataset/constants.py:32
+msgid "Every twelve hours"
+msgstr ""
+
+#: udata/core/dataset/constants.py:33
+msgid "Several times a day"
+msgstr ""
+
+#: udata/core/dataset/constants.py:34
+msgid "Three times a day"
+msgstr "Três vezes por dia"
+
+#: udata/core/dataset/constants.py:35
+msgid "Twice a day"
+msgstr ""
+
+#: udata/core/dataset/constants.py:36 udata/harvest/models.py:22
+msgid "Daily"
+msgstr "Diário"
+
+#: udata/core/dataset/constants.py:37
+msgid "Five times a week"
+msgstr ""
+
+#: udata/core/dataset/constants.py:40
+msgid "Three times a week"
+msgstr "Três vezes por semana"
+
+#: udata/core/dataset/constants.py:43
+msgid "Twice a week"
+msgstr ""
+
+#: udata/core/dataset/constants.py:44 udata/harvest/models.py:21
+msgid "Weekly"
+msgstr "Semanal"
+
+#: udata/core/dataset/constants.py:45
+msgid "Every two weeks"
+msgstr ""
+
+#: udata/core/dataset/constants.py:48
+msgid "Three times a month"
+msgstr "Três vezes por mês"
+
+#: udata/core/dataset/constants.py:51
+msgid "Twice a month"
+msgstr ""
+
+#: udata/core/dataset/constants.py:52 udata/harvest/models.py:20
+msgid "Monthly"
+msgstr "Mensal"
+
+#: udata/core/dataset/constants.py:53
+msgid "Every two months"
+msgstr ""
+
+#: udata/core/dataset/constants.py:54
+msgid "Quarterly"
+msgstr "Trimestral"
+
+#: udata/core/dataset/constants.py:57
+msgid "Three times a year"
+msgstr "Três vezes por ano"
+
+#: udata/core/dataset/constants.py:60
+msgid "Twice a year"
+msgstr ""
+
+#: udata/core/dataset/constants.py:61
+msgid "Annually"
+msgstr ""
+
+#: udata/core/dataset/constants.py:62
+msgid "Every two years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:63
+msgid "Every three years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:64
+msgid "Every four years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:65
+msgid "Every five years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:66
+msgid "Every ten years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:67
+msgid "Every twenty years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:68
+msgid "Every thirty years"
+msgstr ""
+
+#: udata/core/dataset/constants.py:69
+msgid "Punctual"
+msgstr "Pontual"
+
+#: udata/core/dataset/constants.py:70
+msgid "Irregular"
+msgstr "Irregular"
+
+#: udata/core/dataset/constants.py:71
+msgid "Never"
+msgstr ""
+
+#: udata/core/dataset/constants.py:72
+msgid "Not planned"
+msgstr ""
+
+#: udata/core/dataset/constants.py:73 udata/core/dataset/constants.py:149
+#: udata/core/spatial/constants.py:5
+msgid "Other"
+msgstr "Outro"
+
+#: udata/core/dataset/constants.py:74
+msgid "Unknown"
+msgstr "Desconhecido"
+
+#: udata/core/dataset/constants.py:144
+msgid "Main file"
+msgstr "Ficheiro principal"
+
+#: udata/core/dataset/constants.py:145
+msgid "Documentation"
+msgstr "Documentação"
+
+#: udata/core/dataset/constants.py:146
+msgid "Update"
+msgstr "Atualização"
+
+#: udata/core/dataset/constants.py:147 udata/core/reuse/constants.py:4
+msgid "API"
+msgstr "API"
+
+#: udata/core/dataset/constants.py:148
+msgid "Code repository"
+msgstr "Repositório de código"
+
+#: udata/core/dataset/constants.py:156
+msgid "Uploaded file"
+msgstr "Ficheiro carregado"
+
+#: udata/core/dataset/constants.py:157
+msgid "Remote file"
+msgstr "Ficheiro remoto"
+
+#: udata/core/dataset/forms.py:32
+msgid "Checksum value"
+msgstr ""
+
+#: udata/core/dataset/forms.py:43
+msgid "URL of the schema"
+msgstr ""
+
+#: udata/core/dataset/forms.py:44
+msgid "Name of the schema"
+msgstr ""
+
+#: udata/core/dataset/forms.py:45
+msgid "Version of the schema"
+msgstr ""
+
+#: udata/core/dataset/forms.py:64 udata/core/dataset/forms.py:146
+#: udata/core/discussions/forms.py:14 udata/core/discussions/forms.py:25
+#: udata/core/site/forms.py:12 udata/core/topic/forms.py:13
+#: udata/templates/mail/discussion_closed.html:26
+#: udata/templates/mail/new_discussion.html:25
+#: udata/templates/mail/new_discussion_comment.html:26
+msgid "Title"
+msgstr "Título"
+
+#: udata/core/dataset/forms.py:67 udata/core/dataset/forms.py:150
+#: udata/core/jobs/forms.py:28 udata/core/organization/forms.py:50
+#: udata/core/topic/forms.py:14 udata/core/topic/forms.py:38
+#: udata/harvest/forms.py:80
+msgid "Description"
+msgstr "Descrição"
+
+#: udata/core/dataset/forms.py:70
+msgid "File type"
+msgstr "Tipo de ficheiro"
+
+#: udata/core/dataset/forms.py:74
+msgid "Whether the resource is an uploaded file, a remote file or an API"
+msgstr "Seja o recurso um arquivo carregado, um arquivo remoto ou uma API"
+
+#: udata/core/dataset/forms.py:77
+msgid "Type"
+msgstr "Tipo"
+
+#: udata/core/dataset/forms.py:81
+msgid "Resource type (documentation, API...)"
+msgstr "Tipo de recurso (documentação, API...)"
+
+#: udata/core/dataset/forms.py:83 udata/harvest/forms.py:82
+msgid "URL"
+msgstr "URL"
+
+#: udata/core/dataset/forms.py:85
+msgid "Format"
+msgstr "Formato"
+
+#: udata/core/dataset/forms.py:90
+msgid "Mime type"
+msgstr "Formato de ficheiro"
+
+#: udata/core/dataset/forms.py:91
+msgid "The mime type associated to the extension. (ex: text/plain)"
+msgstr "O mime type associado à extensão. (ex: texto/sem formatação)"
+
+#: udata/core/dataset/forms.py:94
+msgid "Size"
+msgstr "Tamanho"
+
+#: udata/core/dataset/forms.py:94
+msgid "The file size in bytes"
+msgstr "Tamanho do ficheiro em bytes"
+
+#: udata/core/dataset/forms.py:113
+msgid "Related dataset"
+msgstr "Dataset relacionado"
+
+#: udata/core/dataset/forms.py:138 udata/tests/api/test_datasets_api.py:1067
+msgid "Wrong contact point id or contact point ownership mismatch"
+msgstr ""
+
+#: udata/core/dataset/forms.py:148 udata/core/organization/forms.py:48
+msgid "Acronym"
+msgstr "Sigla"
+
+#: udata/core/dataset/forms.py:148
+msgid "An optional acronym"
+msgstr "Um acrónimo opcional"
+
+#: udata/core/dataset/forms.py:152
+msgid "The details about the dataset (collection process, specifics...)."
+msgstr "Os detalhes do dataset (processo de coleta, especificidades...)."
+
+#: udata/core/dataset/forms.py:155
+msgid "Short description"
+msgstr ""
+
+#: udata/core/dataset/forms.py:157
+msgid "A short description of the dataset."
+msgstr ""
+
+#: udata/core/dataset/forms.py:159
+msgid "License"
+msgstr "Licença"
+
+#: udata/core/dataset/forms.py:161
+msgid "Update frequency"
+msgstr "Frequência de atualização"
+
+#: udata/core/dataset/forms.py:171
+msgid "The frequency at which data are updated."
+msgstr "A frequência com que os dados são atualizados."
+
+#: udata/core/dataset/forms.py:173
+msgid "Expected frequency date"
+msgstr "Data de frequência esperada"
+
+#: udata/core/dataset/forms.py:177
 msgid "Temporal coverage"
+msgstr "Cobertura temporal"
+
+#: udata/core/dataset/forms.py:177
+msgid "The period covered by the data"
+msgstr "O período coberto pelos dados"
+
+#: udata/core/dataset/forms.py:180 udata/core/spatial/forms.py:85
+#: udata/core/topic/forms.py:86
+msgid "Spatial coverage"
+msgstr "Cobertura espacial"
+
+#: udata/core/dataset/forms.py:180 udata/core/topic/forms.py:86
+msgid "The geographical area covered by the data."
+msgstr "A área geográfica abrangida pelos dados."
+
+#: udata/core/dataset/forms.py:182 udata/core/post/forms.py:26
+#: udata/core/site/forms.py:13 udata/core/topic/forms.py:15
+#: udata/core/topic/forms.py:89
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: udata/core/dataset/forms.py:182
+msgid "Some taxonomy keywords"
+msgstr "Algumas palavras-chave de taxonomia"
+
+#: udata/core/dataset/forms.py:184 udata/core/topic/forms.py:90
+msgid "Private"
+msgstr "Privado"
+
+#: udata/core/dataset/forms.py:185
+msgid "Restrict the dataset visibility to you or your organization only."
+msgstr "Restringir a visibilidade do dataset para si ou para a sua organização apenas."
+
+#: udata/core/dataset/models.py:67
+msgid "Pivotal data"
+msgstr "Dados centrais"
+
+#: udata/core/dataset/models.py:68
+msgid "Reference data public service"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:213
-msgid "to"
+#: udata/core/dataset/models.py:69
+msgid "Inspire"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:221
-msgid "Granularity"
+#: udata/core/dataset/models.py:70
+msgid "High value datasets"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:225
-msgid "Territory"
+#: udata/core/dataset/models.py:71
+msgid "Certified statistic series"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataset/display.html:585
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:232
-msgid "Frequency"
+#: udata/core/dataset/models.py:72
+msgid "Statistical series of general interest"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/embed-dataset.html:237
-msgid "License:"
+#: udata/core/dataset/models.py:152
+msgid "A schema must contains a name or an URL when a version is provided."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/footer.html:9
-msgid "Open Data"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:19
-msgid "Platform"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:29
-msgid "Resources"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:39
-msgid "Development"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:46
-msgid "Portal's API"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:54
+#: udata/core/dataset/models.py:184 udata/tests/api/test_datasets_api.py:1163
+#: udata/tests/api/test_datasets_api.py:1174
 #, python-brace-format
-msgid "Open-source engine: udata ({version})"
+msgid "Schema name \"{schema}\" is not an allowed value. Allowed values: {values}"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/footer.html:62
-msgid "data.gouv.fr extension: udata-front"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/footer.html:65
+#: udata/core/dataset/models.py:203 udata/tests/api/test_datasets_api.py:1186
 #, python-brace-format
-msgid "udata theme extension: udata-front ({version})"
+msgid "Version \"{version}\" is not an allowed value for the schema \"{name}\". Allowed versions: {values}"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/footer.html:90
-#: udata_front/theme/gouvfr/templates/header.html:64
-msgid "Go back to home page"
+#: udata/core/dataset/models.py:481 udata/core/dataset/rdf.py:595
+#: udata/tests/dataset/test_dataset_rdf.py:722
+#: udata/tests/dataset/test_dataset_rdf.py:735
+msgid "Nameless resource"
+msgstr "Recurso sem nome"
+
+#: udata/core/dataset/models.py:584
+msgid "Future date of update"
+msgstr "Data futura de atualização"
+
+#: udata/core/dataset/models.py:616
+msgid "Last update of the dataset resources"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/footer.html:98
-msgid "A product of the Direction Interministérielle du Numérique (DINUM)."
-msgstr ""
+#: udata/core/dataset/models.py:671
+msgid "dataset"
+msgstr "conjunto de dados"
 
-#: udata_front/theme/gouvfr/templates/footer.html:115
-msgid "Select a Language"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:7
-msgid "A dataset"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:8
-msgid "An API"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:9
-msgid "A reuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:10
-msgid "A harvester"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:11
-msgid "An organization"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:12
-msgid "A post"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:32
-msgid ""
-"Internet Explorer 8 and below are not anymore supported.\n"
-"                Please upgrade or change your browser to access the "
-"website.\n"
-"                <a class=\"fr-link\" "
-"href=\"http://browsehappy.com/\">More information →</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:47
-#: udata_front/theme/gouvfr/templates/header.html:49
-#: udata_front/theme/gouvfr/templates/header.html:151
-#: udata_front/theme/gouvfr/templates/header.html:155
-#: udata_front/theme/gouvfr/templates/header.html:163
-#: udata_front/theme/gouvfr/templates/header.html:165
-msgid "Search for data"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:56
-#: udata_front/theme/gouvfr/templates/header.html:59
-msgid "Open menu"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:97
-msgid "Administration"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:112
-msgid "Logout"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:121
-#: udata_front/theme/gouvfr/templates/security/login_user.html:17
-#: udata_front/theme/gouvfr/templates/security/login_user.html:30
-#: udata_front/theme/gouvfr/templates/territories/territory.html:28
-msgid "Log in"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:130
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:57
-#: udata_front/theme/gouvfr/templates/security/register_user.html:15
-#: udata_front/theme/gouvfr/templates/security/register_user.html:68
-#: udata_front/theme/gouvfr/templates/security/register_user.html:74
-msgid "Sign up"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:179
-msgid "Main Menu"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:229
-msgid "Publish on "
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/header.html:263
+#: udata/core/dataset/rdf.py:593 udata/tests/dataset/test_dataset_rdf.py:692
+#: udata/tests/dataset/test_dataset_rdf.py:709
 #, python-brace-format
-msgid ""
-"This is a degraded experience of {site}. Please enable JavaScript and use"
-" an up to date browser."
-msgstr ""
+msgid "{format} resource"
+msgstr "{format} recurso"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_error.html:12
-#: udata_front/theme/gouvfr/templates/errors/base.html:15
-#: udata_front/theme/gouvfr/templates/home.html:4
-#: udata_front/theme/gouvfr/templates/macros/breadcrumb.html:15
-#: udata_front/theme/gouvfr/templates/macros/metadata.html:2
-msgid "Home"
-msgstr ""
+#: udata/core/dataset/tasks.py:104
+msgid "You need to update some frequency-based datasets"
+msgstr "É necessário atualizar alguns datasets baseados em frequência"
 
-#: udata_front/theme/gouvfr/templates/home.html:5
+#: udata/core/discussions/forms.py:16 udata/core/discussions/forms.py:31
+#: udata/core/discussions/forms.py:37 udata/core/organization/forms.py:83
+#: udata/core/organization/forms.py:87 udata/harvest/forms.py:97
+msgid "Comment"
+msgstr "Comentário"
+
+#: udata/core/discussions/forms.py:18
+msgid "Subject"
+msgstr "Assunto"
+
+#: udata/core/discussions/tasks.py:26
 #, python-format
-msgid "%(site)s home"
-msgstr ""
+msgid "Your %(type)s have a new discussion"
+msgstr "O seu %(type)s tem uma nova discussão"
 
-#: udata_front/theme/gouvfr/templates/home.html:6
-msgid "home"
-msgstr ""
+#: udata/core/discussions/tasks.py:45
+#, python-format
+msgid "%(user)s commented your discussion"
+msgstr "%(user)s comentou a sua discussão"
 
-#: udata_front/theme/gouvfr/templates/home.html:40
-msgid "Open platform for Portuguese public data"
-msgstr ""
+#: udata/core/discussions/tasks.py:61
+msgid "A discussion has been closed"
+msgstr "Uma discussão foi fechada"
 
-#: udata_front/theme/gouvfr/templates/home.html:43
-msgid "Use, share and improve public data"
-msgstr ""
+#: udata/core/jobs/forms.py:29
+msgid "Tasks"
+msgstr "Tarefas"
 
-#: udata_front/theme/gouvfr/templates/home.html:47
-msgid "Discover datasets"
-msgstr ""
+#: udata/core/jobs/forms.py:30
+msgid "Enabled"
+msgstr "Activado"
 
-#: udata_front/theme/gouvfr/templates/home.html:50
-msgid "Explore data reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:41
-#: udata_front/theme/gouvfr/templates/dataset/followers.html:6
-#: udata_front/theme/gouvfr/templates/dataset/list.html:8
-#: udata_front/theme/gouvfr/templates/dataset/list.html:14
-#: udata_front/theme/gouvfr/templates/dataset/list.html:32
-#: udata_front/theme/gouvfr/templates/home.html:59
-#: udata_front/theme/gouvfr/templates/organization/display.html:117
-#: udata_front/theme/gouvfr/templates/organization/display.html:179
-#: udata_front/theme/gouvfr/templates/page.html:32
-#: udata_front/theme/gouvfr/templates/post/display.html:72
-#: udata_front/theme/gouvfr/templates/topic/browse.html:9
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:25
-#: udata_front/theme/gouvfr/templates/user/datasets.html:16
-#: udata_front/theme/gouvfr/templates/user/following.html:31
-msgid "Datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:205
-#: udata_front/theme/gouvfr/templates/dataset/display.html:274
-#: udata_front/theme/gouvfr/templates/home.html:60 udata_front/views/site.py:90
-msgid "Files"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:62
-#: udata_front/theme/gouvfr/templates/user/activity.html:6
-#: udata_front/theme/gouvfr/templates/user/base.html:17
-#: udata_front/theme/gouvfr/templates/user/datasets.html:6
-#: udata_front/theme/gouvfr/templates/user/followers.html:8
-#: udata_front/theme/gouvfr/templates/user/following.html:8
-#: udata_front/theme/gouvfr/templates/user/following.html:34
-#: udata_front/theme/gouvfr/templates/user/list.html:5
-#: udata_front/theme/gouvfr/templates/user/list.html:16
-#: udata_front/theme/gouvfr/templates/user/reuses.html:7
-#: udata_front/views/site.py:95
-msgid "Users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:207
-#: udata_front/theme/gouvfr/templates/dataset/display.html:234
-#: udata_front/theme/gouvfr/templates/dataset/display.html:294
-#: udata_front/theme/gouvfr/templates/home.html:64
-#: udata_front/theme/gouvfr/templates/reuse/display.html:184
-#: udata_front/views/site.py:96
-msgid "Discussions"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:75
-msgid "Portuguese data catalog"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:77
-msgid ""
-"Discover data on all subjects, made by the administration and civil "
-"society."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:90
+#: udata/core/jobs/models.py:18
 #, python-brace-format
-msgid "They publish data on {site}"
-msgstr ""
+msgid "every {0.period_singular}"
+msgstr "cada {0.period_singular}"
 
-#: udata_front/theme/gouvfr/templates/home.html:133
-msgid "See data"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:16
-#: udata_front/theme/gouvfr/templates/home.html:149
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:8
-msgid "datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:171
-msgid "A dynamic and engaged community"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:173
-msgid "Share your data usage and exchange between data producers and reusers."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:186
+#: udata/core/jobs/models.py:19
 #, python-brace-format
-msgid "They reuse data from {site}"
+msgid "every {0.every} {0.period}"
+msgstr "cada {0.period} {0.every}"
+
+#: udata/core/organization/activities.py:18
+msgid "created an organization"
+msgstr "criou uma organização"
+
+#: udata/core/organization/activities.py:25
+msgid "updated an organization"
+msgstr "atualizou uma organização"
+
+#: udata/core/organization/constants.py:4
+msgid "Administrator"
+msgstr "Administrador"
+
+#: udata/core/organization/constants.py:5
+msgid "Editor"
+msgstr "Editor"
+
+#: udata/core/organization/constants.py:11 udata/features/transfer/models.py:13
+#: udata/harvest/models.py:28 udata/harvest/models.py:40 udata/harvest/models.py:88
+msgid "Pending"
+msgstr "Pendente"
+
+#: udata/core/organization/constants.py:12 udata/features/transfer/models.py:14
+#: udata/harvest/models.py:89
+msgid "Accepted"
+msgstr "Aceite"
+
+#: udata/core/organization/constants.py:13 udata/features/transfer/models.py:15
+#: udata/harvest/models.py:90
+msgid "Refused"
+msgstr "Recusado"
+
+#: udata/core/organization/forms.py:25
+#: udata/tests/api/test_organizations_api.py:164
+msgid "A siret number is made of 14 digits"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:229
-msgid "See reuses"
+#: udata/core/organization/forms.py:36
+#: udata/tests/api/test_organizations_api.py:176
+msgid "A siret number is only made of digits"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:235
-msgid "How to reuse data?"
+#: udata/core/organization/forms.py:39
+#: udata/tests/api/test_organizations_api.py:170
+msgid "Invalid Siret number"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:245
-#: udata_front/theme/gouvfr/templates/reuse/list.html:8
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:8
-msgid "reuses"
+#: udata/core/organization/forms.py:48
+msgid "Shorter organization name"
+msgstr "Nome curto da organização"
+
+#: udata/core/organization/forms.py:52
+msgid "The details about your organization"
+msgstr "Os detalhes da sua organização"
+
+#: udata/core/organization/forms.py:54 udata/core/user/forms.py:23
+msgid "Website"
+msgstr "Sítio web"
+
+#: udata/core/organization/forms.py:54
+msgid "The organization website URL"
+msgstr "O URL da página da organização"
+
+#: udata/core/organization/forms.py:55
+msgid "Logo"
+msgstr "Logótipo"
+
+#: udata/core/organization/forms.py:57
+msgid "Business id"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:264
+#: udata/core/organization/forms.py:57
+msgid "Business identification number"
+msgstr ""
+
+#: udata/core/organization/models.py:38
+msgid "Public Service"
+msgstr "Serviço público"
+
+#: udata/core/organization/models.py:39
+msgid "Certified"
+msgstr "Certificado"
+
+#: udata/core/organization/models.py:40
+msgid "Association"
+msgstr ""
+
+#: udata/core/organization/models.py:41
+msgid "Company"
+msgstr ""
+
+#: udata/core/organization/models.py:42
+msgid "Local authority"
+msgstr ""
+
+#: udata/core/organization/tasks.py:52
+msgid "New membership request"
+msgstr "Novo pedido de adesão"
+
+#: udata/core/organization/tasks.py:62 udata/core/organization/tasks.py:74
+#, python-format
+msgid "You are now a member of the organization \"%(org)s\""
+msgstr "Você é agora um membro da organização \"%(org)s\""
+
+#: udata/core/organization/tasks.py:65
+msgid "Membership refused"
+msgstr "Pedido de adesão recusado"
+
+#: udata/core/organization/tasks.py:85
+#, python-format
+msgid "Your organization \"%(name)s\" has been certified"
+msgstr "A sua organização \"%(name)s\" foi certificada"
+
+#: udata/core/organization/tasks.py:102
+#, python-format
+msgid "Your organization \"%(name)s\" has been identified as public service"
+msgstr "A sua organização \"%(name)s\" foi identificada como serviço público"
+
+#: udata/core/organization/tasks.py:119
+#, python-format
+msgid "Your organization \"%(name)s\" has been identified as a company"
+msgstr ""
+
+#: udata/core/organization/tasks.py:132
+#, python-format
+msgid "Your organization \"%(name)s\" has been identified as an association"
+msgstr ""
+
+#: udata/core/organization/tasks.py:150
+#, python-format
+msgid "Your organization \"%(name)s\" has been identified as a local authority"
+msgstr ""
+
+#: udata/core/post/api.py:118
+msgid "Latests posts"
+msgstr ""
+
+#: udata/core/post/constants.py:9
+msgid "Markdown"
+msgstr ""
+
+#: udata/core/post/constants.py:10
+msgid "HTML"
+msgstr "HTML"
+
+#: udata/core/post/forms.py:16
+msgid "Headline"
+msgstr "Cabeçalho"
+
+#: udata/core/post/forms.py:17
+msgid "Content"
+msgstr "Conteúdo"
+
+#: udata/core/post/forms.py:19
+msgid "Associated datasets"
+msgstr "Conjuntos de dados associados"
+
+#: udata/core/post/forms.py:20
+msgid "Associated reuses"
+msgstr "Reutilizações associadas"
+
+#: udata/core/post/forms.py:22
+msgid "Image"
+msgstr "Imagem"
+
+#: udata/core/post/forms.py:23
+msgid "Image credits"
+msgstr "Créditos da imagem"
+
+#: udata/core/post/forms.py:24
+msgid "Credit URL"
+msgstr "URL de créditos"
+
+#: udata/core/post/forms.py:29
+msgid "body type"
+msgstr ""
+
+#: udata/core/post/forms.py:29
+msgid "Specify your body type (HTML or markdown)"
+msgstr ""
+
+#: udata/core/post/models.py:55
+msgid "post"
+msgstr "artigo"
+
+#: udata/core/reports/constants.py:22
+msgid "Explicit content"
+msgstr ""
+
+#: udata/core/reports/constants.py:23
+msgid "Illegal content"
+msgstr ""
+
+#: udata/core/reports/constants.py:24 udata/core/reuse/constants.py:29
+msgid "Others"
+msgstr "Outros"
+
+#: udata/core/reports/constants.py:25
+msgid "Personal data"
+msgstr ""
+
+#: udata/core/reports/constants.py:26
+msgid "Security"
+msgstr ""
+
+#: udata/core/reports/constants.py:27
+msgid "Spam"
+msgstr ""
+
+#: udata/core/reuse/activities.py:18
+msgid "created a reuse"
+msgstr "criou uma reutilização"
+
+#: udata/core/reuse/activities.py:24
+msgid "updated a reuse"
+msgstr "atualizou uma reutilização"
+
+#: udata/core/reuse/activities.py:31
+msgid "deleted a reuse"
+msgstr "apagou uma reutilização"
+
+#: udata/core/reuse/api.py:140
+msgid "Latests reuses"
+msgstr ""
+
+#: udata/core/reuse/constants.py:5
+msgid "Application"
+msgstr "Aplicação"
+
+#: udata/core/reuse/constants.py:6
+msgid "Idea"
+msgstr "Ideia"
+
+#: udata/core/reuse/constants.py:7
+msgid "News Article"
+msgstr "Artigo de notícias"
+
+#: udata/core/reuse/constants.py:8
+msgid "Paper"
+msgstr "Papel"
+
+#: udata/core/reuse/constants.py:9
+msgid "Post"
+msgstr "Artigo"
+
+#: udata/core/reuse/constants.py:10
+msgid "Visualization"
+msgstr "Visualização"
+
+#: udata/core/reuse/constants.py:11
+msgid "Connected device"
+msgstr "Dispositivo ligado"
+
+#: udata/core/reuse/constants.py:15 udata/tests/reuse/test_reuse_model.py:110
+msgid "Health"
+msgstr "Saúde"
+
+#: udata/core/reuse/constants.py:16
+msgid "Transport and mobility"
+msgstr "Transporte e mobilidade"
+
+#: udata/core/reuse/constants.py:17
+msgid "Housing and development"
+msgstr "Habitação e desenvolvimento"
+
+#: udata/core/reuse/constants.py:18
+msgid "Food and agriculture"
+msgstr "Alimentos e agricultura"
+
+#: udata/core/reuse/constants.py:19
+msgid "Culture and recreation"
+msgstr "Cultura e recreação"
+
+#: udata/core/reuse/constants.py:20
+msgid "Economy and business"
+msgstr "Economia e empresas"
+
+#: udata/core/reuse/constants.py:21
+msgid "Environment and energy"
+msgstr "Ambiente e energia"
+
+#: udata/core/reuse/constants.py:22
+msgid "Work and training"
+msgstr ""
+
+#: udata/core/reuse/constants.py:23
+msgid "Politics and public life"
+msgstr "Política e vida pública"
+
+#: udata/core/reuse/constants.py:24
+msgid "Safety and security"
+msgstr "Proteção e Segurança"
+
+#: udata/core/reuse/constants.py:25
+msgid "Education and research"
+msgstr ""
+
+#: udata/core/reuse/constants.py:26
+msgid "Society and demography"
+msgstr "Sociedade e demografia"
+
+#: udata/core/reuse/constants.py:27
+msgid "Law and justice"
+msgstr "Lei e justiça"
+
+#: udata/core/reuse/constants.py:28
+msgid "Open data tools"
+msgstr "Abrir ferramentas de dados"
+
+#: udata/core/reuse/models.py:39
+msgid "This URL is already registered"
+msgstr "Este URL já está registado"
+
+#: udata/core/reuse/models.py:185
+msgid "reuse"
+msgstr "reutilização"
+
+#: udata/core/reuse/tasks.py:48
+msgid "New reuse"
+msgstr "Nova reutilização"
+
+#: udata/core/site/forms.py:13
+msgid "Some SEO keywords"
+msgstr "Algumas palavras-chave (SEO)"
+
+#: udata/core/site/forms.py:14
+msgid "Feed size"
+msgstr "Tamanho do feed"
+
+#: udata/core/site/forms.py:14
+msgid "Number of elements in feeds"
+msgstr "Número de elementos nos fluxos"
+
+#: udata/core/spatial/constants.py:4
+msgid "POI"
+msgstr "POI"
+
+#: udata/core/spatial/forms.py:48
 #, python-brace-format
-msgid "{site} mission"
+msgid "Unknown geoid(s): {identifiers}"
+msgstr "Identificador(es) GeoID desconhecido(s): {identifiers}"
+
+#: udata/core/spatial/forms.py:68
+msgid "Not a valid GeoJSON"
+msgstr "Não é um GeoJSON válido"
+
+#: udata/core/spatial/forms.py:85
+msgid "A list of covered territories"
+msgstr "Lista de territórios abrangidos"
+
+#: udata/core/spatial/forms.py:88
+msgid "Spatial granularity"
+msgstr "Granularidade espacial"
+
+#: udata/core/spatial/forms.py:89
+msgid "The size of the data increment"
+msgstr "O tamanho do incremento de dados"
+
+#: udata/core/spatial/translations.py:7
+msgid "French region"
+msgstr "Região francesa"
+
+#: udata/core/spatial/translations.py:8
+msgid "French intermunicipal (EPCI)"
+msgstr "Intermunicipalidade"
+
+#: udata/core/spatial/translations.py:9
+msgid "French county"
+msgstr "Condado francês"
+
+#: udata/core/spatial/translations.py:10
+msgid "French district"
+msgstr "Bairro francês"
+
+#: udata/core/spatial/translations.py:11
+msgid "French town"
+msgstr "Cidade francesa"
+
+#: udata/core/spatial/translations.py:12
+msgid "French canton"
+msgstr "Cantão francês"
+
+#: udata/core/spatial/translations.py:13
+msgid "Iris (Insee districts)"
+msgstr "Iris ( Distritos Insee)"
+
+#: udata/core/spatial/translations.py:14
+msgid "Country"
+msgstr "País"
+
+#: udata/core/spatial/translations.py:15
+msgid "World"
+msgstr "Mundo"
+
+#: udata/core/spatial/translations.py:16
+msgid "Country group"
+msgstr "Grupo de países"
+
+#: udata/core/spatial/translations.py:17
+msgid "Country subset"
+msgstr "Subconjunto de países"
+
+#: udata/core/spatial/translations.py:18
+msgid "European Union"
+msgstr "União Europeia"
+
+#: udata/core/spatial/translations.py:19
+msgid "Metropolitan France"
+msgstr "França metropolitana"
+
+#: udata/core/spatial/translations.py:20
+msgid "Overseas France"
+msgstr "França no exterior"
+
+#: udata/core/spatial/translations.py:21
+msgid "French overseas collectivities"
+msgstr "Coletividades ultramarinas francesas"
+
+#: udata/core/spatial/translations.py:22
+msgid "French arrondissement"
+msgstr "Quarteirão francês"
+
+#: udata/core/topic/activities.py:25
+msgid "created a topic"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:268
-msgid "Simplify access to public data"
+#: udata/core/topic/activities.py:31
+msgid "updated a topic"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:271
-msgid ""
-"The opening and circulation of public data strengthen transparency, "
-"improve public action, and allow for the creation of new services."
+#: udata/core/topic/activities.py:38
+msgid "added an element to a topic"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:274
+#: udata/core/topic/activities.py:44
+msgid "updated an element in a topic"
+msgstr ""
+
+#: udata/core/topic/activities.py:51
+msgid "removed an element from a topic"
+msgstr ""
+
+#: udata/core/topic/forms.py:17
+msgid "Element"
+msgstr ""
+
+#: udata/core/topic/forms.py:26
+msgid "A topic element must have a title or an element."
+msgstr ""
+
+#: udata/core/topic/forms.py:91
+msgid "Featured"
+msgstr "Em Destaque"
+
+#: udata/core/user/activities.py:35
+msgid "followed a user"
+msgstr "seguiu um utilizador"
+
+#: udata/core/user/activities.py:42
+msgid "discussed a dataservice"
+msgstr ""
+
+#: udata/core/user/activities.py:47
+msgid "discussed a dataset"
+msgstr "discutiu um conjunto de dados"
+
+#: udata/core/user/activities.py:52
+msgid "discussed a reuse"
+msgstr "discutiu uma reutilização"
+
+#: udata/core/user/activities.py:57
+msgid "followed a dataservice"
+msgstr ""
+
+#: udata/core/user/activities.py:62
+msgid "followed a dataset"
+msgstr "seguiu um conjunto de dados"
+
+#: udata/core/user/activities.py:67
+msgid "followed a reuse"
+msgstr "seguiu uma reutilização"
+
+#: udata/core/user/activities.py:72
+msgid "followed an organization"
+msgstr "seguiu uma organização"
+
+#: udata/core/user/forms.py:22
+msgid "Avatar"
+msgstr "Avatar"
+
+#: udata/core/user/forms.py:24
+msgid "About"
+msgstr "Sobre"
+
+#: udata/core/user/forms.py:28
+msgid "Roles"
+msgstr "Perfis"
+
+#: udata/core/user/models.py:298 udata/tests/api/test_me_api.py:297
+msgid "Account deletion"
+msgstr "Conta eliminada"
+
+#: udata/core/user/permissions.py:5
+msgid "System administrator"
+msgstr "Administrador de sistema"
+
+#: udata/core/user/permissions.py:6
+msgid "Site editorialist"
+msgstr "Editor do site"
+
+#: udata/core/user/permissions.py:7
+msgid "Site moderator"
+msgstr "Moderador do site"
+
+#: udata/core/user/tasks.py:19
+msgid "Test mail"
+msgstr "E-mail de teste"
+
+#: udata/core/user/tasks.py:45 udata/tests/user/test_user_tasks.py:36
 #, python-brace-format
-msgid ""
-"{site} makes this information available by organizing its distribution "
-"and use."
+msgid "Inactivity of your {site} account"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:277
-msgid "Our goals"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:283
-msgid "Facilitate data discoverability"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:289
-msgid "Improve data quality"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:295
-msgid "Encourage data reusability"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:301
+#: udata/core/user/tasks.py:88 udata/tests/user/test_user_tasks.py:109
 #, python-brace-format
-msgid "Learn more about {site}"
+msgid "Deletion of your inactive {site} account"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:306
-msgid "Produce information based on data"
+#: udata/forms/fields.py:127
+msgid "Please input a date/time value"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:307
-msgid "Our data explorations"
+#: udata/forms/fields.py:139
+msgid "Invalid date/time input"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/home.html:314
-msgid "Real estate values data explorer"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:316
-msgid "Follow real estate price evolution and find real estate sales prices."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:320
-#: udata_front/theme/gouvfr/templates/home.html:348
-msgid "Learn more"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:342
-msgid "Business Directory"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:344
-msgid ""
-"Check public legal details of company, association and public services in"
-" France."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:371
-msgid "Discover our data exploration"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:376
-msgid "Federate an ecosystem"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:378
-msgid "Our thematic platforms"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:389
-msgid ""
-"Ecological transition data supported by the <strong>Ministry of "
-"Ecological Transition and Cohesion of Territories.</strong>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:401
-msgid ""
-"Mobility data in partnership with the <strong>General Directorate for "
-"Infrastructure, Transport and Mobilities.</strong>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:413
-msgid ""
-"Public data related to meteorology and climatology produced by <strong"
-">Météo-France.</strong>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/home.html:423
+#: udata/forms/fields.py:169
 #, python-brace-format
-msgid "{site} news"
-msgstr ""
+msgid "The role {role} does not exist"
+msgstr "O perfil {role} não existe"
 
-#: udata_front/theme/gouvfr/templates/home.html:431
-#: udata_front/theme/gouvfr/templates/post/search-result.html:12
-msgid "Published on"
-msgstr ""
+#: udata/forms/fields.py:187
+msgid "Not a valid UUID"
+msgstr "Identificador (UUID) inválido"
 
-#: udata_front/theme/gouvfr/templates/home.html:441
-msgid "Read the article"
-msgstr ""
+#: udata/forms/fields.py:421 udata/mongo/taglist_field.py:38
+#, python-format
+msgid "Tag \"%(tag)s\" must be between %(min)d and %(max)d characters long."
+msgstr "A tag \"%(tag)s\" deve ter entre %(min)d e %(max)d caracteres."
 
-#: udata_front/theme/gouvfr/templates/home.html:449
-msgid "See all news"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/metrics.html:4
-#: udata_front/theme/gouvfr/templates/metrics.html:11
-msgid "Metrics"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/metrics.html:5
-msgid "Site metrics"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/metrics.html:6
-#: udata_front/theme/gouvfr/templates/site/dashboard.html:7
-msgid "metrics"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/newsletter.html:11
-msgid "Our next events"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/newsletter.html:13
+#: udata/forms/fields.py:461 udata/forms/fields.py:520
 #, python-brace-format
-msgid "To stay up to date about {site} open data news, and follow our events."
+msgid "{0} does not exists"
+msgstr "{0} não existe"
+
+#: udata/forms/fields.py:494 udata/tests/forms/test_model_field.py:333
+#: udata/tests/forms/test_model_field.py:349
+msgid "Missing \"id\" field"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:21
-#: udata_front/theme/gouvfr/templates/newsletter.html:30
-msgid "Subscribe to our newsletter"
+#: udata/forms/fields.py:501
+#, python-brace-format
+msgid "Expect a \"{0}\" class but \"{1}\" was found"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:24
-msgid "Subscribe"
+#: udata/forms/fields.py:507 udata/tests/forms/test_model_field.py:41
+#: udata/tests/forms/test_model_field.py:56
+msgid "Expect both class and identifier"
+msgstr "Esperados uma classe e um identificador"
+
+#: udata/forms/fields.py:552
+#, python-brace-format
+msgid "Model for {0} not found"
+msgstr "Modelo para {0} não foi encontrado"
+
+#: udata/forms/fields.py:586
+#, python-brace-format
+msgid "Unknown identifiers: {identifiers}"
+msgstr "Identificadores desconhecidos: {identifiers}"
+
+#: udata/forms/fields.py:720
+msgid "Unable to parse date range"
+msgstr "Não é possível analisar o intervalo de datas"
+
+#: udata/forms/fields.py:752 udata/forms/fields.py:784
+#: udata/tests/forms/test_publish_as_field.py:214
+msgid "Cannot change owner after creation. Please use transfer feature."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:33
-msgid "See our next events"
+#: udata/forms/fields.py:757 udata/forms/fields.py:789
+msgid "You must be authenticated"
+msgstr "Você deve estar autenticado"
+
+#: udata/forms/validators.py:59
+#, python-format
+msgid "This field requires \"%(name)s\" to be set"
+msgstr "Este campo requer \"%(name)s\" definidos"
+
+#: udata/frontend/markdown.py:27
+msgid "Source"
+msgstr "Fonte"
+
+#: udata/harvest/forms.py:80
+msgid "Some optional details about this harvester"
+msgstr "Alguns detalhes opcionais sobre esta colheita"
+
+#: udata/harvest/forms.py:84
+msgid "Backend"
+msgstr "Backend"
+
+#: udata/harvest/models.py:19
+msgid "Manual"
+msgstr "Manual"
+
+#: udata/harvest/models.py:29
+msgid "Initializing"
+msgstr "A iniciar"
+
+#: udata/harvest/models.py:30
+msgid "Initialized"
+msgstr "Iniciado"
+
+#: udata/harvest/models.py:31
+msgid "Processing"
+msgstr "Processando"
+
+#: udata/harvest/models.py:32 udata/harvest/models.py:42
+msgid "Done"
+msgstr "Concluído"
+
+#: udata/harvest/models.py:33
+msgid "Done with errors"
+msgstr "Concluído com erros"
+
+#: udata/harvest/models.py:34 udata/harvest/models.py:43
+msgid "Failed"
+msgstr "Falhou"
+
+#: udata/harvest/models.py:41
+msgid "Started"
+msgstr "Iniciado"
+
+#: udata/harvest/models.py:44
+msgid "Skipped"
+msgstr "Ignorado"
+
+#: udata/harvest/models.py:45
+msgid "Archived"
+msgstr "Arquivado"
+
+#: udata/harvest/backends/dcat.py:431
+msgid "Remote URL prefix"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:41
-msgid "Follow us"
+#: udata/harvest/backends/dcat.py:434
+msgid "A prefix used to build the remote URL of the harvested items."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:42
-msgid "on social media"
+#: udata/harvest/backends/ckan/harvesters.py:30
+msgid "Organization"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:46
-msgid "X - new tab"
+#: udata/harvest/backends/ckan/harvesters.py:30
+msgid "A CKAN Organization name"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:51
-msgid "Linkedin - new tab"
+#: udata/harvest/backends/ckan/harvesters.py:31
+msgid "Tag"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:56
-msgid "Mastodon - new tab"
+#: udata/harvest/backends/ckan/harvesters.py:31
+msgid "A CKAN tag name"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:61
-msgid "Bluesky - new tab"
+#: udata/templates/404.html:6
+msgid "Page not found"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:66
-msgid "Github - new tab"
+#: udata/templates/404.html:39
+msgid "The page you are looking for does not exist."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/newsletter.html:71
-msgid "RSS - new tab"
+#: udata/templates/404.html:40
+msgid "Back to home"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/dataset/display.html:655
-#: udata_front/theme/gouvfr/templates/page.html:52
-#: udata_front/theme/gouvfr/templates/post/display.html:95
-msgid "Actions"
-msgstr ""
+#: udata/templates/admin.html:7
+msgid "Admin"
+msgstr "Admin"
 
-#: udata_front/theme/gouvfr/templates/page.html:55
-msgid "Suggest a modification"
-msgstr ""
+#: udata/templates/base.html:7
+msgid "You must be connected to do this action."
+msgstr "Deverá estar conectado à internet."
 
-#: udata_front/theme/gouvfr/templates/raw.html:19
-msgid "Recent datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/raw.html:22
-msgid "Recent reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/terms.html:4
-#: udata_front/theme/gouvfr/templates/terms.html:5
-msgid "Terms"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/terms.html:7
-msgid "terms"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/admin.html:10
-#: udata_front/theme/gouvfr/templates/custom/contact.html:26
-msgid "Name"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/admin.html:11
+#: udata/templates/api/admin.html:11
 msgid "Maintainer"
-msgstr ""
+msgstr "Mantido por"
 
-#: udata_front/theme/gouvfr/templates/api/admin.html:31
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:48
-#: udata_front/theme/gouvfr/templates/dataset/display.html:62
-#: udata_front/theme/gouvfr/templates/post/display.html:102
-#: udata_front/theme/gouvfr/templates/reuse/display.html:64
-#: udata_front/theme/gouvfr/templates/user/base.html:52
+#: udata/templates/api/admin.html:31
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
-#: udata_front/theme/gouvfr/templates/api/admin.html:34
+#: udata/templates/api/admin.html:34
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
-#: udata_front/theme/gouvfr/templates/api/admin.html:42
+#: udata/templates/api/admin.html:42
 msgid "No OAuth clients"
-msgstr ""
+msgstr "Nenhum cliente OAuth"
 
-#: udata_front/theme/gouvfr/templates/api/admin.html:53
+#: udata/templates/api/admin.html:53
 msgid "Add a client"
-msgstr ""
+msgstr "Adicionar um cliente"
 
-#: udata_front/theme/gouvfr/templates/api/card.html:9
-#, python-brace-format
-msgid ""
-"See on <a target=\"_blank\" rel=\"noopener\" title=\"See {title} on "
-"api.gouv.fr - opens a new window\" href=\"{url}\">api.gouv.fr</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/card.html:18
-#, python-brace-format
-msgid "From {producer}"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:3
-msgid "External application authorization"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:28
+#: udata/templates/api/oauth_authorize.html:23
 #, python-format
 msgid "%(app)s want to access your %(site)s account."
-msgstr ""
+msgstr "%(app)s deseja acessar sua conta no %(site)s."
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:38
-msgid "This site request the following rights:"
-msgstr ""
+#: udata/templates/api/oauth_authorize.html:35
+msgid "Details"
+msgstr "Detalhes"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:40
+#: udata/templates/api/oauth_authorize.html:45
 msgid "Access your profile"
-msgstr ""
+msgstr "Aceder ao seu perfil"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:41
-msgid ""
-"Read your profile, your email address, the organization you belong to, "
-"your publications"
-msgstr ""
+#: udata/templates/api/oauth_authorize.html:46
+msgid "Read your profile, the orgnization you belong to, your publications"
+msgstr "Ler o seu perfil, a organização a que você pertence, as suas publicações"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:42
+#: udata/templates/api/oauth_authorize.html:54
 msgid "Publish data"
-msgstr ""
+msgstr "Publicar dados"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:43
+#: udata/templates/api/oauth_authorize.html:55
 msgid "Publish datasets, reuses, follow or unfollow"
-msgstr ""
+msgstr "Publicar conjuntos de dados, reutilizações, seguir ou deixar de seguir"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:54
-msgid "Refuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/api/oauth_authorize.html:61
+#: udata/templates/api/oauth_authorize.html:65
 msgid "Accept"
-msgstr ""
+msgstr "Aceitar"
 
-#: udata_front/theme/gouvfr/templates/api/oauth_error.html:6
+#: udata/templates/api/oauth_authorize.html:67
+msgid "Refuse"
+msgstr "Recusar"
+
+#: udata/templates/api/oauth_error.html:15
 msgid "OAuth Authentication Error"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/banners/feedback.html:7
-msgid "Did you find what you were looking for?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/banners/feedback.html:10
-msgid "Don't show this message again"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/banners/read-only.html:4
-msgid ""
-"Due to security reasons, the creation of new content is currently "
-"disabled."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:4
-msgid "API Documentation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:5
-#, python-format
-msgid "%(site)s dynamic API documentation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:41
-msgid "This page describe this website's free and open RESTful API's behavior"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:45
-msgid "Authentication"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:50
-msgid "In order to be able to execute write operations,"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:52
-#, python-format
-msgid "you first need to obtain an %(apikey)s in your profile settings."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:56
-msgid "API Key"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:59
-msgid ""
-"you first need to authenticate and obtain an API Key in your profile "
-"settings."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:62
-msgid ""
-"This key should be provided on each call in the <code>X-API-KEY</code> "
-"HTTP header."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:66
-msgid "Authorizations"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:70
-msgid "API calls are subject to the same permissions than the web interface."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:71
-msgid ""
-"By example, you need to be part of the organization to modify one of its "
-"datasets."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:75
-msgid "Pagination"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:79
-msgid ""
-"Some method are paginated and always follow the same pattern.\n"
-"                        The object list is wrapped in a <code>Page</code>"
-" object.\n"
-"                        "
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:83
-msgid ""
-"You don't have to compute yourself the previous and next pages\n"
-"                        because the URLs are available in the response "
-"under the\n"
-"                        <code>previous_page</code> and "
-"<code>next_page</code> attributes.\n"
-"                        They will be set to <code>null</code> if there is"
-" no previous and/or next page."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:88
-msgid "Example"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/api.html:102
-msgid "Reference"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:12
-msgid ""
-"Use this form to get in touch with us in case of doubts or need of "
-"assistance. You can also contact us to request for additional datasets or"
-" info that you’d like to see available on this portal. To interact with "
-"data suppliers, i.e. ask for more data or specific improvements, use the "
-"\"Contact\" option on each dataset page, to start a new discussion "
-"thread."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:22
-#: udata_front/theme/gouvfr/templates/security/change_email.html:18
-#: udata_front/theme/gouvfr/templates/security/change_password.html:18
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:19
-#: udata_front/theme/gouvfr/templates/security/login_user.html:19
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:16
-#: udata_front/theme/gouvfr/templates/security/register_user.html:27
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:16
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:17
-msgid ""
-"Fields preceded by a star (<span class='required-field-star'>*</span>) "
-"are required."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:32
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:35
-msgid "Email"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:38
-msgid "Subject"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:44
-#: udata_front/theme/gouvfr/templates/mail/discussion_closed.html:31
-#: udata_front/theme/gouvfr/templates/mail/new_discussion.html:30
-#: udata_front/theme/gouvfr/templates/mail/new_discussion_comment.html:31
-msgid "Message"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/custom/contact.html:57
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:15
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:22
-msgid "Submit"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:64
-msgid "This API is a draft and will not be visible by other users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:64
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:13
-#: udata_front/theme/gouvfr/templates/dataset/card-sm.html:9
-#: udata_front/theme/gouvfr/templates/dataset/card-xs.html:10
-#: udata_front/theme/gouvfr/templates/dataset/display.html:77
-#: udata_front/theme/gouvfr/templates/reuse/display.html:79
-#: udata_front/theme/gouvfr/templates/reuse/oembed.html:11
-msgid "Draft"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:71
-msgid "This API has been deleted. This will be permanent in the next 24 hours"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:71
-#: udata_front/theme/gouvfr/templates/dataset/display.html:84
-#: udata_front/theme/gouvfr/templates/organization/display.html:70
-#: udata_front/theme/gouvfr/templates/reuse/display.html:86
-msgid "Deleted"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:78
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:19
-#: udata_front/theme/gouvfr/templates/dataset/card-sm.html:15
-#: udata_front/theme/gouvfr/templates/dataset/card-xs.html:16
-#: udata_front/theme/gouvfr/templates/dataset/display.html:94
-msgid "Archived"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:90
-#: udata_front/theme/gouvfr/templates/dataset/display.html:106
-#: udata_front/theme/gouvfr/templates/organization/display.html:222
-#: udata_front/theme/gouvfr/templates/reuse/display.html:109
-msgid "Description"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:100
-#: udata_front/theme/gouvfr/templates/dataset/display.html:129
-msgid "Author"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:105
-#, python-format
-msgid ""
-"This API has been published on the initiative and under the "
-"responsibility of\n"
-"                    %(author)s<br />Published on %(date)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:119
-#: udata_front/theme/gouvfr/templates/dataset/display.html:169
-#: udata_front/theme/gouvfr/templates/dataset/display.html:596
-#: udata_front/theme/gouvfr/templates/organization/display.html:393
-msgid "Latest update"
-msgstr "Última atualização"
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:123
-msgid "Rate limiting"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:128
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:136
-msgid "Not documented"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:131
-msgid "Availability"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:134
-#, python-format
-msgid "%(availability)s last month"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:139
-msgid "Access"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:143
-msgid "Restricted"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:147
-msgid "Opened with an account"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:151
-msgid "Opened"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:162
-msgid "Make an authorization request"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:186
-#: udata_front/theme/gouvfr/templates/reuse/display.html:171
-#, python-format
-msgid "%(num)d used dataset"
-msgid_plural "%(num)d used datasets"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:197
-#, python-format
-msgid "No datasets on %(site)s are linked to this API."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/display.html:212
-msgid "There are no discussions for this API yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:6
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:12
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:23
-#: udata_front/theme/gouvfr/templates/organization/display.html:131
-#: udata_front/theme/gouvfr/templates/organization/display.html:189
-msgid "Dataservices"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:13
-#, python-format
-msgid "%(site)s dataservices search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:14
-#: udata_front/theme/gouvfr/templates/dataset/list.html:16
-#: udata_front/theme/gouvfr/templates/organization/list.html:8
-#: udata_front/theme/gouvfr/templates/reuse/list.html:8
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:8
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:8
-#: udata_front/theme/gouvfr/templates/user/list.html:7
-msgid "search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:14
-msgid "dataservices"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:25
-#, python-format
-msgid "Search among %(count)s dataservices on %(site)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataservice/list.html:31
-#: udata_front/theme/gouvfr/templates/dataset/list.html:40
-msgid "Search reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:63
-#: udata_front/theme/gouvfr/templates/dataset/card-sm.html:59
-#: udata_front/theme/gouvfr/templates/dataset/card-xs.html:60
-msgid "From"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:87
-#: udata_front/theme/gouvfr/templates/dataset/card-sm.html:77
-#, python-format
-msgid "Updated %(date)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:103
-#: udata_front/theme/gouvfr/templates/organization/card.html:30
-#, python-format
-msgid "<strong class=\"fr-mr-1v\">%(num)d</strong> reuse"
-msgid_plural "<strong class=\"fr-mr-1v\">%(num)d</strong> reuses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataset/card-lg.html:108
-#, python-format
-msgid "<strong class=\"fr-mr-1v\">%(num)d</strong> favorite"
-msgid_plural "<strong class=\"fr-mr-1v\">%(num)d</strong> favorites"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:18
-msgid "dataset"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:24
-#: udata_front/theme/gouvfr/templates/reuse/display.html:19
-#, python-format
-msgid "Explore with %(certifier)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:77
-msgid "This dataset is a draft and will not be visible by other users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:84
-msgid "This dataset has been deleted. This will be permanent in the next 24 hours"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:89
-msgid ""
-"This dataset has been archived automatically because it has been deleted "
-"from the remote platform."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:91
-msgid "This dataset has been archived."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:135
-#, python-brace-format
-msgid ""
-"This dataset has been published on the initiative and under the "
-"responsibility of {author}."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:142
-msgid "Attributions"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:150
-#, python-brace-format
-msgid ""
-"This dataset come from an external portal.&nbsp;<a "
-"href='{external_source}' rel='ugc nofollow noopener'>View the original "
-"source.</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:158
-#, python-brace-format
-msgid ""
-"This dataset is handled by the <a href='{geo_link}'>geo.data.gouv.fr</a> "
-"platform.\n"
-"                This platform is not actively maintained and as a result,"
-" you may find some bogus data or metadata.\n"
-"                More information about <a href='{blog_link}'>the shutdown"
-" of geo.data.gouv.fr is available here.</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:174
-#: udata_front/theme/gouvfr/templates/dataset/display.html:561
-msgid "License"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:192
-#: udata_front/theme/gouvfr/templates/dataset/display.html:266
-#: udata_front/theme/gouvfr/templates/organization/display.html:93
-#: udata_front/theme/gouvfr/templates/organization/display.html:163
-msgid "In-page navigation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:219
-msgid "Reuses and API"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:248
-#: udata_front/theme/gouvfr/templates/dataset/display.html:304
-msgid "Community resources"
-msgstr ""
+msgstr "Erro de autenticação OAuth"
 
-#: udata_front/theme/gouvfr/templates/dataset/display.html:262
-#: udata_front/theme/gouvfr/templates/dataset/display.html:314
-#: udata_front/theme/gouvfr/templates/dataset/display.html:542
-#: udata_front/theme/gouvfr/templates/organization/display.html:159
-#: udata_front/theme/gouvfr/templates/organization/display.html:209
-msgid "Information"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:358
-#, python-format
-msgid "See the %(type)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:366
-msgid "There are no files for this dataset yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:374
-msgid "Add a file"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:408
-#, python-format
-msgid "%(num)d Reuse"
-msgid_plural "%(num)d Reuses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:413
-msgid "Add a reuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:430
-msgid "There are no reuses for this dataset yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:437
-msgid "Publish a reuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:443
-#: udata_front/theme/gouvfr/templates/organization/display.html:341
-msgid "What's a reuse ?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:462
-msgid "There are no discussions for this dataset yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:486
-msgid ""
-"These resources are published by the community and the producer isn't "
-"responsible for them."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:499
-#, python-format
-msgid "%(num)d Community resource"
-msgid_plural "%(num)d Community resources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:514
-msgid "There are no community resources for this dataset yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:521
-msgid "Share your resources"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:527
-msgid "Learn more about the community"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:543
-#: udata_front/theme/gouvfr/templates/reuse/display.html:148
-msgid "Tags"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:569
-#: udata_front/theme/gouvfr/templates/organization/display.html:396
-msgid "ID"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:573
-msgid "Remote source"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:579
-msgid "Temporality"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:581
-msgid "Creation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:602
-msgid "Spatial coverage"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:605
-#: udata_front/theme/gouvfr/templates/dataset/display.html:612
-msgid "Territorial coverage"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:617
-msgid "Territorial coverage granularity"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:626
-msgid "Data schema"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:631
-msgid "The dataset files are following the schema: "
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:637
-#, python-brace-format
-msgid ""
-"Schemas allow to describe data models,\n"
-"                                discover how schemas improve your data "
-"quality and the available use cases\n"
-"                                on <a "
-"href=\"{url}\">schema.data.gouv.fr</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:648
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:117
-msgid "See schema documentation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:661
-msgid "Extras"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:670
-msgid "See extras"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:689
-msgid "Harvest"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:696
-msgid "See harvest source"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/display.html:706
-msgid "See harvest extras"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/followers.html:16
-#: udata_front/theme/gouvfr/templates/organization/display.html:27
-#: udata_front/theme/gouvfr/templates/organization/list.html:24
-#: udata_front/theme/gouvfr/templates/reuse/list.html:43
-#: udata_front/theme/gouvfr/templates/user/followers.html:21
-msgid "Followers"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/followers.html:27
-#: udata_front/theme/gouvfr/templates/user/base.html:94
-#: udata_front/theme/gouvfr/templates/user/followers.html:28
-#, python-format
-msgid "%(num)d follower"
-msgid_plural "%(num)d followers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:15
-#, python-format
-msgid "%(site)s dataset search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:22
-#: udata_front/theme/gouvfr/templates/organization/display.html:401
-#: udata_front/theme/gouvfr/templates/reuse/display.html:157
-msgid "Creation date"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:23
-#: udata_front/theme/gouvfr/templates/reuse/display.html:161
-msgid "Last update"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:24
-msgid "Number of followers"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:25
-msgid "Number of reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:34
-#, python-format
-msgid "Search among %(count)s datasets on %(site)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:53
-#: udata_front/theme/gouvfr/templates/organization/display.html:247
-msgid "Search for dataset"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:55
-#: udata_front/theme/gouvfr/templates/dataset/list.html:60
-#: udata_front/theme/gouvfr/templates/organization/display.html:249
-#: udata_front/theme/gouvfr/templates/organization/display.html:254
-#: udata_front/theme/gouvfr/templates/organization/list.html:36
-#: udata_front/theme/gouvfr/templates/organization/list.html:41
-#: udata_front/theme/gouvfr/templates/reuse/list.html:61
-#: udata_front/theme/gouvfr/templates/reuse/list.html:66
-msgid "Search..."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:66
-#: udata_front/theme/gouvfr/templates/macros/search.html:224
-#: udata_front/theme/gouvfr/templates/organization/display.html:260
-#: udata_front/theme/gouvfr/templates/organization/list.html:47
-#: udata_front/theme/gouvfr/templates/post/subnav.html:13
-#: udata_front/theme/gouvfr/templates/reuse/list.html:72
-msgid "Search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/list.html:70
-#: udata_front/theme/gouvfr/templates/organization/display.html:264
-#: udata_front/theme/gouvfr/templates/organization/list.html:51
-#: udata_front/theme/gouvfr/templates/reuse/list.html:100
-#, python-format
-msgid "%(result)s results"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:15
-msgid "Nameless file"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:21
-msgid "schema:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:26
-#, python-format
-msgid "Updated on %(date)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:34
-msgid "downloads"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:42
-msgid "Unavailable"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:47
-msgid "File link - opens a new window"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:54
-msgid "Download file"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:65
-msgid "URL"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:69
-msgid "Permalink"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:79
-msgid "MIME Type"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:85
-msgid "Created on"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:89
-msgid "Modified on"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:96
-msgid "Size"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/dataset/resource/card.html:109
-msgid "Schema"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/400.html:3
-msgid "Bad request"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/400.html:8
-#: udata_front/theme/gouvfr/templates/errors/500.html:8
-#, python-brace-format
-msgid "The error identifier is {id}"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/403.html:3
-msgid "Forbidden"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/403.html:6
-msgid "You are not allowed to display this page."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/404.html:3
-#: udata_front/theme/gouvfr/templates/errors/410.html:3
-msgid "Page Not Found"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/404.html:6
-msgid "The page you're looking for could not be found."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/410.html:6
-msgid "The page you're looking has been deleted."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/500.html:3
-msgid "Internal server error"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/500.html:6
-msgid ""
-"The server encountered an internal error and was unable to complete your "
-"request. Either the server is overloaded or there is an error in the "
-"application."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/errors/base.html:9
-#, python-format
-msgid "Error %(code)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/follow/follower-card.html:6
-#, python-format
-msgid "Following since %(date)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/breadcrumb.html:9
-msgid "You're here:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/certified.html:5
-#, python-format
-msgid "The identity of this organization is certified by %(certifier)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/forms.html:23
-msgid "Expected format : name@domain.pt"
-msgstr ""
+#: udata/templates/api/oauth_error.html:20 udata/templates/macros/metadata.html:2
+msgid "Home"
+msgstr "Início"
 
-#: udata_front/theme/gouvfr/templates/macros/integrate.html:16
-msgid "Copy this"
+#: udata/templates/comments/dataset_archived.txt:1
+msgid "This dataset has been archived by our administration team.\n\n"
+"An archived dataset is considered out of date by a combination of factors.\n"
+"It does not appear in the search results and has a special layout warning the site's users.\n\n"
+"If you think this is a mistake, you can contact the site administrator."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/metadata.html:3
+#: udata/templates/macros/metadata.html:3
 msgid "Share, improve and reuse public data"
-msgstr ""
+msgstr "Partilhar, melhorar e reutilizar dados públicos"
 
-#: udata_front/theme/gouvfr/templates/macros/metadata.html:64
-#, python-brace-format
-msgid "udata-front@{version}"
-msgstr ""
+#: udata/templates/mail/account_deleted.html:4
+msgid "Your account has now been deleted"
+msgstr "A sua conta foi eliminada"
 
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:19
-msgid "First page"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:29
-msgid "Previous page"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:37
-msgid "Page 1"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:61
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:79
+#: udata/templates/mail/account_inactivity.html:6
 #, python-format
-msgid "Page %(num)s"
+msgid "We have noticed that your account associated to (%(user_email)s) has been inactive for %(inactivity_years)d years or more on %(site)s, the open platform for public data."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:92
-msgid "Next page"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/paginator.html:102
-msgid "Last page"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_inline.html:7
-#: udata_front/theme/gouvfr/templates/macros/quality_score_inline.html:10
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:10
-msgid "Metadata quality:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:13
-msgid "Data description filled"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:14
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:25
-msgid "Data description empty"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:19
-msgid "Files documented"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:20
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:30
-msgid "Files documentation missing"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:25
-msgid "License filled"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:26
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:35
-msgid "No license set"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:31
-msgid "Update frequency followed"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:32
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:40
-msgid "Update frequency not followed"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:32
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:40
-msgid "Update frequency not set"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:37
-msgid "File formats are open"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:38
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:45
-msgid "File formats are closed"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:43
-msgid "Temporal coverage filled"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:44
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:50
-msgid "Temporal coverage not set"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:49
-msgid "Spatial coverage filled"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:50
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:55
-msgid "Spatial coverage not set"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:55
-msgid "All files are available"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:56
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:60
-msgid "Some files are unavailable"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:64
-msgid "Learn more about this indicator - opens a new window"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_toggletip.html:66
-msgid "Learn more about this indicator"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:10
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:13
-msgid "Metadata quality"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/quality_score_with_warning_below.html:20
-msgid ""
-"Metadata quality may be misleading since metadata info may have been lost"
-" from original source. We're currently working on improving this."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:17
-msgid "Sort by"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:21
-#: udata_front/theme/gouvfr/templates/macros/sort_search.html:19
-msgid "Relevance"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:43
-msgid "Ascending"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:43
-msgid "Descending"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:53
-msgid "Export"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:122
-#: udata_front/theme/gouvfr/templates/macros/search.html:160
-msgid "More results…"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/macros/search.html:201
+#: udata/templates/mail/account_inactivity.html:17
 #, python-format
-msgid "Results %(start)s to %(end)s on %(total)s found"
+msgid "If you want to keep your account, please log in with your account on %(home)s."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/search.html:216
-msgid "No result found"
+#: udata/templates/mail/account_inactivity.html:25
+#, python-format
+msgid "Without logging in, your account will be deleted within %(notify_delay)d days."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/sort_search.html:9
-msgid "Sort by:"
+#: udata/templates/mail/account_inactivity.html:33
+#, python-format
+msgid "This account is not tied to your other administration accounts and you can always re-create an account on the %(site)s platform if necessary."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/uploader.html:8
-msgid "Drag a file here"
+#: udata/templates/mail/badge_added_association.html:6
+#, python-format
+msgid "%(user)s has identified your organization \"%(name)s\" as an association"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/macros/uploader.html:11
-#: udata_front/theme/gouvfr/templates/security/login_user.html:49
-#: udata_front/theme/gouvfr/templates/security/login_user.html:62
-#: udata_front/theme/gouvfr/templates/security/register_user.html:77
-#: udata_front/theme/gouvfr/templates/security/register_user.html:94
-msgid "or"
-msgstr ""
+#: udata/templates/mail/badge_added_association.html:27
+#: udata/templates/mail/badge_added_certified.html:27
+#: udata/templates/mail/badge_added_company.html:27
+#: udata/templates/mail/badge_added_local_authority.html:27
+#: udata/templates/mail/badge_added_public_service.html:27
+msgid "See the badge"
+msgstr "Ver o emblema"
 
-#: udata_front/theme/gouvfr/templates/macros/uploader.html:15
-msgid "Select a file from your computer"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:4
-msgid "Your user account has been removed from the Dados.gov portal."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:5
-msgid "If you wish to regain access, you must create a new account."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:6
-msgid "Thank you."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:7
-msgid "Best regards,"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/account_deleted.html:8
-msgid "The Dados.gov Team"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/badge_added_certified.html:6
+#: udata/templates/mail/badge_added_certified.html:6
 #, python-format
 msgid "%(user)s has certified your organization \"%(name)s\""
+msgstr "%(user)s certificou a sua organização \"%(name)s\""
+
+#: udata/templates/mail/badge_added_company.html:6
+#, python-format
+msgid "%(user)s has identified your organization \"%(name)s\" as a company"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/mail/badge_added_certified.html:27
-#: udata_front/theme/gouvfr/templates/mail/badge_added_public_service.html:27
-msgid "See the badge"
+#: udata/templates/mail/badge_added_local_authority.html:6
+#, python-format
+msgid "%(user)s has identified your organization \"%(name)s\" as a local authority"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/mail/badge_added_public_service.html:6
+#: udata/templates/mail/badge_added_public_service.html:6
 #, python-format
 msgid "%(user)s has identified your organization \"%(name)s\" as public service"
-msgstr ""
+msgstr "%(user)s identificou sua organização \"%(name)s\" como serviço público"
 
-#: udata_front/theme/gouvfr/templates/mail/base.html:48
+#: udata/templates/mail/base.html:45 udata/templates/security/email/base.html:45
 msgid "on your browser."
-msgstr ""
+msgstr "no seu navegador."
 
-#: udata_front/theme/gouvfr/templates/mail/base.html:51
+#: udata/templates/mail/base.html:48 udata/templates/security/email/base.html:48
 #, python-format
 msgid "View this email %(link)s"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/mail/base.html:84
+#: udata/templates/mail/base.html:76 udata/templates/security/email/base.html:76
 #, python-format
 msgid "Hi %(user)s"
-msgstr ""
+msgstr "Olá %(user)s,"
 
-#: udata_front/theme/gouvfr/templates/mail/base.html:95
+#: udata/templates/mail/base.html:87 udata/templates/security/email/base.html:87
 msgid "See you soon on the platform"
-msgstr ""
+msgstr "Até breve na plataforma"
 
-#: udata_front/theme/gouvfr/templates/mail/base.html:96
+#: udata/templates/mail/base.html:88 udata/templates/security/email/base.html:88
 #, python-format
 msgid "The %(site)s team"
-msgstr ""
+msgstr "A equipa do %(site)s"
 
-#: udata_front/theme/gouvfr/templates/mail/discussion_closed.html:6
+#: udata/templates/mail/discussion_closed.html:6
 #, python-format
 msgid "%(user)s closed an discussion on your %(type)s %(subject)s"
-msgstr ""
+msgstr "%(user)s encerrou uma discussão sobre %(type)s %(subject)s"
 
-#: udata_front/theme/gouvfr/templates/mail/discussion_closed.html:26
-#: udata_front/theme/gouvfr/templates/mail/new_discussion.html:25
-#: udata_front/theme/gouvfr/templates/mail/new_discussion_comment.html:26
-msgid "Title"
-msgstr ""
+#: udata/templates/mail/discussion_closed.html:32
+#: udata/templates/mail/new_discussion.html:30
+#: udata/templates/mail/new_discussion_comment.html:31
+msgid "Message"
+msgstr "Mensagem"
 
-#: udata_front/theme/gouvfr/templates/mail/discussion_closed.html:40
-#: udata_front/theme/gouvfr/templates/mail/new_discussion.html:38
-#: udata_front/theme/gouvfr/templates/mail/new_discussion_comment.html:39
+#: udata/templates/mail/discussion_closed.html:41
+#: udata/templates/mail/new_discussion.html:38
+#: udata/templates/mail/new_discussion_comment.html:39
 msgid "See the discussion"
-msgstr ""
+msgstr "Ver a discussão"
 
-#: udata_front/theme/gouvfr/templates/mail/frequency_reminder.html:6
-msgid ""
-"Some of your datasets need to be updated according to the frequency you "
-"set:"
-msgstr ""
+#: udata/templates/mail/frequency_reminder.html:6
+msgid "Some of your datasets need to be updated according to the frequency you set:"
+msgstr "Alguns dos seus conjuntos de dados precisam de ser atualizadas de acordo com a frequência que definiu:"
 
-#: udata_front/theme/gouvfr/templates/mail/frequency_reminder.html:12
+#: udata/templates/mail/frequency_reminder.html:12
 #, python-format
 msgid "Dataset \"%(dataset_title)s\" last update is on %(published_date)s."
-msgstr ""
+msgstr "A última atualização do conjunto de dados \"%(dataset_title)s\" foi em %(published_date)s."
 
-#: udata_front/theme/gouvfr/templates/mail/frequency_reminder.html:17
+#: udata/templates/mail/frequency_reminder.html:17
 #, python-format
-msgid ""
-"Given the set frequency (%(dataset_frequency)s) update was due "
-"%(due_update_days)s days ago."
+msgid "Given the set frequency (%(dataset_frequency)s) update was due %(due_update_days)s days ago."
+msgstr "Dada a frequência definida (%(dataset_frequency)s), os dados deveriam ter sido atualizados %(due_update_days)s dias atrás."
+
+#: udata/templates/mail/frequency_reminder.html:25
+msgid "Update the dataset and associated resources"
+msgstr "Atualizar o dataset e recursos associados"
+
+#: udata/templates/mail/inactive_account_deleted.html:4
+#, python-format
+msgid "Your account on %(site)s has been deleted due to inactivity"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/mail/frequency_reminder.html:25
-msgid "Update the dataset and associated files"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/membership_refused.html:7
+#: udata/templates/mail/membership_refused.html:7
 #, python-format
 msgid "Your membership for the organization \"%(org)s\" has been refused"
-msgstr ""
+msgstr "A sua inscrição na organização \"%(org)s\" foi recusada"
 
-#: udata_front/theme/gouvfr/templates/mail/membership_refused.html:18
+#: udata/templates/mail/membership_refused.html:18
 msgid "Refusal reason"
-msgstr ""
+msgstr "Motivo da recusa"
 
-#: udata_front/theme/gouvfr/templates/mail/membership_request.html:8
+#: udata/templates/mail/membership_request.html:8
 #, python-format
-msgid ""
-"As an administrator of \"%(org)s\" you are being informed than a new "
-"membership request from %(user)s is pending for validation"
-msgstr ""
+msgid "As an administrator of \"%(org)s\" you are being informed than a new membership request from %(user)s is pending for validation"
+msgstr "Como administrador da organização \"%(org)s\" está a ser notificado que um pedido de adesão do utilizador %(user)s está pendente de validação"
 
-#: udata_front/theme/gouvfr/templates/mail/membership_request.html:40
+#: udata/templates/mail/membership_request.html:40
 msgid "See the request"
-msgstr ""
+msgstr "Ver o pedido"
 
-#: udata_front/theme/gouvfr/templates/mail/new_discussion.html:6
+#: udata/templates/mail/new_discussion.html:6
 #, python-format
 msgid "%(user)s submitted a new discussion on your %(type)s %(subject)s"
-msgstr ""
+msgstr "%(user)s submeteu uma nova discussão sobre %(type)s %(subject)s"
 
-#: udata_front/theme/gouvfr/templates/mail/new_discussion_comment.html:6
+#: udata/templates/mail/new_discussion_comment.html:6
 #, python-format
 msgid "%(user)s commented an discussion on your %(type)s %(subject)s"
-msgstr ""
+msgstr "%(user)s comentou uma discussão sobre %(type)s %(subject)s"
 
-#: udata_front/theme/gouvfr/templates/mail/new_follower.html:8
-#, python-format
-msgid "%(user)s followed you"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/new_follower.html:33
-#: udata_front/theme/gouvfr/templates/mail/new_follower_org.html:40
-msgid "See his profile"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/new_follower_org.html:8
-#, python-format
-msgid "%(user)s followed your organization %(org)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/new_member.html:7
+#: udata/templates/mail/new_member.html:7
 #, python-format
 msgid "Congratulations, you are now a member of the organization \"%(org)s\""
-msgstr ""
+msgstr "Parabéns, foi adicionado como membro da organização \"%(org)s\""
 
-#: udata_front/theme/gouvfr/templates/mail/new_member.html:21
+#: udata/templates/mail/new_member.html:21
 msgid "See the organization page"
-msgstr ""
+msgstr "Ver a página da organização"
 
-#: udata_front/theme/gouvfr/templates/mail/new_reuse.html:7
+#: udata/templates/mail/new_reuse.html:7
 #, python-format
 msgid "A new reuse of your dataset %(dataset)s has been published"
-msgstr ""
+msgstr "Foi publicada uma nova reutilização do seu conjunto de dados %(dataset)s"
 
-#: udata_front/theme/gouvfr/templates/mail/new_reuse.html:31
-#: udata_front/theme/gouvfr/templates/reuse/display.html:56
-#: udata_front/theme/gouvfr/templates/reuse/display.html:106
+#: udata/templates/mail/new_reuse.html:31
 msgid "See the reuse"
-msgstr ""
+msgstr "Ver a reutilização"
 
-#: udata_front/theme/gouvfr/templates/mail/new_reuse.html:37
-msgid "See on the dataset page"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/mail/test.html:4
+#: udata/templates/mail/test.html:4
 msgid "This is a test mail"
-msgstr ""
+msgstr "Este é um e-mail de teste"
 
-#: udata_front/theme/gouvfr/templates/mail/test.html:5
+#: udata/templates/mail/test.html:5
 msgid "If you read this, your mail configuration is working"
-msgstr ""
+msgstr "Se estiver a ler isto a sua configuração de correio está operacional"
 
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:6
+#: udata/templates/security/change_password.html:9
+#: udata/templates/security/change_password.html:16
+msgid "Change Password"
+msgstr "Alterar palavra-passe"
+
+#: udata/templates/security/forgot_password.html:9
+#: udata/templates/security/forgot_password.html:15
+#: udata/templates/security/reset_password.html:10
+#: udata/templates/security/reset_password.html:16
+msgid "Reset Password"
+msgstr "Redefinir palavra-passe"
+
+#: udata/templates/security/forgot_password.html:10
+msgid "Forgotten your password? Enter your email address below, and we'll email instructions for setting a new one."
+msgstr "Esqueceu a palavra-passe? Introduza o seu endereço de email e enviaremos instruções para redefinir uma nova."
+
+#: udata/templates/security/login_user.html:13
+msgid "Sign In"
+msgstr "Iniciar sessão"
+
+#: udata/templates/security/login_user.html:17
+msgid "Sign in"
+msgstr "Iniciar sessão"
+
+#: udata/templates/security/login_user.html:21
+msgid "Forgot your password?"
+msgstr "Esqueceu a sua palavra-passe?"
+
+#: udata/templates/security/login_user.html:23
+msgid "Recover your password"
+msgstr "Recuperar palavra-passe"
+
+#: udata/templates/security/login_user.html:28
+msgid "Confirmation instructions not received?"
+msgstr "Não recebeu as instruções de confirmação?"
+
+#: udata/templates/security/login_user.html:30
+msgid "Send the instructions again"
+msgstr "Reenviar instruções"
+
+#: udata/templates/security/login_user.html:41
+#: udata/templates/security/register_user.html:13
+msgid "Sign up"
+msgstr "Criar conta"
+
+#: udata/templates/security/login_user.html:44
+msgid "Register"
+msgstr "Registar-se"
+
+#: udata/templates/security/login_user.html:48
+msgid "Create an account"
+msgstr "Criar uma conta"
+
+#: udata/templates/security/register_user.html:9
+msgid "Sign Up"
+msgstr "Registar-se"
+
+#: udata/templates/security/send_confirmation.html:9
+msgid "Resend confirmation instructions"
+msgstr "Reenviar instruções de confirmação"
+
+#: udata/templates/security/send_confirmation.html:15
+msgid "Submit"
+msgstr "Submeter"
+
+#: udata/templates/security/email/change_notice.html:6
 msgid "Your password has been changed."
-msgstr ""
+msgstr "A sua palavra-passe foi alterada."
 
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:10
+#: udata/templates/security/email/change_notice.html:10
 msgid "If you did not change your password, click below to reset it."
-msgstr ""
+msgstr "Se não alterou a sua senha, clique abaixo para redefini-la."
 
-#: udata_front/theme/gouvfr/templates/mail/security/change_notice.html:15
+#: udata/templates/security/email/change_notice.html:15
 msgid "Reset password"
-msgstr ""
+msgstr "Redefinir palavra-passe"
 
-#: udata_front/theme/gouvfr/templates/mail/security/confirmation_instructions.html:6
+#: udata/templates/security/email/confirmation_instructions.html:6
 msgid "Please confirm your email through the link below:"
-msgstr ""
+msgstr "Por favor, confirme o seu e-mail através do link abaixo:"
 
-#: udata_front/theme/gouvfr/templates/mail/security/confirmation_instructions.html:14
+#: udata/templates/security/email/confirmation_instructions.html:14
 msgid "Confirm my account"
-msgstr ""
+msgstr "Confirmar a minha conta"
 
-#: udata_front/theme/gouvfr/templates/mail/security/login_instructions.html:6
+#: udata/templates/security/email/login_instructions.html:6
 msgid "You can log into your account through the link below:"
-msgstr ""
+msgstr "Pode entrar na sua conta através do link abaixo:"
 
-#: udata_front/theme/gouvfr/templates/mail/security/login_instructions.html:13
+#: udata/templates/security/email/login_instructions.html:13
 msgid "Login now"
-msgstr ""
+msgstr "Iniciar sessão agora"
 
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:7
+#: udata/templates/security/email/reset_instructions.html:7
 #, python-format
-msgid ""
-"Someone has requested a password reset for your %(site)s account. If you "
-"didn't, please ignore this email."
-msgstr ""
+msgid "Someone has requested a password reset for your %(site)s account. If you didn't, please ignore this email."
+msgstr "Alguém pediu uma redefinição de palavra-passe para a conta %(site)s. Se não foi você, por favor, ignore este e-mail."
 
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:10
-msgid ""
-"To reset your password, please confirm your request through the link "
-"below:"
-msgstr ""
+#: udata/templates/security/email/reset_instructions.html:10
+msgid "To reset your password, please confirm your request through the link below:"
+msgstr "Para redefinir a sua palavra-passe, por favor confirme o seu pedido através do link abaixo:"
 
-#: udata_front/theme/gouvfr/templates/mail/security/reset_instructions.html:18
+#: udata/templates/security/email/reset_instructions.html:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Redefinir a minha palavra-passe"
 
-#: udata_front/theme/gouvfr/templates/mail/security/reset_notice.html:7
+#: udata/templates/security/email/reset_notice.html:7
 #, python-format
 msgid "Your password for %(site)s has been reset."
-msgstr ""
+msgstr "A sua palavra-passe para o %(site)s foi redefinida."
 
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:7
+#: udata/templates/security/email/welcome.html:7
 #, python-format
 msgid "Welcome to %(site)s!"
-msgstr ""
+msgstr "Bem-vindo a %(site)s!"
 
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:10
-msgid ""
-"To activate your account, please confirm your email address through the "
-"link below:"
-msgstr ""
+#: udata/templates/security/email/welcome.html:10
+msgid "To activate your account, please confirm your email address through the link below:"
+msgstr "Para ativar a sua conta, por favor confirme o seu endereço de e-mail através do seguinte link:"
 
-#: udata_front/theme/gouvfr/templates/mail/security/welcome.html:18
+#: udata/templates/security/email/welcome.html:18
 msgid "Confirm now"
-msgstr ""
+msgstr "Confirmar agora"
 
-#: udata_front/theme/gouvfr/templates/organization/card.html:22
+#: udata/templates/security/email/welcome_existing.html:7
 #, python-format
-msgid "<strong class=\"fr-mr-1v\">%(num)d</strong> dataset"
-msgid_plural "<strong class=\"fr-mr-1v\">%(num)d</strong> datasets"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:16
-msgid "organization"
+msgid "Hello %(email)s!"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/organization/display.html:25
-#: udata_front/theme/gouvfr/templates/organization/list.html:22
-#: udata_front/theme/gouvfr/templates/reuse/list.html:41
-msgid "Newest"
+#: udata/templates/security/email/welcome_existing.html:10
+msgid "Someone (you?) tried to register this email - which is already in our system."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/organization/display.html:26
-#: udata_front/theme/gouvfr/templates/organization/list.html:23
-#: udata_front/theme/gouvfr/templates/reuse/list.html:42
-msgid "Oldest"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:56
-msgid "Modify organization"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:68
-msgid ""
-"This organization has been deleted. This will be permanent in the next 24"
-" hours"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:104
-#: udata_front/theme/gouvfr/templates/organization/display.html:170
-msgid "Presentation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:278
-msgid "This organization hasn't published any datasets yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:285
-msgid "What's a dataset ?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:307
-msgid "This organization hasn't published any dataservices yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:334
-msgid "This organization hasn't published any reuses yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:359
-msgid "Members"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:371
-msgid "Pending request to join this organization"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/display.html:391
-msgid "Technical details"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/organization/list.html:7
+#: udata/templates/security/email/welcome_existing.html:14
 #, python-format
-msgid "%(site)s organization search"
+msgid "This account also has the following username associated with it: %(username)s."
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/organization/list.html:8
-msgid "organizations"
+#: udata/templates/security/email/welcome_existing.html:19
+msgid "If you forgot your password you can reset it"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/organization/list.html:31
-#, python-format
-msgid "Search among %(count)s organizations on %(site)s"
+#: udata/templates/security/email/welcome_existing.html:25
+msgid "Here"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/organization/list.html:34
-msgid "Search an organization"
+#: udata/tests/forms/test_model_field.py:165
+msgid "Expect a \"Target\" class but \"Wrong\" was found"
 msgstr ""
 
-#: udata_front/theme/gouvfr/templates/post/display.html:35
-#: udata_front/theme/gouvfr/templates/reuse/oembed.html:18
-#, python-format
-msgid "Published on %(date)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:39
-msgid "This post is a draft and will not be visible by other users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:44
-msgid "This post has been deleted. This will be permanent in the next 24 hours"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:114
-msgid "Navigate in the post collection"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:123
-msgid "Previous post"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:129
-msgid "All posts"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/display.html:138
-msgid "Next post"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/list.html:5
-#: udata_front/theme/gouvfr/templates/post/list.html:15
-#: udata_front/theme/gouvfr/templates/post/list.html:22
-msgid "Posts"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/list.html:6
-#, python-format
-msgid "%(site)s posts"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/list.html:7
-msgid "posts"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/list.html:27
-msgid "To stay up-to-date, you can subscribe to"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/list.html:30
-msgid "our newsletter."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/post/subnav.html:39
-msgid "Read more"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:11
-msgid "reuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:79
-msgid "This reuse is a draft and will not be visible by other users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:86
-msgid "This reuse has been deleted. This will be permanent in the next 24 hours"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:134
-msgid "Topic"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:141
-msgid "Type"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:189
-msgid "There are no discussions for this reuse yet."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:204
-#, python-format
-msgid "%(num)d reuse from the same creator"
-msgid_plural "%(num)d reuses from the same creator"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:215
-msgid "Reuses from the same creator"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/display.html:220
-msgid "There are no other reuses from this creator."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:7
-#, python-format
-msgid "%(site)s reuse search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:23
-msgid "Health"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:24
-msgid "Transport and mobility"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:25
-msgid "Housing and development"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:26
-msgid "Food and agriculture"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:27
-msgid "Culture and recreation"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:28
-msgid "Economy and business"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:29
-msgid "Environment and energy"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:30
-msgid "Work and training"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:31
-msgid "Politics and public life"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:32
-msgid "Safety and security"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:33
-msgid "Education and research"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:34
-msgid "Society and demography"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:35
-msgid "Law and justice"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:36
-msgid "Open data tools"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:37
-msgid "Others"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:50
-#, python-format
-msgid "Search among %(count)s reuses on %(site)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:54
-msgid "Search in datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:59
-msgid "Search a reuse"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/list.html:83
-msgid "All"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/reuse/oembed.html:20
-msgid " by "
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/change_email.html:13
-#: udata_front/theme/gouvfr/templates/security/change_email.html:20
-msgid "Change email"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/change_email.html:15
-msgid "You want to change your email? Enter the new email below."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/change_password.html:13
-#: udata_front/theme/gouvfr/templates/security/change_password.html:20
-msgid "Change Password"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/change_password.html:15
-msgid ""
-"You want to change your password? Enter your current password and new "
-"password below."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:14
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:49
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:14
-#: udata_front/theme/gouvfr/templates/security/reset_password.html:18
-msgid "Reset Password"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:16
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
-"instructions for setting a new one."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:26
-msgid "Javascript is required to use this page correctly."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/forgot_password.html:36
-#: udata_front/theme/gouvfr/templates/security/register_user.html:55
-msgid "Retype the characters from the picture"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:34
-msgid "Forgot your password?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:36
-msgid "Recover your password"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:41
-msgid "Confirmation instructions not received?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:43
-msgid "Send the instructions again"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:51
-#: udata_front/theme/gouvfr/templates/security/login_user.html:64
-msgid "Login"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:81
-msgid "Don't have an account?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/login_user.html:87
-msgid "Create an account"
-msgstr ""
+#: udata/tests/search/test_adapter.py:31
+msgid "Never reused"
+msgstr "Nunca reutilizado"
 
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:14
-msgid "Sign Up"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:42
-msgid "User NIC"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_saml.html:51
-#: udata_front/theme/gouvfr/templates/security/register_user.html:45
-#, python-format
-msgid ""
-"I have read and accept <a href=\"%(url)s\"> the terms and conditions of "
-"the service.</a>"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_user.html:21
-msgid "Why create an account? - opens a new window"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_user.html:23
-msgid "Why create an account?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_user.html:33
-msgid "Javascript is required to sign up."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/register_user.html:80
-#: udata_front/theme/gouvfr/templates/security/register_user.html:96
-msgid "Register"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/security/send_confirmation.html:13
-msgid "Resend confirmation instructions"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/site/dashboard.html:5
-msgid "Dashboard"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/site/dashboard.html:6
-msgid "Site metrics and activity"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/site/dashboard.html:7
-msgid "activity"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/site/dashboard.html:13
-msgid "Site dashboard"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/commune.html:5
-#, python-format
-msgid "Datasets related to the town of %(name)s with INSEE code %(code)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/commune.html:12
-#: udata_front/theme/gouvfr/templates/territories/departement.html:12
-#: udata_front/theme/gouvfr/templates/territories/home.html:14
-#: udata_front/theme/gouvfr/templates/territories/home.html:27
-#: udata_front/theme/gouvfr/templates/territories/region.html:12
-msgid "Territories"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/commune.html:15
-msgid "Town:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/commune.html:26
-#: udata_front/theme/gouvfr/templates/territories/departement.html:27
-#: udata_front/theme/gouvfr/templates/territories/region.html:26
-#: udata_front/theme/gouvfr/templates/territories/search-result.html:7
-msgid "INSEE code:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/departement.html:5
-#, python-format
-msgid "Datasets related to the county of %(name)s with INSEE code %(code)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/departement.html:16
-#: udata_front/theme/gouvfr/templates/territories/region.html:15
-msgid "Region:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/home.html:5
-#: udata_front/theme/gouvfr/templates/territories/home.html:6
-msgid "French regions"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/home.html:22
-#: udata_front/theme/gouvfr/templates/territories/territory.html:10
-msgid "Work in progress"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/home.html:23
-msgid ""
-"The territories pages are currently being renovated to improve user "
-"experience."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/home.html:29
-msgid "Sorted alphabetically:"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/region.html:5
-#, python-format
-msgid "Datasets related to the region of %(name)s with INSEE code %(code)s"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/search-result.html:13
-msgid "Administrative level"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/territory.html:11
-msgid ""
-"The territories pages are no longer maintained. We are working on new "
-"territories features."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/territory.html:24
-#, python-format
-msgid ""
-"If you want your datasets to appear in that list, the geographical zone "
-"associated must be the exact same one of that territory (%(code)s)."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/territory.html:26
-msgid "You want to add your own datasets to that list?"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/territory.html:27
-msgid "Log in / Sign up"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/territories/territory.html:29
-msgid "and create files for that territory."
-msgstr ""
+#: udata/tests/search/test_adapter.py:32
+msgid "Little reused"
+msgstr "Pouco reutilizado"
 
-#: udata_front/theme/gouvfr/templates/topic/browse.html:30
-#: udata_front/theme/gouvfr/templates/topic/browse.html:50
-#, python-format
-msgid "See the %(total)s results"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/browse.html:35
-#: udata_front/theme/gouvfr/templates/topic/browse.html:55
-msgid "No results found"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:6
-#, python-format
-msgid "%(topic)s datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:7
-#, python-format
-msgid "%(site)s %(topic)s related datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/datasets.html:8
-#: udata_front/theme/gouvfr/templates/topic/display.html:6
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:8
-msgid "topic"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/display.html:35
-msgid "Latest reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/display.html:51
-msgid "Featured datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/display.html:52
-msgid "Latest datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/display.html:70
-msgid "See more datasets"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:6
-#, python-format
-msgid "%(topic)s reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/topic/reuses.html:7
-#, python-format
-msgid "%(site)s %(topic)s related reuses"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/activity.html:16
-msgid "Activity"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:9
-#, python-format
-msgid "%(site)s %(username)s profile"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:10
-msgid "user"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:10
-msgid "profile"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:37
-msgid "User's admin profile"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:103
-#, python-format
-msgid "%(num)d followed"
-msgid_plural "%(num)d followed"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:148
-msgid "Browse the datasets of this user."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/base.html:153
-msgid "Browse the reuses of this user."
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/datasets.html:40
-#, python-format
-msgid "%(user)s has not yet published any dataset"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/followers.html:38
-#, python-format
-msgid "%(user)s has no follower"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/following.html:21
-msgid "Following"
-msgstr ""
+#: udata/tests/search/test_adapter.py:33
+msgid "Quite reused"
+msgstr "Bastante reutilizado"
 
-#: udata_front/theme/gouvfr/templates/user/following.html:41
-#, python-format
-msgid "Follow %(num)d dataset"
-msgid_plural "Follow %(num)d datasets"
-msgstr[0] ""
-msgstr[1] ""
+#: udata/tests/search/test_adapter.py:34
+msgid "Heavily reused"
+msgstr "Muito reutilizado"
 
-#: udata_front/theme/gouvfr/templates/user/following.html:58
-#, python-format
-msgid "Follow %(num)d reuse"
-msgid_plural "Follow %(num)d reuses"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Opened with an account"
+msgstr "Aberto com uma conta"
 
-#: udata_front/theme/gouvfr/templates/user/following.html:75
-#, python-format
-msgid "Follow %(num)d organization"
-msgid_plural "Follow %(num)d organizations"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Dear %(user)"
+msgstr "Caro/a %(user)"
 
-#: udata_front/theme/gouvfr/templates/user/following.html:92
-#, python-format
-msgid "Follow %(num)d user"
-msgid_plural "Follow %(num)d users"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Your user account has been removed from the Dados.gov portal."
+msgstr "A sua conta de utilizador foi removida no portal Dados.gov."
 
-#: udata_front/theme/gouvfr/templates/user/following.html:110
-#, python-format
-msgid "%(user)s is not following anyone"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/list.html:6
-#, python-format
-msgid "%(site)s user search"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/list.html:7
-msgid "users"
-msgstr ""
-
-#: udata_front/theme/gouvfr/templates/user/reuses.html:44
-#, python-format
-msgid "%(user)s has not yet published any reuse"
-msgstr ""
+msgid "If you wish to regain access, you must create a new account."
+msgstr "Se pretender retomar o acesso, deverá criar uma nova conta."
 
-#: udata_front/views/dataservice.py:22 udata_front/views/dataset.py:26
-msgid "Last datasets"
-msgstr ""
-
-#: udata_front/views/dataset.py:153
-#, python-format
-msgid "%(num)d Main file"
-msgid_plural "%(num)d Main files"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/views/dataset.py:155
-#, python-format
-msgid "%(num)d Documentation"
-msgid_plural "%(num)d Documentations"
-msgstr[0] ""
-msgstr[1] ""
-
-#: udata_front/views/dataset.py:159
-#, python-format
-msgid "%(num)d Update"
-msgid_plural "%(num)d Updates"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Thank you."
+msgstr "Obrigado."
 
-#: udata_front/views/dataset.py:162
-#, python-format
-msgid "%(num)d Code repository"
-msgid_plural "%(num)d Code repositories"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Best regards,"
+msgstr "Cumprimentos."
 
-#: udata_front/views/dataset.py:166
-#, python-format
-msgid "%(num)d Other"
-msgid_plural "%(num)d Others"
-msgstr[0] ""
-msgstr[1] ""
+msgid "The Dados.gov Team"
+msgstr "A equipa Dados.gov"
 
-#: udata_front/views/reuse.py:20
-msgid "Last reuses"
-msgstr ""
-
-#: udata_front/views/reuse.py:57
-msgid "Transfer"
-msgstr ""
+msgid "Attributions"
+msgstr "Contato"
 
-#: udata_front/views/site.py:88
-msgid "Datasets and Dataservices"
-msgstr ""
+msgid "Latest update"
+msgstr "Última atualização"
 
+msgid "Metadata quality:"
+msgstr "Qualidade dos metadados:"
