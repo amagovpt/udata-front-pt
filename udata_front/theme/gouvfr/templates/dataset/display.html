@@ -12,11 +12,11 @@
 
 ## FIXME: remove inspire:indentifier robots condition when geo.data.gouv.fr is shutdown
 {% set meta = {
-    'title': dataset.full_title,
-    'description': dataset.description|mdstrip(60)|forceescape,
-    'image': dataset.organization and dataset.organization.logo(external=True) or '',
-    'keywords': [_('dataset')] + dataset.tags,
-    'robots': 'noindex, nofollow' if dataset.is_hidden or 'inspire:identifier' in dataset.extras else '',
+'title': dataset.full_title,
+'description': dataset.description|mdstrip(60)|forceescape,
+'image': dataset.organization and dataset.organization.logo(external=True) or '',
+'keywords': [_('dataset')] + dataset.tags,
+'robots': 'noindex, nofollow' if dataset.is_hidden or 'inspire:identifier' in dataset.extras else '',
 } %}
 
 {% set bundle = 'dataset' %}
@@ -35,18 +35,18 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {% cache cache_duration, 'dataset-breadcrumb', dataset.id|string, g.lang_code, dataset.last_modified|string %}
-        <li>
-            <a class="fr-breadcrumb__link" href="{{ url_for('datasets.list') }}">
-                {{ _('Datasets') }}
-            </a>
-        </li>
-        <li>
-            <a class="fr-breadcrumb__link" aria-current="page">
-                {{ dataset.acronym or dataset.title|truncate(128) }}
-            </a>
-        </li>
-    {% endcache %}
+{% cache cache_duration, 'dataset-breadcrumb', dataset.id|string, g.lang_code, dataset.last_modified|string %}
+<li>
+    <a class="fr-breadcrumb__link" href="{{ url_for('datasets.list') }}">
+        {{ _('Datasets') }}
+    </a>
+</li>
+<li>
+    <a class="fr-breadcrumb__link" aria-current="page">
+        {{ dataset.acronym or dataset.title|truncate(128) }}
+    </a>
+</li>
+{% endcache %}
 {% endblock %}
 
 {% block toolbar %}
@@ -54,48 +54,49 @@
 {{ report_btn(dataset) }}
 {{ hook('dataset.display.explore-button') }}
 {% if can_edit %}
-    <div class="fr-col-auto fr-ml-3v">
-        <a
-            class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
-            href="{{ beta_admin_url_for(path='datasets/{id}/'.format(id=dataset.id), fallback_path='dataset/{id}/'.format(id=dataset.id)) }}"
-        >
-            {{ _('Edit') }}
-        </a>
-    </div>
+<div class="fr-col-auto fr-ml-3v">
+    <a class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-warning-425 fr-icon-pencil-line fr-btn--icon-left"
+        href="{{ beta_admin_url_for(path='datasets/{id}/'.format(id=dataset.id), fallback_path='dataset/{id}/'.format(id=dataset.id)) }}">
+        {{ _('Edit') }}
+    </a>
+</div>
 {% endif %}
 {% endblock %}
 
 {% block content %}
 {{ breadcrumb(self) }}
-{% cache cache_duration, 'dataset-content', dataset.id|string, reuses.page|string, g.lang_code, current_user.slug or 'anonymous', dataset.last_modified|string %}
+{% cache cache_duration, 'dataset-content', dataset.id|string, reuses.page|string, g.lang_code, current_user.slug or
+'anonymous', dataset.last_modified|string %}
 <div class="content fr-container fr-mb-10v">
     {% if dataset.private or dataset.deleted or dataset.archived %}
-        <div class="fr-grid-row">
-            {% if dataset.private %}
-                <div class="fr-col-auto fr-mr-1w">
-                    <p class="fr-tag"
-                    title="{{ _('This dataset is a draft and will not be visible by other users') }}">{{ _('Draft') }}
-                    </p>
-                </div>
-            {% endif %}
-            {% if dataset.deleted %}
-                <div class="fr-col-auto fr-mr-1w">
-                    <p class="fr-tag"
-                        title="{{ _('This dataset has been deleted. This will be permanent in the next 24 hours') }}">{{ _('Deleted') }}
-                    </p>
-                </div>
-            {% endif %}
-            {% if dataset.archived %}
-                {% set title = _('This dataset has been archived automatically because it has been deleted from the remote platform.')
-                    if dataset.harvest and dataset.harvest.archived == 'not-on-remote' else
-                    _('This dataset has been archived.') %}
-                <div class="fr-col-auto fr-mr-1w">
-                    <p class="fr-tag" title="{{ title }}">
-                        {{ _('Archived') }}
-                    </p>
-                </div>
-            {% endif %}
+    <div class="fr-grid-row">
+        {% if dataset.private %}
+        <div class="fr-col-auto fr-mr-1w">
+            <p class="fr-tag" title="{{ _('This dataset is a draft and will not be visible by other users') }}">{{
+                _('Draft') }}
+            </p>
         </div>
+        {% endif %}
+        {% if dataset.deleted %}
+        <div class="fr-col-auto fr-mr-1w">
+            <p class="fr-tag"
+                title="{{ _('This dataset has been deleted. This will be permanent in the next 24 hours') }}">{{
+                _('Deleted') }}
+            </p>
+        </div>
+        {% endif %}
+        {% if dataset.archived %}
+        {% set title = _('This dataset has been archived automatically because it has been deleted from the remote
+        platform.')
+        if dataset.harvest and dataset.harvest.archived == 'not-on-remote' else
+        _('This dataset has been archived.') %}
+        <div class="fr-col-auto fr-mr-1w">
+            <p class="fr-tag" title="{{ title }}">
+                {{ _('Archived') }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
     {% endif %}
     <div class="fr-grid-row fr-grid-row--gutters vuejs">
         <section class="fr-col-12 fr-col-md-8">
@@ -111,55 +112,58 @@
         <section class="fr-col-12 fr-col-md-4" data-read-more-max-height="description">
             {% if sysadmin %}
             <div class="fr-m-0">
-                <featured-button subject-id="{{ dataset.id }}" subject-type="dataset" :featured="{{ dataset.featured|tojson|safe }}"></featured-button>
+                <featured-button subject-id="{{ dataset.id }}" subject-type="dataset"
+                    :featured="{{ dataset.featured|tojson|safe }}"></featured-button>
             </div>
             {% endif %}
             {% if dataset.organization %}
-                <h2 id="producer" class="subtitle fr-mb-1v">
-                    {% if dataset.contact_points|length %}
-                        {{ CONTACT_ROLES.get('publisher') }}
-                    {% else %}
-                        {{ _('Producer') }}
-                    {% endif %}
-                </h2>
-                {% with organization=dataset.organization, producer_type='organization' %}
-                {% include theme('organization/producer-name-with-logo.html') %}
-                {% endwith %}
+            <h2 id="producer" class="subtitle fr-mb-1v">
+                {% if dataset.contact_points|length %}
+                {{ CONTACT_ROLES.get('publisher') }}
+                {% else %}
+                {{ _('Producer') }}
+                {% endif %}
+            </h2>
+            {% with organization=dataset.organization, producer_type='organization' %}
+            {% include theme('organization/producer-name-with-logo.html') %}
+            {% endwith %}
             {% elif dataset.owner %}
-                <h2 id="author" class="subtitle fr-mb-1w">{{ _('Author') }}</h2>
-                {% with organization=dataset.owner, producer_type='owner' %}
-                {% include theme('organization/producer-name-with-logo.html') %}
-                {% endwith %}
-                <p class="well well-grey-100 fr-text--regular fr-py-3v fr-my-3v">
-                    {{
-                        _("This dataset has been published on the initiative and under the responsibility of {author}.")
-                        .format(author=dataset.owner.fullname)
-                    }}
-                </p>
+            <h2 id="author" class="subtitle fr-mb-1w">{{ _('Author') }}</h2>
+            {% with organization=dataset.owner, producer_type='owner' %}
+            {% include theme('organization/producer-name-with-logo.html') %}
+            {% endwith %}
+            <p class="well well-grey-100 fr-text--regular fr-py-3v fr-my-3v">
+                {{
+                _("This dataset has been published on the initiative and under the responsibility of {author}.")
+                .format(author=dataset.owner.fullname)
+                }}
+            </p>
             {% endif %}
             {% for contact_point in dataset.contact_points %}
-                {% if loop.first %}
-                    <h2 class="subtitle fr-mt-3v fr-mb-1v">{{ _('Attributions')}}</h2>
-                {% endif %}
-                {% include theme('contact_point.html') %}
+            {% if loop.first %}
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">{{ _('Attributions')}}</h2>
+            {% endif %}
+            {% include theme('contact_point.html') %}
             {% endfor %}
             {% if external_source(dataset) %}
-                <div class="fr-my-3v fr-text--sm">
-                    {{ banner_info(
-                        "fr-icon-external-link-line",
-                        _("This dataset come from an external portal.&nbsp;<a href='{external_source}' rel='ugc nofollow noopener'>View the original source.</a>")
-                        .format(external_source=external_source(dataset))
-                    )}}
-                </div>
+            <div class="fr-my-3v fr-text--sm">
+                {{ banner_info(
+                "fr-icon-external-link-line",
+                _("This dataset come from an external portal.&nbsp;<a href='{external_source}'
+                    rel='ugc nofollow noopener'>View the original source.</a>")
+                .format(external_source=external_source(dataset))
+                )}}
+            </div>
             {% endif %}
             {# FIXME: remove when geo.data.gouv.fr is shutdown #}
             {% if 'geop:dataset_id' in dataset.extras %}
             <p class="well well-warning fr-py-3v fr-my-3v fr-text--sm">
                 ⚠️ {{ _("This dataset is handled by the <a href='{geo_link}'>geo.data.gouv.fr</a> platform.
                 This platform is not actively maintained and as a result, you may find some bogus data or metadata.
-                More information about <a href='{blog_link}'>the shutdown of geo.data.gouv.fr is available here.</a>").format(
-                    geo_link='https://geo.data.gouv.fr',
-                    blog_link='https://www.data.gouv.fr/fr/posts/extinction-de-geo-data-gouv-fr/'
+                More information about <a href='{blog_link}'>the shutdown of geo.data.gouv.fr is available
+                    here.</a>").format(
+                geo_link='https://geo.data.gouv.fr',
+                blog_link='https://www.data.gouv.fr/fr/posts/extinction-de-geo-data-gouv-fr/'
                 )}}
             </p>
             {% endif %}
@@ -192,73 +196,36 @@
         <ul class="fr-tabs__list" role="tablist" aria-label="{{ _('In-page navigation') }}">
             <li role="presentation">
                 {% set count_resources = dataset.resources | length %}
-                <button
-                    id="resources"
-                    class="fr-tabs__tab"
-                    tabindex="0"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="resources-panel"
-                    data-update-url="resources"
-                    data-previous-url="resource-"
-                >
+                <button id="resources" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="false"
+                    aria-controls="resources-panel" data-update-url="resources" data-previous-url="resource-">
                     {{ _('Files') }}
                     <sup>{{count_resources}}</sup>
                 </button>
             </li>
             <li role="presentation">
-                <button
-                    id="community-reuses"
-                    class="fr-tabs__tab"
-                    tabindex="-1"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="community-reuses-panel"
-                    data-update-url="community-reuses"
-                >
+                <button id="community-reuses" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false"
+                    aria-controls="community-reuses-panel" data-update-url="community-reuses">
                     {{ _('Reuses and API') }}
                     <sup>{{ total_reuses + total_dataservices }}</sup>
                 </button>
             </li>
             <li role="presentation">
-                <button
-                    id="discussions"
-                    class="fr-tabs__tab"
-                    tabindex="-1"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="discussions-panel"
-                    data-update-url="discussions"
-                    data-previous-url="discussion-"
-                >
+                <button id="discussions" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false"
+                    aria-controls="discussions-panel" data-update-url="discussions" data-previous-url="discussion-">
                     {{_('Discussions')}}
                     <sup>{{ dataset.metrics.discussions or 0 }}</sup>
                 </button>
             </li>
             <li role="presentation">
-                <button
-                    id="community-resources"
-                    class="fr-tabs__tab"
-                    tabindex="-1"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="community-resources-panel"
-                    data-update-url="community-resources"
-                >
+                <button id="community-resources" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false"
+                    aria-controls="community-resources-panel" data-update-url="community-resources">
                     {{ _('Community resources') }}
                     <sup>{{ dataset.community_resources|length }}</sup>
                 </button>
             </li>
             <li role="presentation">
-                <button
-                    id="information"
-                    class="fr-tabs__tab"
-                    tabindex="-1"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="information-panel"
-                    data-update-url="information"
-                >
+                <button id="information" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false"
+                    aria-controls="information-panel" data-update-url="information">
                     {{ _("Information") }}
                 </button>
             </li>
@@ -266,136 +233,96 @@
         <ul class="fr-tabs__list" role="navigation" aria-label="{{ _('In-page navigation') }}">
             <li role="presentation">
                 {% set count_resources = dataset.resources | length %}
-                <a
-                    id="resources"
-                    class="fr-tabs__tab"
-                    href="#resources-panel"
-                >
+                <a id="resources" class="fr-tabs__tab" href="#resources-panel">
                     {{ _('Files') }}
                     <sup>{{count_resources}}</sup>
                 </a>
             </li>
             <li role="presentation">
-                <a
-                    id="community-reuses"
-                    class="fr-tabs__tab"
-                    href="#community-reuses-panel"
-                >
+                <a id="community-reuses" class="fr-tabs__tab" href="#community-reuses-panel">
                     {{ _('Reuses') }}
                     <sup>{{ total_reuses }}</sup>
                 </a>
             </li>
             <li role="presentation">
-                <a
-                    id="discussions"
-                    class="fr-tabs__tab"
-                    href="#discussions-panel"
-                >
+                <a id="discussions" class="fr-tabs__tab" href="#discussions-panel">
                     {{_('Discussions')}}
                     <sup>{{ dataset.metrics.discussions or 0 }}</sup>
                 </a>
             </li>
             <li role="presentation">
-                <a
-                    id="community-resources"
-                    class="fr-tabs__tab"
-                    href="#community-resources-panel"
-                >
+                <a id="community-resources" class="fr-tabs__tab" href="#community-resources-panel">
                     {{ _('Community resources') }}
                     <sup>{{ dataset.community_resources|length }}</sup>
                 </a>
             </li>
             <li role="presentation">
-                <a
-                    id="information"
-                    class="fr-tabs__tab"
-                    href="#information-panel"
-                >
+                <a id="information" class="fr-tabs__tab" href="#information-panel">
                     {{ _("Information") }}
                 </a>
             </li>
         </ul>
     </div>
-    <div
-        id="resources-panel"
-        class="fr-tabs__panel"
-        role="tabpanel"
-        aria-labelledby="resources"
-        tabindex="0"
-    >
+    <div id="resources-panel" class="fr-tabs__panel" role="tabpanel" aria-labelledby="resources" tabindex="0">
         <div class="fr-container">
             <div class="ressources-files vuejs fr-mb-5v">
-                <dataset-resource-from-hash
-                    dataset-id="{{ dataset.id }}"
-                    type-label="{{ type_label }}"
-                    :can-edit="{{ can_edit.can()|tojson|safe }}"
-                ></dataset-resource-from-hash>
+                <dataset-resource-from-hash dataset-id="{{ dataset.id }}" type-label="{{ type_label }}"
+                    :can-edit="{{ can_edit.can()|tojson|safe }}"></dataset-resource-from-hash>
                 {% set show_all_resources = request.args.get('resources') == 'all' %}
                 {% set grouped_resources = dataset.resources|group_resources_by_type %}
                 {% set nb_groups = grouped_resources.keys()|length %}
                 {% set has_multiple_groups = nb_groups > 1 %}
                 {% set resources_per_page = config.RESOURCES_DEFAULT_PAGE_SIZE %}
                 {% for (type, type_label), resources in grouped_resources.items() %}
-                    <dataset-resources
-                        dataset-id="{{ dataset.id }}"
-                        type="{{ type }}"
-                        type-label="{{ type_label }}"
-                        :can-edit="{{ can_edit.can()|tojson|safe }}"
-                        :show-total="{{ has_multiple_groups|tojson|safe }}"
-                        :first-group="{{loop.first|tojson|safe}}"
-                    >
-                    </dataset-resources>
-                    <noscript>
-                        <h2 class="fr-mt-4w fr-mb-1w subtitle subtitle--uppercase">
-                            {{ type_label }} {% if has_multiple_groups %}<sup>{{resources|length }}</sup>{% endif %}
-                        </h2>
-                        {% set max_resources_to_show = resources_per_page if not show_all_resources else resources|length %}
-                        {% for resource in resources[:max_resources_to_show] %}
-                        {% include theme('dataset/resource/card.html') %}
-                        {% endfor %}
-                        {% if resources|length > resources_per_page and not show_all_resources %}
-                            <a class="fr-btn fr-btn--secondary fr-mt-2w" href="?resources=all">
-                                {{ _('See the %(type)s', type=type_label|lower) }}
-                            </a>
-                        {% endif %}
-                    </noscript>
+                <dataset-resources dataset-id="{{ dataset.id }}" type="{{ type }}" type-label="{{ type_label }}"
+                    :can-edit="{{ can_edit.can()|tojson|safe }}" :show-total="{{ has_multiple_groups|tojson|safe }}"
+                    :first-group="{{loop.first|tojson|safe}}">
+                </dataset-resources>
+                <noscript>
+                    <h2 class="fr-mt-4w fr-mb-1w subtitle subtitle--uppercase">
+                        {{ type_label }} {% if has_multiple_groups %}<sup>{{resources|length }}</sup>{% endif %}
+                    </h2>
+                    {% set max_resources_to_show = resources_per_page if not show_all_resources else resources|length %}
+                    {% for resource in resources[:max_resources_to_show] %}
+                    {% include theme('dataset/resource/card.html') %}
+                    {% endfor %}
+                    {% if resources|length > resources_per_page and not show_all_resources %}
+                    <a class="fr-btn fr-btn--secondary fr-mt-2w" href="?resources=all">
+                        {{ _('See the %(type)s', type=type_label|lower) }}
+                    </a>
+                    {% endif %}
+                </noscript>
                 {% else %}
-                    <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
-                        {% include theme('svg/blank_state/resource.svg') %}
-                        <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-                            {{ _('There are no files for this dataset yet.') }}
-                        </p>
-                        {% if can_edit %}
-                            <p>
-                                <a
-                                    class="fr-btn"
-                                    href="{{ beta_admin_url_for(path='datasets/{id}/'.format(id=dataset.id), fallback_path='dataset/{id}/'.format(id=dataset.id)) }}"
-                                >
-                                    {{ _('Add a file') }}
-                                </a>
-                            </p>
-                        {% endif %}
-                    </div>
+                <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
+                    {% include theme('svg/blank_state/resource.svg') %}
+                    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+                        {{ _('There are no files for this dataset yet.') }}
+                    </p>
+                    {% if can_edit %}
+                    <p>
+                        <a class="fr-btn"
+                            href="{{ beta_admin_url_for(path='datasets/{id}/'.format(id=dataset.id), fallback_path='dataset/{id}/'.format(id=dataset.id)) }}">
+                            {{ _('Add a file') }}
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
             {{ hook('dataset.display.after-files') }}
         </div>
     </div>
-    <div
-        id="community-reuses-panel"
-        class="fr-tabs__panel"
-        role="tabpanel"
-        aria-labelledby="community-reuses"
-        tabindex="0"
-    >
+    <div id="community-reuses-panel" class="fr-tabs__panel" role="tabpanel" aria-labelledby="community-reuses"
+        tabindex="0">
         <div class="fr-container">
             {% if dataservices|length %}
-                <div class="fr-grid-row fr-mb-3v">
-                <h2 class="subtitle subtitle--uppercase fr-col">{{ ngettext('%(num)d API', '%(num)d APIs', total_dataservices) }}</h2>
+            <div class="fr-grid-row fr-mb-3v">
+                <h2 class="subtitle subtitle--uppercase fr-col">{{ ngettext('%(num)d API', '%(num)d APIs',
+                    total_dataservices) }}</h2>
             </div>
             <div>
                 {% for dataservice in dataservices %}
-                    {% include theme('dataservice/card.html') %}
+                {% include theme('dataservice/card.html') %}
                 {% endfor %}
             </div>
             {{ paginator(dataservices, arg_name='dataservices_page', url='#/community-reuses') }}
@@ -404,15 +331,16 @@
         <div class="fr-container">
             {{ hook('dataset.display.after-reuses') }}
             {% if reuses|length %}
-                <div class="fr-grid-row fr-mb-3v">
-                <h2 class="subtitle subtitle--uppercase fr-col">{{ ngettext('%(num)d Reuse', '%(num)d Reuses', total_reuses) }}</h2>
+            <div class="fr-grid-row fr-mb-3v">
+                <h2 class="subtitle subtitle--uppercase fr-col">{{ ngettext('%(num)d Reuse', '%(num)d Reuses',
+                    total_reuses) }}</h2>
                 {% if not read_only_mode %}
-                    <div class="fr-col-12 fr-col-sm-6 fr-col-md-5 fr-col-lg-4 text-align-right">
-                        <a class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
-                            href="{{ beta_admin_url_for(path='reuses/new/', fallback_path='reuse/new/', **{'dataset_id': dataset.id}) }}">
-                            {{ _('Add a reuse') }}
-                        </a>
-                    </div>
+                <div class="fr-col-12 fr-col-sm-6 fr-col-md-5 fr-col-lg-4 text-align-right">
+                    <a class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
+                        href="{{ beta_admin_url_for(path='reuses/new/', fallback_path='reuse/new/', **{'dataset_id': dataset.id}) }}">
+                        {{ _('Add a reuse') }}
+                    </a>
+                </div>
                 {% endif %}
             </div>
             <div class="fr-grid-row fr-grid-row--gutters">
@@ -424,132 +352,92 @@
             </div>
             {{ paginator(reuses, arg_name='reuses_page', url='#/community-reuses') }}
             {% else %}
-                <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
-                    {% include theme('svg/blank_state/reuse.svg') %}
-                    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-                        {{ _('There are no reuses for this dataset yet.') }}
-                    </p>
-                    <p>
-                        <a
-                            class="fr-btn"
-                            href="{{ beta_admin_url_for(path='reuses/new/', fallback_path='reuse/new/', **{'dataset_id': dataset.id}) }}"
-                        >
-                            {{ _('Publish a reuse') }}
-                        </a>
-                        <a
-                            class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
-                            href="{{ config.GUIDES_REUSE_URL }}"
-                        >
-                            {{ _("What's a reuse ?") }}
-                        </a>
-                    </p>
-                </div>
+            <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
+                {% include theme('svg/blank_state/reuse.svg') %}
+                <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+                    {{ _('There are no reuses for this dataset yet.') }}
+                </p>
+                <p>
+                    <a class="fr-btn"
+                        href="{{ beta_admin_url_for(path='reuses/new/', fallback_path='reuse/new/', **{'dataset_id': dataset.id}) }}">
+                        {{ _('Publish a reuse') }}
+                    </a>
+                    <a class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+                        href="{{ config.GUIDES_REUSE_URL }}">
+                        {{ _("What's a reuse ?") }}
+                    </a>
+                </p>
+            </div>
             {% endif %}
         </div>
     </div>
-    <div
-        id="discussions-panel"
-        class="fr-tabs__panel"
-        role="tabpanel"
-        aria-labelledby="discussions"
-        tabindex="0"
-    >
+    <div id="discussions-panel" class="fr-tabs__panel" role="tabpanel" aria-labelledby="discussions" tabindex="0">
         <div class="fr-container vuejs">
             {% if not dataset.metrics.discussions %}
-                <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w" data-no-discussion>
-                    {% include theme('svg/blank_state/discussion.svg') %}
-                    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-                        {{ _('There are no discussions for this dataset yet.') }}
-                    </p>
-                </div>
+            <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w" data-no-discussion>
+                {% include theme('svg/blank_state/discussion.svg') %}
+                <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+                    {{ _('There are no discussions for this dataset yet.') }}
+                </p>
+            </div>
             {% endif %}
-            <discussion-threads
-                ref="discussions"
-                subject-id="{{ dataset.id }}"
-                subject-class="{{ dataset.__class__.__name__ }}"
-            >
+            <discussion-threads ref="discussions" subject-id="{{ dataset.id }}"
+                subject-class="{{ dataset.__class__.__name__ }}">
             </discussion-threads>
         </div>
     </div>
-    <div
-        id="community-resources-panel"
-        class="fr-tabs__panel"
-        role="tabpanel"
-        aria-labelledby="community-resources"
-        tabindex="0"
-    >
+    <div id="community-resources-panel" class="fr-tabs__panel" role="tabpanel" aria-labelledby="community-resources"
+        tabindex="0">
         <div class="fr-container">
             {% if dataset.community_resources|length %}
-                <div class="fr-mb-3v">
-                    {{ banner_warning(
-                        "fr-icon-alert-line",
-                        _("These resources are published by the community and the producer isn't responsible for them.")
-                    )}}
-                </div>
-                <div class="resource-list vuejs">
-                    <dataset-resource-from-hash
-                        dataset-id="{{ dataset.id }}"
-                        type-label="{{ type_label }}"
-                        :can-edit="{{ can_edit.can()|tojson|safe }}"
-                        community-resource
-                    ></dataset-resource-from-hash>
-                    <dataset-resources
-                        dataset-id="{{ dataset.id }}"
-                        type="community"
-                        type-label="{{ ngettext('%(num)d Community resource', '%(num)d Community resources', dataset.community_resources|length) }}"
-                        :can-edit-resources='{{ dataset.community_resources|permissions|tojson|safe }}'
-                        :first-group="true"
-                    >
-                    </dataset-resources>
-                    <noscript>
-                        {% for resource in dataset.community_resources %}
-                        {% include theme('dataset/resource/card.html') %}
-                        {% endfor %}
-                    </noscript>
-                </div>
+            <div class="fr-mb-3v">
+                {{ banner_warning(
+                "fr-icon-alert-line",
+                _("These resources are published by the community and the producer isn't responsible for them.")
+                )}}
+            </div>
+            <div class="resource-list vuejs">
+                <dataset-resource-from-hash dataset-id="{{ dataset.id }}" type-label="{{ type_label }}"
+                    :can-edit="{{ can_edit.can()|tojson|safe }}" community-resource></dataset-resource-from-hash>
+                <dataset-resources dataset-id="{{ dataset.id }}" type="community"
+                    type-label="{{ ngettext('%(num)d Community resource', '%(num)d Community resources', dataset.community_resources|length) }}"
+                    :can-edit-resources='{{ dataset.community_resources|permissions|tojson|safe }}' :first-group="true">
+                </dataset-resources>
+                <noscript>
+                    {% for resource in dataset.community_resources %}
+                    {% include theme('dataset/resource/card.html') %}
+                    {% endfor %}
+                </noscript>
+            </div>
             {% else %}
-                <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
-                    {% include theme('svg/blank_state/resource.svg') %}
-                    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-                        {{ _('There are no community resources for this dataset yet.') }}
-                    </p>
-                    <p>
-                        <a
-                            class="fr-btn"
-                            href="{{ beta_admin_url_for(path='community-resources/new/', fallback_path='community-resource/new/', **{'dataset_id': dataset.id}) }}"
-                        >
-                            {{ _('Share your resources') }}
-                        </a>
-                        <a
-                            class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
-                            href="{{ config.GUIDES_COMMUNITY_URL }}"
-                        >
-                            {{ _('Learn more about the community') }}
-                        </a>
-                    </p>
-                </div>
+            <div class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w">
+                {% include theme('svg/blank_state/resource.svg') %}
+                <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+                    {{ _('There are no community resources for this dataset yet.') }}
+                </p>
+                <p>
+                    <a class="fr-btn"
+                        href="{{ beta_admin_url_for(path='community-resources/new/', fallback_path='community-resource/new/', **{'dataset_id': dataset.id}) }}">
+                        {{ _('Share your resources') }}
+                    </a>
+                    <a class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+                        href="{{ config.GUIDES_COMMUNITY_URL }}">
+                        {{ _('Learn more about the community') }}
+                    </a>
+                </p>
+            </div>
             {% endif %}
         </div>
     </div>
-    <div
-        id="information-panel"
-        class="fr-tabs__panel"
-        role="tabpanel"
-        aria-labelledby="information"
-        tabindex="0"
-    >
+    <div id="information-panel" class="fr-tabs__panel" role="tabpanel" aria-labelledby="information" tabindex="0">
         <div class="fr-container">
-        {% call() information_section(_('Information')) %}
+            {% call() information_section(_('Information')) %}
             <h3 class="subtitle fr-mb-1v">{{_('Tags')}}</h3>
             {% if dataset.tags %}
             <ul class="fr-tags-group fr-mb-3v">
                 {% for tag in dataset.tags %}
                 <li>
-                    <a
-                        href="{{ url_for('datasets.list', tag=tag) }}"
-                        title="{{ tag }}"
-                        class="fr-tag fr-tag--sm"
-                    >
+                    <a href="{{ url_for('datasets.list', tag=tag) }}" title="{{ tag }}" class="fr-tag fr-tag--sm">
                         {{ tag|truncate(35, True) }}
                     </a>
                 </li>
@@ -558,169 +446,157 @@
             {% endif %}
             <div class="fr-grid-row fr-grid-row--gutters">
                 {% if dataset.license %}
-                    {% call() information_col(_('License')) %}
-                        <code class="bg-alt-grey fr-px-1v text-grey-380">
+                {% call() information_col(_('License')) %}
+                <code class="bg-alt-grey fr-px-1v text-grey-380">
                             {% if dataset.license.url %}<a href="{{ dataset.license.url }}">{% endif %}
                             {{ dataset.license.title }}
                             {% if dataset.license.url %}</a>{% endif %}
                         </code>
-                    {% endcall %}
+                {% endcall %}
                 {% endif %}
                 {% call() information_col(_('ID')) %}
-                    {{dataset.id}}
+                {{dataset.id}}
                 {% endcall %}
                 {% if external_source(dataset) %}
                 {% call() information_col(_('Remote source'), 'text-overflow-ellipsis') %}
-                    <a rel="ugc nofollow noopener" href="{{ external_source(dataset) }}">{{external_source(dataset)}}</a>
+                <a rel="ugc nofollow noopener" href="{{ external_source(dataset) }}">{{external_source(dataset)}}</a>
                 {% endcall %}
                 {% endif %}
             </div>
-        {% endcall %}
-        {% call() information_section(_('Temporality')) %}
+            {% endcall %}
+            {% call() information_section(_('Temporality')) %}
             <div class="fr-grid-row fr-grid-row--gutters">
                 {% call() information_col(_('Creation')) %}
-                    {{dataset.created_at|dateformat(format='long')}}
+                {{dataset.created_at|dateformat(format='long')}}
                 {% endcall %}
                 {% if dataset.frequency %}
-                    {% call() information_col(_('Frequency')) %}
-                        {{dataset.frequency_label}}
-                    {% endcall %}
+                {% call() information_col(_('Frequency')) %}
+                {{dataset.frequency_label}}
+                {% endcall %}
                 {% endif %}
                 {% if dataset.temporal_coverage %}
-                    {% call() information_col(_('Temporal coverage')) %}
-                        {{dataset.temporal_coverage|daterange(details=True)}}
-                    {% endcall %}
+                {% call() information_col(_('Temporal coverage')) %}
+                {{dataset.temporal_coverage|daterange(details=True)}}
+                {% endcall %}
                 {% endif %}
             </div>
             <div class="fr-grid-row fr-grid-row--gutters">
                 {% call() information_col(_('Latest update')) %}
-                    {{ dataset.last_update|dateformat(format='long') }}
+                {{ dataset.last_update|dateformat(format='long') }}
                 {% endcall %}
             </div>
-        {% endcall %}
-        {% if dataset.spatial %}
+            {% endcall %}
+            {% if dataset.spatial %}
             {% call() information_section(_('Spatial coverage')) %}
             <div class="fr-grid-row fr-grid-row--gutters">
                 {% if dataset.spatial.zones %}
-                    {% call() information_col(_('Territorial coverage')) %}
-                        {% for zone in dataset.spatial.zones %}
-                        {{zone.name}}{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                    {% endcall %}
+                {% call() information_col(_('Territorial coverage')) %}
+                {% for zone in dataset.spatial.zones %}
+                {{zone.name}}{% if not loop.last %},{% endif %}
+                {% endfor %}
+                {% endcall %}
                 {% endif %}
                 {% if dataset.spatial.geom %}
-                    {% call() information_col(_('Territorial coverage')) %}
-                        {{ leaflet_map(dataset.spatial.geom) }}
-                    {% endcall %}
+                {% call() information_col(_('Territorial coverage')) %}
+                {{ leaflet_map(dataset.spatial.geom) }}
+                {% endcall %}
                 {% endif %}
                 {% if dataset.spatial.granularity %}
-                    {% call() information_col(_('Territorial coverage granularity')) %}
-                        {{dataset.spatial.granularity_label}}
-                    {% endcall %}
+                {% call() information_col(_('Territorial coverage granularity')) %}
+                {{dataset.spatial.granularity_label}}
+                {% endcall %}
                 {% endif %}
             </div>
             {% endcall %}
-        {% endif %}
-        {% set schemas = dataset.resources|group_resources_by_schema%}
-        {% if schemas|length %}
+            {% endif %}
+            {% set schemas = dataset.resources|group_resources_by_schema%}
+            {% if schemas|length %}
             {% call() information_section(_('Data schema')) %}
-                {% for name in schemas %}
-                    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-                        <div class="fr-col">
-                            <div class="fr-grid-row fr-grid-row--middle fr-mb-1w">
-                                <p class="fr-text--xs fr-m-0">{{_('The dataset files are following the schema: ')}}</p>
-                                <p class="fr-tag fr-tag--sm fr-icon-checkbox-circle-line fr-tag--icon-left">
-                                    {{name}}
-                                </p>
-                            </div>
-                            <p class="fr-text--xs fr-m-0">
-                                {{_('Schemas allow to describe data models,
-                                discover how schemas improve your data quality and the available use cases
-                                on <a href="{url}">schema.data.gouv.fr</a>')
-                                .format(url=config.SCHEMA_DOCUMENTATION_URL)}}
-                            </p>
-                        </div>
-                        <div class="fr-col-auto">
-                            <a
-                                class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-btn--icon-left fr-icon-book-2-line"
-                                href="{{config.SCHEMA_DOCUMENTATION_URL}}{{name}}"
-                            >
-                                {{ _('See schema documentation') }}
-                            </a>
-                        </div>
+            {% for name in schemas %}
+            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+                <div class="fr-col">
+                    <div class="fr-grid-row fr-grid-row--middle fr-mb-1w">
+                        <p class="fr-text--xs fr-m-0">{{_('The dataset files are following the schema: ')}}</p>
+                        <p class="fr-tag fr-tag--sm fr-icon-checkbox-circle-line fr-tag--icon-left">
+                            {{name}}
+                        </p>
                     </div>
-                {% endfor %}
+                    <p class="fr-text--xs fr-m-0">
+                        {{_('Schemas allow to describe data models,
+                        discover how schemas improve your data quality and the available use cases
+                        on <a href="{url}">schema.data.gouv.fr</a>')
+                        .format(url=config.SCHEMA_DOCUMENTATION_URL)}}
+                    </p>
+                </div>
+                <div class="fr-col-auto">
+                    <a class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-btn--icon-left fr-icon-book-2-line"
+                        href="{{config.SCHEMA_DOCUMENTATION_URL}}{{name}}">
+                        {{ _('See schema documentation') }}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
             {% endcall %}
-        {% endif %}
-        {% call() information_section(_('Actions')) %}
+            {% endif %}
+            {% call() information_section(_('Actions')) %}
             <h3 class="subtitle fr-mb-1v">{{_('Embed')}}</h3>
             {{integrate_btn(dataset)}}
-        {% endcall %}
+            {% endcall %}
 
-        {% if dataset.extras %}
-        {% call(slot) information_accordion(_('Extras')) %}
+            {% if dataset.extras %}
+            {% call(slot) information_accordion(_('Extras')) %}
             {% if slot == "button" %}
-                <button
-                    data-accordion-button
-                    role="button"
-                    id="extras-accordion-button"
-                    aria-controls="extras-accordion"
-                    class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-btn--secondary-grey-500 accordion-button"
-                    >
-                    {{ _('See extras') }}
-                </button>
+            <button data-accordion-button role="button" id="extras-accordion-button" aria-controls="extras-accordion"
+                class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-btn--secondary-grey-500 accordion-button">
+                {{ _('See extras') }}
+            </button>
             {% else %}
-                <div class="accordion-content" id="extras-accordion" aria-labelledby="extras-accordion-button">
-                    {% call() information_section() %}
-                        <div class="fr-grid-row fr-grid-row--gutters">
-                        {% for extra_name, extra_value in dataset.extras.items() %}
-                            {% call() information_col(extra_name) %}
-                                {{extra_value}}
-                            {% endcall %}
-                        {% endfor %}
-                        </div>
+            <div class="accordion-content" id="extras-accordion" aria-labelledby="extras-accordion-button">
+                {% call() information_section() %}
+                <div class="fr-grid-row fr-grid-row--gutters">
+                    {% for extra_name, extra_value in dataset.extras.items() %}
+                    {% call() information_col(extra_name) %}
+                    {{extra_value}}
                     {% endcall %}
+                    {% endfor %}
                 </div>
+                {% endcall %}
+            </div>
             {% endif %}
-        {% endcall %}
-        {% endif %}
+            {% endcall %}
+            {% endif %}
 
-        {% if dataset.harvest %}
-        {% call(slot) information_accordion(_('Harvest')) %}
+            {% if dataset.harvest %}
+            {% call(slot) information_accordion(_('Harvest')) %}
             {% if slot == "button" %}
-                {% if sysadmin and dataset.harvest.source_id %}
-                    <a
-                        href="{{ beta_admin_url_for(path='harvesters/{id}/'.format(id=dataset.harvest.source_id), fallback_path='harvester/{id}/'.format(id=dataset.harvest.source_id)) }}"
-                        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-btn--icon-left fr-icon-settings-5-line"
-                    >
-                        {{ _('See harvest source') }}
-                    </a>
-                {% endif %}
-                <button
-                    data-accordion-button
-                    role="button"
-                    id="harvest-extras-accordion-button"
-                    aria-controls="harvest-extras-accordion"
-                    class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-btn--secondary-grey-500 accordion-button"
-                >
-                    {{ _('See harvest extras') }}
-                </button>
-            {% else %}
-                <div class="accordion-content" id="harvest-extras-accordion" aria-labelledby="harvest-extras-accordion-button">
-                    {% call() information_section() %}
-                        <div class="fr-grid-row fr-grid-row--gutters">
-                        {% for harvest_extra_name, harvest_extra_value in dataset.harvest._data.items() %}
-                            {% call() information_col(harvest_extra_name) %}
-                                {{harvest_extra_value}}
-                            {% endcall %}
-                        {% endfor %}
-                        </div>
-                    {% endcall %}
-                </div>
+            {% if sysadmin and dataset.harvest.source_id %}
+            <a href="{{ beta_admin_url_for(path='harvesters/{id}/'.format(id=dataset.harvest.source_id), fallback_path='harvester/{id}/'.format(id=dataset.harvest.source_id)) }}"
+                class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-btn--icon-left fr-icon-settings-5-line">
+                {{ _('See harvest source') }}
+            </a>
             {% endif %}
-        {% endcall %}
-        {% endif %}
-        {{ hook('dataset.display.metrics') }}
+            <button data-accordion-button role="button" id="harvest-extras-accordion-button"
+                aria-controls="harvest-extras-accordion"
+                class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-btn--secondary-grey-500 accordion-button">
+                {{ _('See harvest extras') }}
+            </button>
+            {% else %}
+            <div class="accordion-content" id="harvest-extras-accordion"
+                aria-labelledby="harvest-extras-accordion-button">
+                {% call() information_section() %}
+                <div class="fr-grid-row fr-grid-row--gutters">
+                    {% for harvest_extra_name, harvest_extra_value in dataset.harvest._data.items() %}
+                    {% call() information_col(harvest_extra_name) %}
+                    {{harvest_extra_value}}
+                    {% endcall %}
+                    {% endfor %}
+                </div>
+                {% endcall %}
+            </div>
+            {% endif %}
+            {% endcall %}
+            {% endif %}
+            {{ hook('dataset.display.metrics') }}
         </div>
     </div>
 </div>
