@@ -3,7 +3,7 @@ import requests
 
 from udata.i18n import gettext as _
 from udata.harvest.backends.base import BaseBackend, HarvestFilter
-from udata.models import Resource, Dataset, License, SpatialCoverage
+from udata.models import Resource, Dataset, License, SpatialCoverage, Organization
 from udata.core.contact_point.models import ContactPoint
 from udata.harvest.models import HarvestItem
 
@@ -40,6 +40,80 @@ class OGCBackend(BaseBackend):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.logger = logging.getLogger(__name__)
+
+    def _get_or_create_contact_point(
+        self,
+        name: str,
+        email: str = None,
+        role: str = "contact",
+        organization: Organization = None,
+    ) -> ContactPoint:
+        """
+        Get or create a ContactPoint with the given parameters.
+        First checks if a ContactPoint with the same organization exists,
+        then falls back to checking by name, email and role.
+
+        Args:
+            name: Contact point name
+            email: Contact point email (optional)
+            role: Contact point role (default: 'contact')
+            organization: Organization reference (optional)
+
+        Returns:
+            ContactPoint instance (existing or newly created)
+        """
+        contact = None
+
+        # First, try to find by organization if provided
+        if organization:
+            contact = ContactPoint.objects(organization=organization, role=role).first()
+
+            if contact:
+                # Update name and email if they changed
+                updated = False
+                if name and contact.name != name:
+                    contact.name = name
+                    updated = True
+                if email and contact.email != email:
+                    contact.email = email
+                    updated = True
+                if updated:
+                    try:
+                        contact.save()
+                        self.logger.debug(
+                            f"Updated ContactPoint for organization {organization.name}: {name}"
+                        )
+                    except Exception as e:
+                        self.logger.warning(
+                            f"Could not update contact point {name}: {e}"
+                        )
+                return contact
+
+        # Fallback: try to find by name, email and role
+        if not contact:
+            query = {"name": name, "role": role}
+            if email:
+                query["email"] = email
+            contact = ContactPoint.objects(**query).first()
+
+        # Create new if not found
+        if not contact:
+            contact = ContactPoint(
+                name=name,
+                email=email,
+                role=role,
+                organization=organization,
+            )
+            try:
+                contact.save()
+                self.logger.info(
+                    f"Created new ContactPoint: {name} (role={role}, org={organization.name if organization else 'None'})"
+                )
+            except Exception as e:
+                self.logger.warning(f"Could not save contact point {name}: {e}")
+                return None
+
+        return contact
 
     def inner_harvest(self):
         """
@@ -186,33 +260,59 @@ class OGCBackend(BaseBackend):
         if temporal:
             dataset.extras["temporal_coverage"] = temporal
 
-        # Provider/Publisher
+        # Provider/Publisher - Get or create ContactPoint with organization reference
         provider = item_data.get("provider")
         if provider and isinstance(provider, dict):
             publisher_name = provider.get("name")
             publisher_email = provider.get("contactPoint", {}).get("email")
 
-            # dataset.extras["publisher_name"] = publisher_name
-            # dataset.extras["publisher_email"] = publisher_email
+            # Try to find the organization associated with the dataset
+            organization = dataset.organization
+
+            # If no organization on the dataset, try to find by provider name
+            if not organization and publisher_name:
+                # Try to find organization by name or acronym
+                organization = Organization.objects(name__iexact=publisher_name).first()
+                if not organization:
+                    organization = Organization.objects(
+                        acronym__iexact=publisher_name
+                    ).first()
+
+                # Try to extract acronym from "ACRONYM - Name" format
+                if not organization and " - " in publisher_name:
+                    possible_acronym = publisher_name.split(" - ")[0]
+                    organization = Organization.objects(
+                        acronym__iexact=possible_acronym
+                    ).first()
+
+            # First create a contact point with role="contact" if email is available
+            contact_email = provider.get("contactPoint", {}).get("email")
+            if contact_email and publisher_name:
+                contact_c = self._get_or_create_contact_point(
+                    name=publisher_name,
+                    email=contact_email,
+                    role="contact",
+                    organization=organization,
+                )
+
+                if contact_c:
+                    dataset.contact_points.append(contact_c)
 
             if publisher_name:
-                contact = ContactPoint.objects(
-                    name=publisher_name, email=publisher_email, role="publisher"
-                ).first()
+                # Then create publisher role:
+                # - name should be the organization name (if organization exists)
+                # - email should be None
+                point_name = organization.name if organization else publisher_name
 
-                if not contact:
-                    contact = ContactPoint(
-                        name=publisher_name, email=publisher_email, role="publisher"
-                    )
-                    try:
-                        contact.save()
-                    except Exception as e:
-                        self.logger.warning(
-                            f"Could not save contact point {publisher_name}: {e}"
-                        )
-                        contact = None
+                # Get or create ContactPoint with organization reference
+                contact = self._get_or_create_contact_point(
+                    name=point_name,
+                    email=None,  # No email for publisher role
+                    role="publisher",
+                    organization=organization,
+                )
 
-                if contact:
+                if contact and contact not in dataset.contact_points:
                     dataset.contact_points.append(contact)
 
         return dataset
