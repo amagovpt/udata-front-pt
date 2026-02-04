@@ -2986,4 +2986,4 @@ msgid "The Dados.gov Team"
 msgstr "A equipa Dados.gov"
 
 msgid "Attributions"
-msgstr "Contato"
+msgstr "Atribuições"

@@ -13,27 +13,27 @@ Este documento mapeia os campos obtidos do harvester `OGCBackend` (OGC API - Col
 
 ## Resumo do Mapeamento
 
-| Campo Fonte (OGC JSON-LD)     | Propriedade JSON                         | Campo Destino (uData `Dataset`)                | Notas / Lógica                                     |
-| :---------------------------- | :--------------------------------------- | :--------------------------------------------- | :------------------------------------------------- |
-| **Dataset**                   |                                          |                                                |                                                    |
-| `@id`                         | `each['@id']`                            | `remote_id` (HarvestItem)                      | Identificador único (URI).                         |
-| `name`                        | `each['name']`                           | `title`                                        | Nome do dataset.                                   |
-| `description`                 | `each['description']`                    | `description`                                  | Descrição do dataset.                              |
-| `keywords`                    | `each['keywords']`                       | `tags`                                         | Keywords (lista ou string).                        |
-| (Código)                      | -                                        | `tags`                                         | Adiciona tag fixa: `'ogcapi.dgterritorio.gov.pt'`. |
-| `license`                     | `each['license']`                        | `license`                                      | URL da licença (guess).                            |
-| (Código)                      | -                                        | `license`                                      | Fallback: `'notspecified'` se não encontrar.       |
-| `temporalCoverage`            | `each['temporalCoverage']`               | `extras['temporal_coverage']`                  | Cobertura temporal (não parseada).                 |
-| `provider`                    | `each['provider']` ou `data['provider']` | `extras['publisher_name']` e `contact_points`  | Nome do fornecedor.                                |
-| `provider.contactPoint.email` | `provider['contactPoint']['email']`      | `extras['publisher_email']` e `contact_points` | Email de contacto.                                 |
-| (Código)                      | -                                        | `extras['harvest:name']`                       | Nome da fonte de harvest.                          |
-| **Distribution**              | `each['distribution']`                   | **Resource**                                   |                                                    |
-| `contentURL`                  | `dist['contentURL']`                     | `url`                                          | URL do recurso (normalizada).                      |
-| `description`                 | `dist['description']`                    | `title`                                        | Descrição como título.                             |
-| `name`                        | `dist['name']`                           | `title`                                        | Nome (fallback).                                   |
-| (Código)                      | -                                        | `title`                                        | Fallback final: `'Resource'`.                      |
-| `encodingFormat`              | `dist['encodingFormat']`                 | `format`                                       | MIME type convertido para formato.                 |
-| (Código)                      | -                                        | `filetype`                                     | Fixo: `'remote'`.                                  |
+| Campo Fonte (OGC JSON-LD)     | Propriedade JSON                         | Campo Destino (uData `Dataset`)   | Notas / Lógica                                                        |
+| :---------------------------- | :--------------------------------------- | :-------------------------------- | :-------------------------------------------------------------------- |
+| **Dataset**                   |                                          |                                   |                                                                       |
+| `@id`                         | `each['@id']`                            | `remote_id` (HarvestItem)         | Identificador único (URI).                                            |
+| `name`                        | `each['name']`                           | `title`                           | Nome do dataset.                                                      |
+| `description`                 | `each['description']`                    | `description`                     | Descrição do dataset.                                                 |
+| `keywords`                    | `each['keywords']`                       | `tags`                            | Keywords (lista ou string).                                           |
+| (Código)                      | -                                        | `tags`                            | Adiciona tag fixa: `'ogcapi.dgterritorio.gov.pt'`.                    |
+| `license`                     | `each['license']`                        | `license`                         | URL da licença (guess).                                               |
+| (Código)                      | -                                        | `license`                         | Fallback: `'notspecified'` se não encontrar.                          |
+| `temporalCoverage`            | `each['temporalCoverage']`               | `extras['temporal_coverage']`     | Cobertura temporal (não parseada).                                    |
+| `provider`                    | `each['provider']` ou `data['provider']` | `contact_points` (role=publisher) | Nome da organização (se existir nos dados) ou do provider. Sem email. |
+| `provider.contactPoint.email` | `provider['contactPoint']['email']`      | `contact_points` (role=contact)   | Email de contacto e nome do provider.                                 |
+| (Código)                      | -                                        | `extras['harvest:name']`          | Nome da fonte de harvest.                                             |
+| **Distribution**              | `each['distribution']`                   | **Resource**                      |                                                                       |
+| `contentURL`                  | `dist['contentURL']`                     | `url`                             | URL do recurso (normalizada).                                         |
+| `description`                 | `dist['description']`                    | `title`                           | Descrição como título.                                                |
+| `name`                        | `dist['name']`                           | `title`                           | Nome (fallback).                                                      |
+| (Código)                      | -                                        | `title`                           | Fallback final: `'Resource'`.                                         |
+| `encodingFormat`              | `dist['encodingFormat']`                 | `format`                          | MIME type convertido para formato.                                    |
+| (Código)                      | -                                        | `filetype`                        | Fixo: `'remote'`.                                                     |
 
 ## Detalhes Específicos
 
@@ -223,12 +223,24 @@ if provider and isinstance(provider, dict):
     dataset.extras['publisher_name'] = provider.get('name')
     dataset.extras['publisher_email'] = provider.get('contactPoint', {}).get('email')
 
-    # Adiciona também aos contact_points para exibição correta
-    # Verifica se já existe ou cria novo ContactPoint
-    contact = ContactPoint.objects(name=provider.get('name'), ...).first()
-    if not contact:
-        contact = ContactPoint(name=..., ...)
-        contact.save()
+    # Validação de Organização:
+    # 1. Tenta encontrar a Organization pelo nome ou acrónimo (extraído de "SIGLA - Nome")
+    # 2. Se encontrar, usa essa Organization como referência nos contact_points
+
+    # Criação de Contact Points (Ordem: Contact -> Publisher):
+
+    # 1. Para role="contact" (se houver email)
+    # - Name: provider.name
+    # - Email: provider.contactPoint.email
+    # - Organization: Referência à Organization encontrada (se houver)
+    contact_c = ContactPoint.objects(role='contact', ...).first()
+    dataset.contact_points.append(contact_c)
+
+    # 2. Para role="publisher"
+    # - Name: Organization.name (se encontrada) OU provider.name
+    # - Email: None (não guarda email para publisher)
+    # - Organization: Referência à Organization encontrada (se houver)
+    contact = ContactPoint.objects(role='publisher', ...).first()
     dataset.contact_points.append(contact)
 ```
 
@@ -353,8 +365,9 @@ dataset.extras = {
 }
 
 dataset.contact_points = [
-    # ContactPoint instance (saved in DB)
-    <ContactPoint: Direção-Geral do Território>
+    # A ordem é importante: Contacto primeiro, depois Publisher
+    <ContactPoint: Direção-Geral do Território (contact, email=info@...)>,
+    <ContactPoint: Direção-Geral do Território (publisher, email=None)>
 ]
 
 dataset.resources = [
@@ -384,7 +397,7 @@ Os seguintes campos **não são mapeados** para o modelo Dataset:
 2. **Filtro de formatos**: Ignora HTML e PNG automaticamente
 3. **Identificador URI**: Usa `@id` como identificador (pode ser URL completa)
 4. **Licença por URL**: Tenta identificar licença pela URL fornecida
-5. **Provider e Contact Points**: Provider não cria `Organization`, mas cria um `ContactPoint` e armazena info em `extras`.
+5. **Provider e Contact Points**: Tenta vincular a uma `Organization` existente. Cria `ContactPoint` com referência à organização se encontrada. Publisher não tem email. Ordem de criação: Contact, depois Publisher.
 6. **Temporal coverage não parseada**: Armazenada como string em extras
 7. **Tag fixa específica**: `'ogcapi.dgterritorio.gov.pt'` (hardcoded)
 8. **Mapeamento MIME extensível**: Fácil adicionar novos formatos ao dicionário
