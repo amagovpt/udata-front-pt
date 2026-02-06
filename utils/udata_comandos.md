@@ -3,424 +3,537 @@
 ---
 
 ## udata
+
 **`Usage: udata [OPTIONS] COMMAND [ARGS]...`**
-  udata management client
+Cliente de gestão udata
 
 **`Options:`**
-* --version
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- --version
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`api`** - API related operations
-* **`badges`** - Badges related operations
-* **`cache`** - Cache related operations.
-* **`collect`** - Collect static files
-* **`dataset`** - Dataset related operations
-* **`db`** - Database related operations
-* **`dcat`** - DCAT diagnosis operations
-* **`frequency-reminder`** - Send a unique email per organization to members
-* **`generate-fixtures-file`** - Build sample fixture file based on datasets...
-* **`harvest`** - Remote repositories harvesting operations
-* **`images`** - Images related operations
-* **`import-fixtures`** - Build sample fixture data (users, datasets,...
-* **`info`** - Display some details about the local environment
-* **`init`** - Initialize your udata instance (search index,...
-* **`job`** - Jobs related operations
-* **`licenses`** - Feed the licenses from a JSON file
-* **`linkchecker`** - Link checking operations
-* **`metrics`** - Metrics related operations
-* **`organizations`** - Organizations related operations
-* **`purge`** - Permanently remove data flagged as deleted.
-* **`roles`** - Role commands.
-* **`search`** - Search/Indexation related operations
-* **`serve`** - Runs a development server.
-* **`shell`** - Run a shell in the app context.
-* **`sitemap`** - Generate static sitemap to given directory.
-* **`spatial`** - Geospatial related operations
-* **`test`** - Some commands for testing purpose
-* **`user`** - User related operations
-* **`users`** - User commands.
-* **`worker`** - Worker related operations
+
+- **`api`** - Operações relacionadas com a API
+- **`badges`** - Operações relacionadas com distintivos (badges)
+- **`cache`** - Operações relacionadas com cache.
+- **`collect`** - Recolher ficheiros estáticos
+- **`dataset`** - Operações relacionadas com conjuntos de dados (datasets)
+- **`db`** - Operações relacionadas com a base de dados
+- **`dcat`** - Operações de diagnóstico DCAT
+- **`frequency-reminder`** - Enviar um email único por organização aos membros
+- **`generate-fixtures-file`** - Criar ficheiro de exemplo (fixture) baseado em datasets...
+- **`harvest`** - Operações de colheita (harvesting) de repositórios remotos
+- **`images`** - Operações relacionadas com imagens
+- **`import-fixtures`** - Criar dados de exemplo (utilizadores, datasets, ...
+- **`info`** - Exibir detalhes sobre o ambiente local
+- **`init`** - Inicializar a instância udata (índice de pesquisa, ...
+- **`job`** - Operações relacionadas com tarefas (jobs)
+- **`licenses`** - Carregar licenças a partir de um ficheiro JSON
+- **`linkchecker`** - Operações de verificação de links
+- **`metrics`** - Operações relacionadas com métricas
+- **`organizations`** - Operações relacionadas com organizações
+- **`purge`** - Remover permanentemente dados marcados como apagados.
+- **`roles`** - Comandos de funções (roles).
+- **`search`** - Operações de pesquisa/indexação
+- **`serve`** - Executa um servidor de desenvolvimento.
+- **`shell`** - Executar uma shell no contexto da aplicação.
+- **`sitemap`** - Gerar sitemap estático para a diretoria indicada.
+- **`spatial`** - Operações relacionadas com dados geoespaciais
+- **`test`** - Alguns comandos para fins de teste
+- **`user`** - Operações relacionadas com utilizadores
+- **`users`** - Comandos de utilizador.
+- **`worker`** - Operações relacionadas com workers
 
 ---
 
 ## udata api
+
 **`Usage: udata api [OPTIONS] COMMAND [ARGS]...`**
-  API related operations
+Operações relacionadas com a API
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`create-oauth-client`** - Creates an OAuth2Client instance in DB
-* **`postman`** - Dump the API as a Postman collection
-* **`swagger`** - Dump the swagger specifications
-* **`validate`** - Validate the Swagger/OpenAPI specification with...
+
+- **`create-oauth-client`** - Cria uma instância OAuth2Client na BD
+- **`postman`** - Exportar a API como uma coleção Postman
+- **`swagger`** - Exportar as especificações Swagger
+- **`validate`** - Validar a especificação Swagger/OpenAPI com...
 
 ---
 
 ## udata badges
+
 **`Usage: udata badges [OPTIONS] COMMAND [ARGS]...`**
-  Badges related operations
+Operações relacionadas com distintivos (badges)
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`toggle`** - Toggle a `badge_kind` for a given `path_or_id`
+
+- **`toggle`** - Alternar um `badge_kind` para um dado `path_or_id`
 
 ---
 
 ## udata cache
+
 **`Usage: udata cache [OPTIONS] COMMAND [ARGS]...`**
-  Cache related operations.
+Operações relacionadas com cache.
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`flush`** - Flush the cache
+
+- **`flush`** - Limpar a cache
 
 ---
 
 ## udata collect
+
 **`Usage: udata collect [OPTIONS] [PATH]`**
-  Collect static files
+Recolher ficheiros estáticos
 
 **`Options:`**
-* **`-ni,`** - --no-input  Disable input prompts
-* **`-?,`** - -h, --help   Show this message and exit.
+
+- **`-ni,`** - --no-input Desativar pedidos de input
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata dataset
+
 **`Usage: udata dataset [OPTIONS] COMMAND [ARGS]...`**
-  Dataset related operations
+Operações relacionadas com conjuntos de dados (datasets)
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`archive`** - Archive multiple datasets from a list in a file (one id...
-* **`archive-one`** - Archive one dataset
+
+- **`archive`** - Arquivar múltiplos datasets a partir de uma lista num ficheiro (um id...
+- **`archive-one`** - Arquivar um dataset
 
 ---
 
 ## udata db
+
 **`Usage: udata db [OPTIONS] COMMAND [ARGS]...`**
-  Database related operations
+Operações relacionadas com a base de dados
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* check-duplicate-resources-ids
-* **`check-integrity`** - Check the integrity of the database from...
-* **`info`** - Display detailed info about a migration
-* **`migrate`** - Perform database migrations
-* **`status`** - Display the database migrations status
-* **`unrecord`** - Remove a database migration record.
+
+- check-duplicate-resources-ids
+- **`check-integrity`** - Verificar a integridade da base de dados a partir de...
+- **`info`** - Exibir informações detalhadas sobre uma migração
+- **`migrate`** - Executar migrações de base de dados
+- **`status`** - Exibir o estado das migrações de base de dados
+- **`unrecord`** - Remover um registo de migração de base de dados.
 
 ---
 
 ## udata dcat
+
 **`Usage: udata dcat [OPTIONS] COMMAND [ARGS]...`**
-  DCAT diagnosis operations
+Operações de diagnóstico DCAT
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`parse-url`** - Parse the datasets in a DCAT format located at URL (debug)
+
+- **`parse-url`** - Processar os datasets em formato DCAT localizados no URL (debug)
 
 ---
 
 ## udata harvest
+
 **`Usage: udata harvest [OPTIONS] COMMAND [ARGS]...`**
-  Remote repositories harvesting operations
+Operações de colheita (harvesting) de repositórios remotos
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`attach`** - Attach existing datasets to their harvest remote id
-* **`backends`** - List available backends
-* **`clean`** - Delete all datasets linked to a harvest source
-* **`create`** - Create a new harvest source
-* **`delete`** - Delete a harvest source
-* **`launch`** - Launch a source harvesting on the workers
-* **`purge`** - Permanently remove deleted harvest sources
-* **`run`** - Run a harvester synchronously
-* **`schedule`** - Schedule a harvest job to run periodically
-* **`sources`** - List all harvest sources
-* **`unschedule`** - Unschedule a periodical harvest job
-* **`validate`** - Validate a source given its identifier
+
+- **`attach`** - Associar datasets existentes ao seu ID remoto de colheita
+- **`backends`** - Listar backends disponíveis
+- **`clean`** - Apagar todos os datasets ligados a uma fonte de colheita
+- **`create`** - Criar uma nova fonte de colheita
+- **`delete`** - Apagar uma fonte de colheita
+- **`launch`** - Iniciar a colheita de uma fonte nos workers
+- **`purge`** - Remover permanentemente fontes de colheita apagadas
+- **`run`** - Executar um harvester de forma síncrona
+- **`schedule`** - Agendar um job de colheita para execução periódica
+- **`sources`** - Listar todas as fontes de colheita
+- **`unschedule`** - Cancelar o agendamento periódico de um job de colheita
+- **`validate`** - Validar uma fonte dado o seu identificador
 
 ---
 
 ## udata images
+
 **`Usage: udata images [OPTIONS] COMMAND [ARGS]...`**
-  Images related operations
+Operações relacionadas com imagens
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`render`** - Force (re)rendering stored images
+
+- **`render`** - Forçar a (re)renderização das imagens armazenadas
 
 ---
 
 ## udata info
+
 **`Usage: udata info [OPTIONS] COMMAND [ARGS]...`**
-  Display some details about the local environment
+Exibir alguns detalhes sobre o ambiente local
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`config`** - Display some details about the local configuration
-* **`plugins`** - Display some details about the local plugins
+
+- **`config`** - Exibir alguns detalhes sobre a configuração local
+- **`plugins`** - Exibir alguns detalhes sobre os plugins locais
 
 ---
 
 ## udata init
+
 **`Usage: udata init [OPTIONS]`**
-  Initialize your udata instance (search index, user, sample data...)
+Inicializar a sua instância udata (índice de pesquisa, utilizador, dados de exemplo...)
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata job
+
 **`Usage: udata job [OPTIONS] COMMAND [ARGS]...`**
-  Jobs related operations
+Operações relacionadas com tarefas (jobs)
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`list`** - List all availables jobs
-* **`run`** - Run the job <name>
-* **`schedule`** - Schedule the job <name> to run periodically given the...
-* **`scheduled`** - List scheduled jobs.
-* **`unschedule`** - Unschedule the job <name> with the given parameters.
+
+- **`list`** - Listar todos os jobs disponíveis
+- **`run`** - Executar o job <nome>
+- **`schedule`** - Agendar o job <nome> para executar periodicamente dado o...
+- **`scheduled`** - Listar jobs agendados.
+- **`unschedule`** - Cancelar agendamento do job <nome> com os parâmetros dados.
 
 ---
 
 ## udata licenses
+
 **`Usage: udata licenses [OPTIONS] [SOURCE]`**
-  Feed the licenses from a JSON file
+Carregar as licenças a partir de um ficheiro JSON
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata linkchecker
+
 **`Usage: udata linkchecker [OPTIONS] COMMAND [ARGS]...`**
-  Link checking operations
+Operações de verificação de links
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`check`** - Check <number> of URLs that have not been (recently) checked
+
+- **`check`** - Verificar <número> de URLs que não foram verificados (recentemente)
 
 ---
 
 ## udata metrics
+
 **`Usage: udata metrics [OPTIONS] COMMAND [ARGS]...`**
-  Metrics related operations
+Operações relacionadas com métricas
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`update`** - Update all metrics for the current date
+
+- **`update`** - Atualizar todas as métricas para a data atual
 
 ---
 
 ## udata organizations
+
 **`Usage: udata organizations [OPTIONS] COMMAND [ARGS]...`**
-  Organizations related operations
+Operações relacionadas com organizações
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`attach-zone`** - Attach a zone <geoid> restricted to level for a given...
-* **`detach-zone`** - Detach the zone of a given <organization>.
+
+- **`attach-zone`** - Associar uma zona <geoid> restrita ao nível para uma dada...
+- **`detach-zone`** - Desassociar a zona de uma dada <organização>.
 
 ---
 
 ## udata purge
+
 **`Usage: udata purge [OPTIONS]`**
-  Permanently remove data flagged as deleted.
-  If no model flag is given, all models are purged.
+Remover permanentemente dados marcados como apagados.
+Se nenhuma flag de modelo for dada, todos os modelos serão limpos.
 
 **`Options:`**
-* **`-d,`** - --datasets
-* **`-r,`** - --reuses
-* **`-o,`** - --organizations
-* --dataservices
-* **`-h,`** - -?, --help       Show this message and exit.
+
+- **`-d,`** - --datasets
+- **`-r,`** - --reuses
+- **`-o,`** - --organizations
+- --dataservices
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata roles
+
 **`Usage: udata roles [OPTIONS] COMMAND [ARGS]...`**
-  Role commands.
+Comandos de funções (roles).
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`add`** - Add role to user.
-* **`add_permissions`** - Add permissions to role.
-* **`create`** - Create a role.
-* **`remove`** - Remove role from user.
-* **`remove_permissions`** - Remove permissions from role.
+
+- **`add`** - Adicionar função ao utilizador.
+- **`add_permissions`** - Adicionar permissões à função.
+- **`create`** - Criar uma função.
+- **`remove`** - Remover função do utilizador.
+- **`remove_permissions`** - Remover permissões da função.
 
 ---
 
 ## udata search
+
 **`Usage: udata search [OPTIONS] COMMAND [ARGS]...`**
-  Search/Indexation related operations
+Operações de pesquisa/indexação
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`index`** - Initialize or rebuild the search index
+
+- **`index`** - Inicializar ou reconstruir o índice de pesquisa
 
 ---
 
 ## udata serve
+
 **`Usage: udata serve [OPTIONS]`**
-  Runs a local udata development server.
-  This local server is recommended for development purposes only but it can
-  also be used for simple intranet deployments.
-  By default it will not support any sort of concurrency at all to simplify
-  debugging. This can be changed with the --with-threads option which will
-  enable basic multithreading.
-  The reloader and debugger are by default enabled if the debug flag of Flask
-  is enabled and disabled otherwise.
+Executa um servidor local de desenvolvimento udata.
+Este servidor local é recomendado apenas para desenvolvimento, mas pode
+também ser usado para implementações simples em intranet.
+Por defeito, não suporta qualquer tipo de concorrência para simplificar
+o debugging. Isto pode ser alterado com a opção --with-threads que irá
+ativar multithreading básico.
+O reloader e debugger estão ativos por defeito se a flag de debug do Flask
+estiver ativada, caso contrário estão desativados.
 
 **`Options:`**
-* **`-h,`** - --host TEXT                 The interface to bind to.
-* **`-p,`** - --port INTEGER              The port to bind to.
-* **`-r,`** - --reload / -nr, --no-reload
-* **`Enable`** - or disable the reloader.  By default
-* **`the`** - reloader is active if debug is enabled.
-* **`-d,`** - --debugger / -nd, --no-debugger
-* **`Enable`** - or disable the debugger.  By default
-* **`the`** - debugger is active if debug is enabled.
-* **`--eager-loading`** - / --lazy-loader
-* **`Enable`** - or disable eager loading.  By default
-* **`eager`** - loading is enabled if the reloader is
-* disabled.
-* **`--with-threads`** - / --without-threads
-* **`Enable`** - or disable multithreading.
-* **`-?,`** - --help                      Show this message and exit.
+
+- **`-h,`** - --host TEXT A interface de rede para vincular.
+- **`-p,`** - --port INTEGER A porta de rede para vincular.
+- **`-r,`** - --reload / -nr, --no-reload
+- **`Enable`** - ou desativar o reloader. Por defeito
+- **`the`** - o reloader está ativo se o debug estiver ativado.
+- **`-d,`** - --debugger / -nd, --no-debugger
+- **`Enable`** - ou desativar o debugger. Por defeito
+- **`the`** - o debugger está ativo se o debug estiver ativado.
+- **`--eager-loading`** - / --lazy-loader
+- **`Enable`** - ou desativar o eager loading. Por defeito
+- **`eager`** - o eager loading está ativado se o reloader estiver
+- desativado.
+- **`--with-threads`** - / --without-threads
+- **`Enable`** - ou desativar multithreading.
+- **`-?,`** - --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata shell
+
 **`Usage: udata shell [OPTIONS]`**
-  Run an interactive Python shell in the context of a given Flask application.
-  The application will populate the default namespace of this shell according
-  to its configuration.
-  This is useful for executing small snippets of management code without
-  having to manually configure the application.
+Executar uma shell Python interativa no contexto de uma aplicação Flask.
+A aplicação irá preencher o namespace padrão desta shell de acordo
+com a sua configuração.
+Isto é útil para executar pequenos trechos de código de gestão sem
+ter que configurar manualmente a aplicação.
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata sitemap
+
 **`Usage: udata sitemap [OPTIONS]`**
-  Generate static sitemap to given directory.
+Gerar sitemap estático para a diretoria indicada.
 
 **`Options:`**
-* **`-o,`** - --output-directory TEXT  Output directory for sitemap files.
-* **`-v,`** - --verbose
-* **`-h,`** - -?, --help               Show this message and exit.
+
+- **`-o,`** - --output-directory TEXT Diretoria de saída para os ficheiros do sitemap.
+- **`-v,`** - --verbose
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 ---
 
 ## udata spatial
+
 **`Usage: udata spatial [OPTIONS] COMMAND [ARGS]...`**
-  Geospatial related operations
+Operações relacionadas com dados geoespaciais
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`load`** - Load a geozones archive from <filename>
-* **`migrate`** - Migrate zones from old to new ids in datasets.
+
+- **`load`** - Carregar um arquivo de geozones a partir de <nomedoficheiro>
+- **`migrate`** - Migrar zones de IDs antigos para novos em datasets.
 
 ---
 
 ## udata test
+
 **`Usage: udata test [OPTIONS] COMMAND [ARGS]...`**
-  Some commands for testing purpose
+Alguns comandos para fins de teste
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`log`** - Test logging
+
+- **`log`** - Testar logging
 
 ---
 
 ## udata user
+
 **`Usage: udata user [OPTIONS] COMMAND [ARGS]...`**
-  User related operations
+Operações relacionadas com utilizadores
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`activate`** - Activate an existing user (validate their email...
-* **`create`** - Create a new user
-* **`delete`** - Delete an existing user
-* password
-* **`rotate-password`** - Ask user for password rotation on next login and reset...
-* **`set-admin`** - Set an user as administrator
+
+- **`activate`** - Ativar um utilizador existente (validar o seu email...
+- **`create`** - Criar um novo utilizador
+- **`delete`** - Apagar um utilizador existente
+- password
+- **`rotate-password`** - Pedir ao utilizador rotação de password no próximo login e redefinir...
+- **`set-admin`** - Definir um utilizador como administrador
 
 ---
 
 ## udata users
+
 **`Usage: udata users [OPTIONS] COMMAND [ARGS]...`**
-  User commands.
-  For commands that require a USER - pass in any identity attribute.
+Comandos de utilizador.
+Para comandos que requerem um USER - passe qualquer atributo de identidade.
 
 **`Options:`**
-* **`-?,`** - -h, --help  Show this message and exit.
+
+- **`-?,`** - -h, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`activate`** - Activate a user.
-* **`change_password`** - Administratively change a user's password.
-* **`create`** - Create a new user with one or more attributes using the
-* **`syntax:`** - attr:value. If attr isn't set 'email' is presumed.
-* **`Identity`** - attribute values will be validated using the
-* **`configured`** - confirm_register_form; however, any ADDITIONAL
-* **`attribute:value`** - pairs will be sent to datastore.create_user
-* **`deactivate`** - Deactivate a user.
-* **`reset_access`** - Reset all authentication credentials for user.
+
+- **`activate`** - Ativar um utilizador.
+- **`change_password`** - Alterar administrativamente a palavra-passe de um utilizador.
+- **`create`** - Criar um novo utilizador com um ou mais atributos usando a
+- **`syntax:`** - atrb:valor. Se atrb não for definido, assume-se 'email'.
+- **`Identity`** - Valores de atributos de identidade serão validados usando o
+- **`configured`** - confirm_register_form; contudo, qualquer
+- **`attribute:value`** - par atrb:valor ADICIONAL será enviado para datastore.create_user
+- **`deactivate`** - Desativar um utilizador.
+- **`reset_access`** - Redefinir todas as credenciais de autenticação do utilizador.
 
 ---
 
 ## udata worker
+
 **`Usage: udata worker [OPTIONS] COMMAND [ARGS]...`**
-  Worker related operations
+Operações relacionadas com workers
 
 **`Options:`**
-* **`-h,`** - -?, --help  Show this message and exit.
+
+- **`-h,`** - -?, --help Mostrar esta mensagem e sair.
 
 **`Commands:`**
-* **`start`** - Start a worker
-* **`status`** - List queued tasks aggregated by name
-* **`tasks`** - Display registered tasks with their queue
+
+- **`start`** - Iniciar um worker
+- **`status`** - Listar tarefas em fila agregadas por nome
+- **`tasks`** - Exibir tarefas registadas com a sua fila
+
+---
+
+## Lista de Jobs Schedulables
+
+Lista de jobs obtida via API (`GET /api/1/workers/jobs/schedulables`) ou console (`udata worker tasks`).
+Estes jobs podem ser agendados para execução periódica (via Celery Beat).
+
+| Job                                  | Descrição                                                           | Em uso? | Horário/Agendamento |
+| :----------------------------------- | :------------------------------------------------------------------ | :-----: | :------------------ |
+| **`bind-tabular-dataservice`**       | Vincula recursos tabulares a dataservices para API/Preview.         |   Sim   | Trigger/Sob demanda |
+| **`check-integrity`**                | Verifica integridade referencial do banco de dados.                 |   Sim   | Semanal (Padrão)    |
+| **`compute-geozones-metrics`**       | Calcula métricas baseadas em zonas geográficas.                     |   Sim   | Diário (Padrão)     |
+| **`compute-site-metrics`**           | Calcula métricas globais do portal (números da home).               |   Sim   | Diário (Padrão)     |
+| **`count-tags`**                     | Recalcula contadores de uso das tags.                               |   Sim   | Diário (Padrão)     |
+| **`delete-inactive-users`**          | Exclui usuários considerados inativos.                              |   Não   | Manual              |
+| **`export-csv`**                     | Gera arquivos CSV com metadados do catálogo.                        |   Sim   | Diário (se config)  |
+| **`harvest`**                        | Executa a colheita de dados (harvesters) agendados.                 |   Sim   | Varia por fonte     |
+| **`notify-inactive-users`**          | Envia notificações para usuários inativos.                          |   Não   | Manual              |
+| **`piwik-bulk-track-api`**           | Envia dados de rastreamento pendentes para o Piwik/Matomo.          |   Sim   | Regular (ex: 15min) |
+| **`purge-chunks`**                   | Limpa fragmentos de uploads incompletos ou órfãos.                  |   Sim   | Diário              |
+| **`purge-datasets`**                 | Exclui fisicamente datasets marcados como deletados (soft-deleted). |   Sim   | Diário              |
+| **`purge-harvest-jobs`**             | Limpa histórico de execuções de harvest antigas.                    |   Sim   | Diário              |
+| **`purge-harvesters`**               | Exclui fisicamente harvesters marcados como deletados.              |   Sim   | Diário              |
+| **`purge-organizations`**            | Exclui fisicamente organizações marcadas como deletadas.            |   Sim   | Diário              |
+| **`purge-reuses`**                   | Exclui fisicamente reutilizações marcadas como deletadas.           |   Sim   | Diário              |
+| **`send-frequency-reminder`**        | Envia lembretes de periodicidade aos produtores de dados.           |   Sim   | Diário (06:00)      |
+| **`test-default-queue`**             | Job de teste para a fila padrão.                                    |   Não   | -                   |
+| **`test-error`**                     | Job para testar geração e registro de erros.                        |   Não   | -                   |
+| **`test-high-queue`**                | Job de teste para a fila de alta prioridade.                        |   Não   | -                   |
+| **`test-log`**                       | Job para testar geração de logs.                                    |   Não   | -                   |
+| **`test-low-queue`**                 | Job de teste para a fila de baixa prioridade.                       |   Não   | -                   |
+| **`update-datasets-reuses-metrics`** | Atualiza métricas (views, downloads) de datasets e reuses.          |   Sim   | Diário              |
+| **`update-metrics`**                 | Atualiza métricas gerais diárias.                                   |   Sim   | Diário              |
+
+> **Nota:** O status "Em uso" e o "Horário" devem ser preenchidos conforme a configuração do ambiente (`udata.cfg` -> `CELERY_BEAT_SCHEDULE`).
