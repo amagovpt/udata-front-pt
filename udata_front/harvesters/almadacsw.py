@@ -1,12 +1,12 @@
 """
-Harvester for the Portuguese Environment Portal (Almada).
+Harvester for the Almada Municipality Environment Portal.
 
 This module defines a custom udata harvester backend for collecting datasets from a CSW (Catalogue Service for the Web)
-endpoint provided by the Portuguese Environment Portal. It fetches metadata records, normalizes resource URLs,
+endpoint provided by the Almada Municipality. It fetches metadata records, normalizes resource URLs,
 and maps them to udata datasets and resources.
 
 Classes:
-    PortalAlmadaBackend: Custom udata harvester backend for the Environment Portal.
+    AlmadaCSWBackend: Custom udata harvester backend for the Almada Municipality.
 
 Functions:
     normalize_url_slashes(url: str) -> str: Utility to normalize slashes in URLs (imported).
@@ -26,6 +26,14 @@ from owslib.csw import CatalogueServiceWeb
 
 from udata.harvest.models import HarvestItem
 from udata.harvest.exceptions import HarvestException
+from udata.harvest.filters import (
+    boolean,
+    email,
+    to_date,
+    slug,
+    normalize_tag,
+    normalize_string,
+)
 
 from .tools.harvester_utils import normalize_url_slashes
 
@@ -34,10 +42,11 @@ from .tools.harvester_utils import normalize_url_slashes
 
 class AlmadaCSWBackend(BaseBackend):
     """
-    Harvester backend for the Portuguese Environment Portal (Almada).
+    Harvester backend for the Almada Municipality Environment Portal.
 
-    This backend connects to a CSW endpoint, fetches dataset records, normalizes resource URLs,
-    and maps them to udata datasets and resources.
+    This backend connects to a CSW endpoint provided by the Almada Municipality,
+    fetches dataset records, processes metadata including tags and resources,
+    and maps them to udata datasets.
     """
 
     display_name = "Harvester Almada"
@@ -107,6 +116,7 @@ class AlmadaCSWBackend(BaseBackend):
                     "id": record.identifier,
                     "title": getattr(record, "title", "") or "",
                     "description": getattr(record, "abstract", "") or "",
+                    "tags": getattr(record, "subjects", []) or [],
                     "resources": resources,
                     "type": getattr(record, "type", None),
                 }
@@ -140,13 +150,21 @@ class AlmadaCSWBackend(BaseBackend):
             )
 
         # Set basic dataset fields
-        dataset.title = data["title"]
+        dataset.title = normalize_string(data["title"])
         dataset.license = License.guess("cc-by")
-        dataset.tags = ["almada"]
-        dataset.description = data["description"]
+
+        # Process tags
+        tags = [normalize_tag("almada")]
+        for tag in data.get("tags", []):
+            normalized = normalize_tag(tag)
+            if normalized:
+                tags.append(normalized)
+        dataset.tags = list(set(tags))  # Remove duplicates
+
+        dataset.description = normalize_string(data["description"])
 
         if data.get("date"):
-            dataset.created_at = data["date"]
+            dataset.created_at = to_date(data["date"])
 
         # Force recreation of all resources
         dataset.resources = []
