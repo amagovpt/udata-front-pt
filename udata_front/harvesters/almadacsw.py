@@ -21,7 +21,7 @@ import requests
 from urllib.parse import urlparse, urlencode
 
 from udata.harvest.backends.base import BaseBackend
-from udata.models import Resource, Dataset, License
+from udata.models import Resource, Dataset, License, SpatialCoverage, GeoZone
 from owslib.csw import CatalogueServiceWeb
 
 from udata.harvest.models import HarvestItem
@@ -117,6 +117,7 @@ class AlmadaCSWBackend(BaseBackend):
                     "title": getattr(record, "title", "") or "",
                     "description": getattr(record, "abstract", "") or "",
                     "tags": getattr(record, "subjects", []) or [],
+                    "bbox": getattr(record, "bbox", None),
                     "resources": resources,
                     "type": getattr(record, "type", None),
                 }
@@ -166,6 +167,9 @@ class AlmadaCSWBackend(BaseBackend):
         if data.get("date"):
             dataset.created_at = to_date(data["date"])
 
+        # Process spatial coverage
+        self._process_spatial(dataset, data)
+
         # Force recreation of all resources
         dataset.resources = []
 
@@ -204,3 +208,40 @@ class AlmadaCSWBackend(BaseBackend):
             dataset.resources.append(new_resource)
 
         return dataset
+
+    def _process_spatial(self, dataset, data):
+        """
+        Process spatial coverage from CSW bounding box.
+        """
+        bbox = data.get("bbox")
+        if not bbox:
+            return
+
+        try:
+            # Extract coordinates ensuring float type
+            minx = float(bbox.minx)
+            miny = float(bbox.miny)
+            maxx = float(bbox.maxx)
+            maxy = float(bbox.maxy)
+
+            # Ensure corrent min/max order
+            if minx > maxx:
+                minx, maxx = maxx, minx
+            if miny > maxy:
+                miny, maxy = maxy, miny
+
+            # Construct GeoJSON Polygon (counter-clockwise)
+            # [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
+            polygon_coordinates = [
+                # Ring Exterior
+                [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
+            ]
+
+            # Wraps as MultiPolygon: [Polygon1, Polygon2...] -> [[Ring1...], [Ring2...]]
+            # MultiPolygon coordinates: [ [ [[x,y]...] ] ]
+            coordinates = [polygon_coordinates]
+
+            dataset.spatial = SpatialCoverage()
+            dataset.spatial.geom = {"type": "MultiPolygon", "coordinates": coordinates}
+        except (ValueError, AttributeError):
+            pass
