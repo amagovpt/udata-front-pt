@@ -1,55 +1,46 @@
 """
-Harvester for the Almada Municipality Environment Portal.
+CSW (Catalogue Service for the Web) Harvester for udata.
 
-This module defines a custom udata harvester backend for collecting datasets from a CSW (Catalogue Service for the Web)
-endpoint provided by the Almada Municipality. It fetches metadata records, normalizes resource URLs,
+This module defines a custom udata harvester backend for collecting datasets from CSW endpoints.
+It fetches metadata records following the OGC CSW 2.0.2 standard, processes their metadata,
 and maps them to udata datasets and resources.
 
 Classes:
-    AlmadaCSWBackend: Custom udata harvester backend for the Almada Municipality.
-
-Functions:
-    normalize_url_slashes(url: str) -> str: Utility to normalize slashes in URLs (imported).
+    CSWUdataBackend: Custom udata harvester backend for CSW endpoints.
 
 Usage:
     This backend is intended to be used as a plugin in a udata instance. It will fetch datasets from the configured
     CSW endpoint, process their metadata, and create or update corresponding datasets and resources in udata.
 """
 
-from datetime import datetime
+import logging
 import requests
-from urllib.parse import urlparse, urlencode
 
 from udata.harvest.backends.base import BaseBackend
-from udata.models import Resource, Dataset, License, SpatialCoverage, GeoZone
+from udata.models import Resource, Dataset, License, SpatialCoverage
 from owslib.csw import CatalogueServiceWeb
 
 from udata.harvest.models import HarvestItem
 from udata.harvest.exceptions import HarvestException
 from udata.harvest.filters import (
-    boolean,
-    email,
     to_date,
-    slug,
     normalize_tag,
     normalize_string,
 )
 
-from .tools.harvester_utils import normalize_url_slashes
-
-# backend = 'https://metadados.cm-almada.pt/geonetwork/srv/eng/csw?service=CSW&version=2.0.2&request=GetRecords&resultType=results&typeNames=csw:Record&elementSetName=full&startPosition=1&maxRecords=1000&outputSchema=http://www.opengis.net/cat/csw/2.0.2'
+log = logging.getLogger(__name__)
 
 
 class CSWUdataBackend(BaseBackend):
     """
-    Harvester backend for the Almada Municipality Environment Portal.
+    Harvester backend for CSW (Catalogue Service for the Web) endpoints.
 
-    This backend connects to a CSW endpoint provided by the Almada Municipality,
+    This backend connects to CSW endpoints following the OGC CSW 2.0.2 standard,
     fetches dataset records, processes metadata including tags and resources,
     and maps them to udata datasets.
     """
 
-    display_name = "Harvester Almada"
+    display_name = "CSW Harvester"
 
     def inner_harvest(self):
         """
@@ -63,16 +54,19 @@ class CSWUdataBackend(BaseBackend):
             # We use a GET request with stream=True to follow redirects and find the actual endpoint
             # without downloading the whole body.
             response = requests.get(
-                base_url, timeout=10, allow_redirects=True, stream=True
+                base_url, timeout=30, allow_redirects=True, stream=True
             )
             base_url = response.url
             response.close()
-        except Exception:
+            log.debug(f"Resolved CSW endpoint URL: {base_url}")
+        except requests.RequestException as e:
             # Fallback to source URL if anything goes wrong
+            log.warning(f"Failed to resolve CSW endpoint URL, using original: {e}")
             pass
 
         page_size = 100
-        csw = CatalogueServiceWeb(base_url)
+        # Set a generous timeout for the CSW client as government servers can be slow
+        csw = CatalogueServiceWeb(base_url, timeout=60)
 
         # Force all operations to use https if our base_url is https
         # This is needed because some servers (like GeoNetwork) advertise http URLs in GetCapabilities
@@ -86,6 +80,7 @@ class CSWUdataBackend(BaseBackend):
         # First request to get matches and validate endpoint
         csw.getrecords2(maxrecords=1, esn="full")
         matches = int(csw.results.get("matches", 0) or 0)
+        log.info(f"Found {matches} records in CSW endpoint")
 
         startposition = 1  # CSW is 1-based
         while matches > 0 and startposition <= matches:
@@ -93,6 +88,9 @@ class CSWUdataBackend(BaseBackend):
                 maxrecords=page_size, startposition=startposition, esn="full"
             )
             nextrecord = int(csw.results.get("nextrecord", 0) or 0)
+            log.debug(
+                f"Processing records {startposition} to {startposition + len(csw.records) - 1}"
+            )
 
             for rec_id, record in csw.records.items():
                 resources = []
@@ -120,11 +118,14 @@ class CSWUdataBackend(BaseBackend):
                     "bbox": getattr(record, "bbox", None),
                     "resources": resources,
                     "type": getattr(record, "type", None),
+                    "created": getattr(record, "created", None),
+                    "modified": getattr(record, "modified", None),
                 }
 
                 self.process_dataset(data["id"], items=data)
 
                 if self.has_reached_max_items():
+                    log.info(f"Reached maximum items limit")
                     return
 
             if nextrecord == 0 or nextrecord <= startposition:
@@ -154,8 +155,9 @@ class CSWUdataBackend(BaseBackend):
         dataset.title = normalize_string(data["title"])
         dataset.license = License.guess("cc-by")
 
-        # Process tags
-        tags = [normalize_tag("almada")]
+        # Process tags - use config tag if available, otherwise use generic 'csw'
+        default_tag = self.config.get("default_tag", "csw")
+        tags = [normalize_tag(default_tag)]
         for tag in data.get("tags", []):
             normalized = normalize_tag(tag)
             if normalized:
@@ -164,8 +166,31 @@ class CSWUdataBackend(BaseBackend):
 
         dataset.description = normalize_string(data["description"])
 
-        if data.get("date"):
-            dataset.created_at = to_date(data["date"])
+        # Process creation and modification dates
+        if data.get("created"):
+            dataset.extras["created_at"] = data.get("created")
+            try:
+                dataset.created_at = to_date(data["created"])
+            except (ValueError, TypeError) as e:
+                log.warning(f"Failed to parse created date for {item.remote_id}: {e}")
+
+        if data.get("modified"):
+            dataset.extras["modified_at"] = data.get("modified")
+            try:
+                dataset.last_modified_internal = to_date(data["modified"])
+            except (ValueError, TypeError) as e:
+                log.warning(f"Failed to parse modified date for {item.remote_id}: {e}")
+
+        # Populate other extras
+        dataset.extras["dct_identifier"] = data.get("id")
+        dataset.extras["uri"] = data.get("id")
+
+        # Try to find a remote_url
+        for res_data in data.get("resources", []):
+            protocol = res_data.get("protocol", "").lower()
+            if "html" in protocol or "link" in protocol:
+                dataset.extras["remote_url"] = res_data.get("url")
+                break
 
         # Process spatial coverage
         self._process_spatial(dataset, data)
@@ -207,11 +232,19 @@ class CSWUdataBackend(BaseBackend):
             )
             dataset.resources.append(new_resource)
 
+        log.debug(
+            f"Processed dataset {item.remote_id}: {dataset.title} with {len(dataset.resources)} resources"
+        )
+
         return dataset
 
     def _process_spatial(self, dataset, data):
         """
         Process spatial coverage from CSW bounding box.
+
+        Args:
+            dataset: The dataset object to update with spatial information.
+            data: Dictionary containing the bbox information.
         """
         bbox = data.get("bbox")
         if not bbox:
@@ -235,6 +268,7 @@ class CSWUdataBackend(BaseBackend):
             if minx == maxx and miny == maxy:
                 # It's a point
                 dataset.spatial.geom = {"type": "Point", "coordinates": [minx, miny]}
+                log.debug(f"Processed spatial coverage as Point: [{minx}, {miny}]")
             else:
                 # Construct GeoJSON Polygon (counter-clockwise)
                 # [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
@@ -254,5 +288,9 @@ class CSWUdataBackend(BaseBackend):
                     "type": "MultiPolygon",
                     "coordinates": coordinates,
                 }
-        except (ValueError, AttributeError, TypeError):
+                log.debug(
+                    f"Processed spatial coverage as MultiPolygon: bbox=[{minx}, {miny}, {maxx}, {maxy}]"
+                )
+        except (ValueError, AttributeError, TypeError) as e:
+            log.warning(f"Failed to process spatial coverage: {e}")
             pass
