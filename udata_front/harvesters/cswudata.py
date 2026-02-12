@@ -40,7 +40,7 @@ from .tools.harvester_utils import normalize_url_slashes
 # backend = 'https://metadados.cm-almada.pt/geonetwork/srv/eng/csw?service=CSW&version=2.0.2&request=GetRecords&resultType=results&typeNames=csw:Record&elementSetName=full&startPosition=1&maxRecords=1000&outputSchema=http://www.opengis.net/cat/csw/2.0.2'
 
 
-class AlmadaCSWBackend(BaseBackend):
+class CSWUdataBackend(BaseBackend):
     """
     Harvester backend for the Almada Municipality Environment Portal.
 

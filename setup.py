@@ -58,7 +58,7 @@ setup(
             "dgtIne = udata_front.harvesters.dgtIne:DGTINEBackend",
             "ogc = udata_front.harvesters.ogc:OGCBackend",
             "inehvd = udata_front.harvesters.inehvd:INEHvdBackend",
-            "almadacsw = udata_front.harvesters.almadacsw:AlmadaCSWBackend",
+            "cswudata = udata_front.harvesters.cswudata:CSWUdataBackend",
         ],
         "udata.views": [
             "gouvfr_faqs = udata_front.faqs_plugin",
