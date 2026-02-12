@@ -32,6 +32,10 @@
 <link rel="alternate" type="application/json+oembed" href="{{ url_for('api.oembed', url=dataset.external_url) }}"
     title="{{ dataset.title | urlencode }}" />
 {% endcache %}
+{% if dataset.spatial and dataset.spatial.geom %}
+<link rel="stylesheet" href="{{ theme_static('js/leaflet.css') }}" />
+<script src="{{ theme_static('js/leaflet.js') }}"></script>
+{% endif %}
 {% endblock %}
 
 {% block breadcrumb %}

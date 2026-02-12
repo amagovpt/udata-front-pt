@@ -224,24 +224,35 @@ class AlmadaCSWBackend(BaseBackend):
             maxx = float(bbox.maxx)
             maxy = float(bbox.maxy)
 
-            # Ensure corrent min/max order
+            # Ensure correct min/max order
             if minx > maxx:
                 minx, maxx = maxx, minx
             if miny > maxy:
                 miny, maxy = maxy, miny
 
-            # Construct GeoJSON Polygon (counter-clockwise)
-            # [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
-            polygon_coordinates = [
-                # Ring Exterior
-                [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
-            ]
-
-            # Wraps as MultiPolygon: [Polygon1, Polygon2...] -> [[Ring1...], [Ring2...]]
-            # MultiPolygon coordinates: [ [ [[x,y]...] ] ]
-            coordinates = [polygon_coordinates]
-
             dataset.spatial = SpatialCoverage()
-            dataset.spatial.geom = {"type": "MultiPolygon", "coordinates": coordinates}
-        except (ValueError, AttributeError):
+
+            if minx == maxx and miny == maxy:
+                # It's a point
+                dataset.spatial.geom = {"type": "Point", "coordinates": [minx, miny]}
+            else:
+                # Construct GeoJSON Polygon (counter-clockwise)
+                # [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
+                polygon_coordinates = [
+                    # Ring Exterior
+                    [
+                        [minx, miny],
+                        [maxx, miny],
+                        [maxx, maxy],
+                        [minx, maxy],
+                        [minx, miny],
+                    ]
+                ]
+                # MultiPolygon coordinates: [ [ [[x,y]...] ] ]
+                coordinates = [polygon_coordinates]
+                dataset.spatial.geom = {
+                    "type": "MultiPolygon",
+                    "coordinates": coordinates,
+                }
+        except (ValueError, AttributeError, TypeError):
             pass
