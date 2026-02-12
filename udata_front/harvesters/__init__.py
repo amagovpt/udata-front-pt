@@ -8,4 +8,4 @@ from . import dgt  # dgt
 from . import dgtIne  # dgt
 from . import ogc  # ogc
 from . import inehvd  # inehvd
-from . import almadacsw  # almadacsw
+from . import cswudata  # cswudata
