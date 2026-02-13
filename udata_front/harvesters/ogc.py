@@ -192,7 +192,7 @@ class OGCBackend(BaseBackend):
         dataset.description = item_data["description"]
         dataset.tags = ["ogcapi.dgterritorio.gov.pt"]
 
-        # If the harvester source belongs to an organization, attribute the dataset to it.
+        # If the harvester source belongs to an organization, attribute the dataset to it (producer).
         # This ensures that even if harvested on behalf of a user, it belongs to the intended org.
         if self.source.organization:
             dataset.organization = self.source.organization
