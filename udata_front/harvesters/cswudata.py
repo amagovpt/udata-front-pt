@@ -266,9 +266,30 @@ class CSWUdataBackend(BaseBackend):
             dataset.spatial = SpatialCoverage()
 
             if minx == maxx and miny == maxy:
-                # It's a point
-                dataset.spatial.geom = {"type": "Point", "coordinates": [minx, miny]}
-                log.debug(f"Processed spatial coverage as Point: [{minx}, {miny}]")
+                # It's a point – create a tiny polygon around it since
+                # SpatialCoverage.geom is a MultiPolygonField and only
+                # accepts "MultiPolygon" type geometries.
+                epsilon = 0.0001  # ~11 meters at the equator
+                minx -= epsilon
+                miny -= epsilon
+                maxx += epsilon
+                maxy += epsilon
+                polygon_coordinates = [
+                    [
+                        [minx, miny],
+                        [maxx, miny],
+                        [maxx, maxy],
+                        [minx, maxy],
+                        [minx, miny],
+                    ]
+                ]
+                dataset.spatial.geom = {
+                    "type": "MultiPolygon",
+                    "coordinates": [polygon_coordinates],
+                }
+                log.debug(
+                    f"Processed spatial coverage as MultiPolygon (from point): [{minx}, {miny}]"
+                )
             else:
                 # Construct GeoJSON Polygon (counter-clockwise)
                 # [[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]
