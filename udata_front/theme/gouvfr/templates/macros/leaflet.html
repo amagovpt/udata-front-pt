@@ -1,24 +1,64 @@
-{% set ns = namespace(included=false) %}
-{% macro include_leaflet() %}
-    {% if not ns.included %}
-        <link rel="stylesheet" href="{{ theme_static('js/leaflet.css') }}"/>
-        <script src="{{ theme_static('js/leaflet.js') }}"></script>
-        
-        {% set ns.included = true %}
-    {% endif %}
-{% endmacro %}
-
 {% macro leaflet_map(geojson, height) %}
-    {% set id = range(0, 1000) | random %}
-    {{ include_leaflet() }}
-    <div id="leaflet_map_{{ id }}" class="fr-raw-link" style="height: {{ height | default('400px') }}"></div>
-    <script>
-        var map = L.map('leaflet_map_{{ id }}');
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        geoJSON = L.geoJSON({{geojson | tojson | safe }}).addTo(map);
-        map.fitBounds(geoJSON.getBounds());
-    </script>
+{% set map_id = "map_" ~ range(1000, 9999) | random %}
+
+<div id="{{ map_id }}" style="height: {{ height | default('400px') }}; width: 100%;"></div>
+
+<script>
+    (function () {
+        var mapInitialized = false;
+
+        function initMap() {
+            if (mapInitialized) return;
+
+            if (typeof L === 'undefined') {
+                setTimeout(initMap, 100);
+                return;
+            }
+
+            var container = document.getElementById('{{ map_id }}');
+            if (!container) return;
+
+            var map = L.map('{{ map_id }}');
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            try {
+                var data = {{ geojson | tojson | safe
+            }};
+        if (data) {
+            var geoJSONLayer = L.geoJSON(data).addTo(map);
+            var bounds = geoJSONLayer.getBounds();
+            if (bounds.isValid()) {
+                map.fitBounds(bounds);
+            } else {
+                map.setView([38.7, -9.14], 10);
+            }
+        } else {
+            map.setView([38.7, -9.14], 10);
+        }
+    } catch (e) {
+        console.error("Erro ao carregar GeoJSON no mapa {{ map_id }}:", e);
+        map.setView([38.7, -9.14], 10);
+    }
+
+    mapInitialized = true;
+
+    // Corrige o tamanho do mapa quando o contentor muda de visibilidade (ex: tabs)
+    if (typeof ResizeObserver !== 'undefined') {
+        var ro = new ResizeObserver(function () {
+            map.invalidateSize();
+        });
+        ro.observe(container);
+    }
+    }
+
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(initMap, 0);
+    } else {
+        document.addEventListener("DOMContentLoaded", initMap);
+    }
+}) ();
+</script>
 {% endmacro %}
