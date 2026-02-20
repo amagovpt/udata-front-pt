@@ -5,6 +5,7 @@ Este documento mapeia os campos obtidos do harvester `OGCBackend` (OGC API - Col
 ## Fonte de Dados
 
 **OGC API - Collections**: Open Geospatial Consortium API
+
 - Formato: JSON-LD (Schema.org)
 - Protocolo: HTTP GET
 - Estrutura: Baseada em Schema.org Dataset
@@ -12,32 +13,34 @@ Este documento mapeia os campos obtidos do harvester `OGCBackend` (OGC API - Col
 
 ## Resumo do Mapeamento
 
-| Campo Fonte (OGC JSON-LD) | Propriedade JSON | Campo Destino (uData `Dataset`) | Notas / Lógica |
-| :--- | :--- | :--- | :--- |
-| **Dataset** | | | |
-| `@id` | `each['@id']` | `remote_id` (HarvestItem) | Identificador único (URI). |
-| `name` | `each['name']` | `title` | Nome do dataset. |
-| `description` | `each['description']` | `description` | Descrição do dataset. |
-| `keywords` | `each['keywords']` | `tags` | Keywords (lista ou string). |
-| (Código) | - | `tags` | Adiciona tag fixa: `'ogcapi.dgterritorio.gov.pt'`. |
-| `license` | `each['license']` | `license` | URL da licença (guess). |
-| (Código) | - | `license` | Fallback: `'notspecified'` se não encontrar. |
-| `temporalCoverage` | `each['temporalCoverage']` | `extras['temporal_coverage']` | Cobertura temporal (não parseada). |
-| `provider` | `each['provider']` ou `data['provider']` | `extras['publisher_name']` | Nome do fornecedor. |
-| `provider.contactPoint.email` | `provider['contactPoint']['email']` | `extras['publisher_email']` | Email de contacto. |
-| (Código) | - | `extras['harvest:name']` | Nome da fonte de harvest. |
-| **Distribution** | `each['distribution']` | **Resource** | |
-| `contentURL` | `dist['contentURL']` | `url` | URL do recurso (normalizada). |
-| `description` | `dist['description']` | `title` | Descrição como título. |
-| `name` | `dist['name']` | `title` | Nome (fallback). |
-| (Código) | - | `title` | Fallback final: `'Resource'`. |
-| `encodingFormat` | `dist['encodingFormat']` | `format` | MIME type convertido para formato. |
-| (Código) | - | `filetype` | Fixo: `'remote'`. |
+| Campo Fonte (OGC JSON-LD)     | Propriedade JSON                         | Campo Destino (uData `Dataset`)   | Notas / Lógica                                                        |
+| :---------------------------- | :--------------------------------------- | :-------------------------------- | :-------------------------------------------------------------------- |
+| **Dataset**                   |                                          |                                   |                                                                       |
+| `@id`                         | `each['@id']`                            | `remote_id` (HarvestItem)         | Identificador único (URI).                                            |
+| `name`                        | `each['name']`                           | `title`                           | Nome do dataset.                                                      |
+| `description`                 | `each['description']`                    | `description`                     | Descrição do dataset.                                                 |
+| `keywords`                    | `each['keywords']`                       | `tags`                            | Keywords (lista ou string).                                           |
+| (Código)                      | -                                        | `tags`                            | Adiciona tag fixa: `'ogcapi.dgterritorio.gov.pt'`.                    |
+| `license`                     | `each['license']`                        | `license`                         | URL da licença (guess).                                               |
+| (Código)                      | -                                        | `license`                         | Fallback: `'notspecified'` se não encontrar.                          |
+| `temporalCoverage`            | `each['temporalCoverage']`               | `extras['temporal_coverage']`     | Cobertura temporal (não parseada).                                    |
+| `provider`                    | `each['provider']` ou `data['provider']` | `contact_points` (role=publisher) | Nome da organização (se existir nos dados) ou do provider. Sem email. |
+| `provider.contactPoint.email` | `provider['contactPoint']['email']`      | `contact_points` (role=contact)   | Email de contacto e nome do provider.                                 |
+| (Código)                      | -                                        | `extras['harvest:name']`          | Nome da fonte de harvest.                                             |
+| **Distribution**              | `each['distribution']`                   | **Resource**                      |                                                                       |
+| `contentURL`                  | `dist['contentURL']`                     | `url`                             | URL do recurso (normalizada).                                         |
+| `description`                 | `dist['description']`                    | `title`                           | Descrição como título.                                                |
+| `name`                        | `dist['name']`                           | `title`                           | Nome (fallback).                                                      |
+| (Código)                      | -                                        | `title`                           | Fallback final: `'Resource'`.                                         |
+| `encodingFormat`              | `dist['encodingFormat']`                 | `format`                          | MIME type convertido para formato.                                    |
+| (Código)                      | -                                        | `filetype`                        | Fixo: `'remote'`.                                                     |
 
 ## Detalhes Específicos
 
 ### 1. Estrutura JSON-LD
+
 O harvester espera uma estrutura Schema.org com array `dataset`:
+
 ```json
 {
   "@context": "https://schema.org/",
@@ -53,7 +56,9 @@ O harvester espera uma estrutura Schema.org com array `dataset`:
 ```
 
 ### 2. Validação de Estrutura
+
 Verifica se o campo `dataset` existe:
+
 ```python
 metadata = data.get("dataset")
 if not metadata:
@@ -61,14 +66,18 @@ if not metadata:
 ```
 
 ### 3. Normalização de Metadata
+
 Garante que metadata é sempre uma lista:
+
 ```python
 if isinstance(metadata, dict):
     metadata = [metadata]
 ```
 
 ### 4. Identificador (@id)
+
 O `@id` é obrigatório. Datasets sem `@id` são ignorados:
+
 ```python
 remote_id = each.get("@id")
 if not remote_id:
@@ -77,6 +86,7 @@ if not remote_id:
 ```
 
 ### 5. Fallbacks de Título e Descrição
+
 ```python
 title = each.get("name") or "Untitled Dataset"
 description = each.get("description") or ""
@@ -85,13 +95,17 @@ description = each.get("description") or ""
 ### 6. Tags
 
 #### 6.1 Tag Fixa
+
 Todos os datasets recebem a tag de identificação:
+
 ```python
 dataset.tags = ["ogcapi.dgterritorio.gov.pt"]
 ```
 
 #### 6.2 Keywords
+
 Suporta lista ou string única:
+
 ```python
 keywords = item_data.get('keywords', [])
 if isinstance(keywords, list):
@@ -105,7 +119,9 @@ elif isinstance(keywords, str) and keywords:
 ### 7. Licença
 
 #### 7.1 Tentativa de Guess
+
 Tenta identificar a licença pela URL:
+
 ```python
 license_url = item_data.get('license')
 if license_url:
@@ -113,7 +129,9 @@ if license_url:
 ```
 
 #### 7.2 Fallback
+
 Se não conseguir identificar, usa `'notspecified'`:
+
 ```python
 if not dataset.license:
     dataset.license = License.guess('notspecified')
@@ -122,7 +140,9 @@ if not dataset.license:
 ### 8. Recursos (Distributions)
 
 #### 8.1 Validação de URL
+
 Apenas cria recursos com URL válida:
+
 ```python
 url = dist.get("contentURL", "")
 if not url:
@@ -130,7 +150,9 @@ if not url:
 ```
 
 #### 8.2 Filtro de Formatos
+
 **Ignora** recursos HTML e PNG:
+
 ```python
 link_type = dist.get("encodingFormat", "")
 if link_type in ('text/html', 'image/png'):
@@ -140,7 +162,9 @@ if link_type in ('text/html', 'image/png'):
 **Razão:** HTML são páginas de visualização, PNG são imagens de pré-visualização, não dados.
 
 #### 8.3 Determinação do Formato
+
 Usa mapeamento de MIME types para formatos:
+
 ```python
 mime_to_format = {
     'application/json': 'JSON',
@@ -157,18 +181,22 @@ mime_to_format = {
 ```
 
 **Fallback:** Se MIME type não estiver no mapeamento:
+
 ```python
 # Extrai a parte após '/' e converte para maiúsculas
 format = mime_type.split('/')[-1].upper()
 ```
 
 **Fallback final:** Se não houver `encodingFormat`, extrai da URL:
+
 ```python
 format_value = url.split('.')[-1] if '.' in url.split('/')[-1] else "unknown"
 ```
 
 #### 8.4 Título do Recurso
+
 Ordem de prioridade:
+
 1. `description`
 2. `name`
 3. `"Resource"` (fallback)
@@ -178,27 +206,54 @@ resource_title = dist.get("description") or dist.get("name") or "Resource"
 ```
 
 #### 8.5 Recriação de Recursos
+
 Os recursos são **recriados** a cada execução:
+
 ```python
 dataset.resources = []
 ```
 
 ### 9. Provider/Publisher
+
 Informação do fornecedor é armazenada em extras:
+
 ```python
 provider = item_data.get('provider')
 if provider and isinstance(provider, dict):
     dataset.extras['publisher_name'] = provider.get('name')
     dataset.extras['publisher_email'] = provider.get('contactPoint', {}).get('email')
+
+    # Validação de Organização:
+    # 1. Tenta encontrar a Organization pelo nome ou acrónimo (extraído de "SIGLA - Nome")
+    # 2. Se encontrar, usa essa Organization como referência nos contact_points
+
+    # Criação de Contact Points (Ordem: Contact -> Publisher):
+
+    # 1. Para role="contact" (se houver email)
+    # - Name: provider.name
+    # - Email: provider.contactPoint.email
+    # - Organization: Referência à Organization encontrada (se houver)
+    contact_c = ContactPoint.objects(role='contact', ...).first()
+    dataset.contact_points.append(contact_c)
+
+    # 2. Para role="publisher"
+    # - Name: Organization.name (se encontrada) OU provider.name
+    # - Email: None (não guarda email para publisher)
+    # - Organization: Referência à Organization encontrada (se houver)
+    contact = ContactPoint.objects(role='publisher', ...).first()
+    dataset.contact_points.append(contact)
 ```
 
 **Nota:** O provider pode vir do dataset individual ou do catálogo raiz:
+
 ```python
 "provider": each.get("provider") or data.get("provider")
 ```
 
 ### 10. Cobertura Temporal
+
 Armazenada em extras sem parsing:
+
 ```python
 temporal = item_data.get('temporal_coverage')
 if temporal:
@@ -253,6 +308,7 @@ if temporal:
 ## Exemplo de Mapeamento
 
 ### Resposta OGC API (simplificado)
+
 ```json
 {
   "@context": "https://schema.org/",
@@ -288,6 +344,7 @@ if temporal:
 ```
 
 ### Dataset uData resultante
+
 ```python
 dataset.remote_id = "https://ogcapi.dgterritorio.gov.pt/collections/caop"
 dataset.title = "Carta Administrativa Oficial de Portugal"
@@ -307,6 +364,12 @@ dataset.extras = {
     'publisher_email': 'info@dgterritorio.gov.pt'
 }
 
+dataset.contact_points = [
+    # A ordem é importante: Contacto primeiro, depois Publisher
+    <ContactPoint: Direção-Geral do Território (contact, email=info@...)>,
+    <ContactPoint: Direção-Geral do Território (publisher, email=None)>
+]
+
 dataset.resources = [
     Resource(
         title="GeoJSON export",
@@ -321,6 +384,7 @@ dataset.resources = [
 ## Campos Não Mapeados
 
 Os seguintes campos **não são mapeados** para o modelo Dataset:
+
 - `temporalCoverage` - Armazenado em extras, não parseado para `temporal_coverage`
 - `spatialCoverage` - Não processado
 - `provider` - Armazenado em extras, não mapeado para `organization`
@@ -333,18 +397,18 @@ Os seguintes campos **não são mapeados** para o modelo Dataset:
 2. **Filtro de formatos**: Ignora HTML e PNG automaticamente
 3. **Identificador URI**: Usa `@id` como identificador (pode ser URL completa)
 4. **Licença por URL**: Tenta identificar licença pela URL fornecida
-5. **Provider não cria organização**: Informação armazenada apenas em extras
+5. **Provider e Contact Points**: Tenta vincular a uma `Organization` existente. Cria `ContactPoint` com referência à organização se encontrada. Publisher não tem email. Ordem de criação: Contact, depois Publisher.
 6. **Temporal coverage não parseada**: Armazenada como string em extras
 7. **Tag fixa específica**: `'ogcapi.dgterritorio.gov.pt'` (hardcoded)
 8. **Mapeamento MIME extensível**: Fácil adicionar novos formatos ao dicionário
 
 ## Comparação com Outros Harvesters
 
-| Aspecto | OGC API | DCAT | CKAN |
-| :--- | :--- | :--- | :--- |
-| **Formato** | JSON-LD (Schema.org) | RDF/XML/JSON-LD (DCAT) | JSON (CKAN API) |
-| **Identificador** | `@id` (URI) | `dct:identifier` | `id` (UUID) |
-| **Distribuições** | `distribution` | `dcat:distribution` | `resources` |
-| **Licença** | URL | `dct:license` | `license_id` |
-| **Provider** | `provider` | `dct:publisher` | `organization` |
-| **Filtro de formatos** | Sim (HTML, PNG) | Não | Sim (resource_type) |
+| Aspecto                | OGC API              | DCAT                   | CKAN                |
+| :--------------------- | :------------------- | :--------------------- | :------------------ |
+| **Formato**            | JSON-LD (Schema.org) | RDF/XML/JSON-LD (DCAT) | JSON (CKAN API)     |
+| **Identificador**      | `@id` (URI)          | `dct:identifier`       | `id` (UUID)         |
+| **Distribuições**      | `distribution`       | `dcat:distribution`    | `resources`         |
+| **Licença**            | URL                  | `dct:license`          | `license_id`        |
+| **Provider**           | `provider`           | `dct:publisher`        | `organization`      |
+| **Filtro de formatos** | Sim (HTML, PNG)      | Não                    | Sim (resource_type) |
