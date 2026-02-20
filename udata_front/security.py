@@ -12,6 +12,10 @@ MAX_SVG_SIZE = 5 * 1024 * 1024
 # Namespaces SVG válidos
 SVG_NAMESPACES = {"{http://www.w3.org/2000/svg}svg", "svg"}
 
+# Limite de tamanho para XML/SVG (50MB) - proteção contra DoS
+MAX_XML_SIZE = 50 * 1024 * 1024
+
+
 # Tags proibidas que permitem execução de scripts ou carregamento de recursos externos
 FORBIDDEN_TAGS = {
     "{http://www.w3.org/2000/svg}script",
@@ -83,30 +87,36 @@ def _is_dangerous_uri(uri: str) -> bool:
     return False
 
 
+def sanitize_xml(content: bytes) -> bytes:
+    """
+    Sanitiza ficheiros XML genéricos contra XXE e vetores de XSS.
+    """
+    return _core_xml_sanitization(content, is_svg=False)
+
+
 def sanitize_svg(content: bytes) -> bytes:
     """
     Remove scripts, eventos e outros vetores de XSS de ficheiros SVG.
+    """
+    return _core_xml_sanitization(content, is_svg=True)
+
+
+def _core_xml_sanitization(content: bytes, is_svg: bool = False) -> bytes:
+    """
+    Lógica central de sanitização XML e SVG.
     Utiliza defusedxml para parse seguro contra XML Bombs e XXE.
-
-    Args:
-        content: Conteúdo do ficheiro SVG em bytes
-
-    Returns:
-        Conteúdo sanitizado em bytes
-
-    Raises:
-        ValueError: Se o ficheiro for inválido ou demasiado grande
     """
     if not content:
         return content
 
     # Verificar tamanho do ficheiro
-    if len(content) > MAX_SVG_SIZE:
+    limit = MAX_SVG_SIZE if is_svg else MAX_XML_SIZE
+    if len(content) > limit:
         log.warning(
-            f"SVG rejeitado: tamanho {len(content)} bytes excede limite de {MAX_SVG_SIZE} bytes"
+            f"Ficheiro rejeitado: tamanho {len(content)} bytes excede limite de {limit} bytes"
         )
         raise ValueError(
-            f"Ficheiro SVG demasiado grande (máximo {MAX_SVG_SIZE // 1024 // 1024}MB)"
+            f"Ficheiro demasiado grande (máximo {limit // 1024 // 1024}MB)"
         )
 
     try:
@@ -114,24 +124,21 @@ def sanitize_svg(content: bytes) -> bytes:
         try:
             tree = safe_lxml.fromstring(content)
         except etree.XMLSyntaxError as e:
-            # Se não for XML válido, rejeitamos por segurança.
-            # SVGs servidos como image/svg+xml devem ser bem formados.
-            log.warning(f"Rejeitando SVG inválido: {e}")
-            raise ValueError("Ficheiro SVG inválido (XML malformado)") from e
+            log.warning(f"Rejeitando XML inválido: {e}")
+            raise ValueError("Ficheiro XML inválido (XML malformado)") from e
 
-        # Validar que é realmente um SVG
-        if tree.tag not in SVG_NAMESPACES:
+        # Validar namespace se for SVG
+        if is_svg and tree.tag not in SVG_NAMESPACES:
             log.warning(f"Rejeitando ficheiro: elemento raiz '{tree.tag}' não é SVG")
             raise ValueError(
                 "Ficheiro não é um SVG válido (elemento raiz deve ser <svg>)"
             )
 
-        # Coletar elementos a remover (evita modificar durante iteração)
+        # Coletar elementos a remover
         elements_to_remove = []
 
         for element in tree.iter():
             # 1. Verificar Tag
-            # lxml usa {namespace}tag format
             tag_name = (
                 element.tag.split("}")[-1]
                 if "}" in str(element.tag)
@@ -145,16 +152,14 @@ def sanitize_svg(content: bytes) -> bytes:
             # 2. Verificar Atributos
             attrs_to_remove = []
             for attr_name, attr_value in element.attrib.items():
-                # Normaliza nome do atributo (remove namespace se houver)
                 clean_attr_name = attr_name.split("}")[-1].lower()
 
-                # a) Atributos de evento (onload, onclick, etc)
+                # Atributos de evento
                 if EVENT_ATTRIBUTES_REGEX.match(clean_attr_name):
                     attrs_to_remove.append(attr_name)
-                    log.debug(f"Removendo atributo de evento: {attr_name}")
                     continue
 
-                # b) Atributos href/src com javascript: ou outros URIs perigosos
+                # URIs perigosos em atributos específicos
                 if clean_attr_name in (
                     "href",
                     "xlink:href",
@@ -164,11 +169,7 @@ def sanitize_svg(content: bytes) -> bytes:
                 ):
                     if _is_dangerous_uri(attr_value):
                         attrs_to_remove.append(attr_name)
-                        log.debug(
-                            f"Removendo URI perigoso: {attr_name}={attr_value[:50]}"
-                        )
 
-            # Remover atributos perigosos
             for attr in attrs_to_remove:
                 del element.attrib[attr]
 
@@ -177,15 +178,11 @@ def sanitize_svg(content: bytes) -> bytes:
             parent = element.getparent()
             if parent is not None:
                 parent.remove(element)
-                log.debug(f"Removendo elemento perigoso: {element.tag}")
 
-        # Serializa de volta para bytes
         return etree.tostring(tree, encoding="utf-8", xml_declaration=True)
 
     except ValueError:
-        # Re-raise ValueError (já são erros esperados)
         raise
     except Exception as e:
-        log.error(f"Erro ao sanitizar SVG: {e}")
-        # Fail-closed: rejeitar em caso de erro inesperado
-        raise ValueError("Falha na sanitização do SVG") from e
+        log.error(f"Erro ao sanitizar ficheiro XML/SVG: {e}")
+        raise ValueError("Falha na sanitização do ficheiro") from e
