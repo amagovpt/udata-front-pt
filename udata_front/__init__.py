@@ -18,42 +18,49 @@ try:
     from udata.core import storages
     from udata.core.dataset.api import UploadMixin
     from udata.api import api
-    from udata_front.security import sanitize_svg
+    from udata_front.security import sanitize_svg, sanitize_xml
 
     log = logging.getLogger(__name__)
 
     def patched_handle_upload(self, dataset):
         """
-        Versão corrigida de handle_upload para sanitizar SVGs.
-        Substitui o método original para permitir SVGs seguros.
+        Versão corrigida de handle_upload para sanitizar SVGs e XMLs.
+        Substitui o método original para permitir ficheiros seguros.
         """
-        # 1. Sanitização de SVG antes do processamento pelo udata
+        # 1. Sanitização antes do processamento pelo udata
         if "file" in request.files:
             file_storage = request.files["file"]
             filename = getattr(file_storage, "filename", "").lower()
             mimetype = getattr(file_storage, "mimetype", "")
 
+            # Lógica para SVG
             if mimetype == "image/svg+xml" or filename.endswith(".svg"):
                 log.info(f"Processando e sanitizando upload de SVG: {filename}")
                 try:
-                    # Ler conteúdo original
                     content = file_storage.read()
-                    # Sanitizar
                     cleaned_content = sanitize_svg(content)
-
-                    # Substituir o stream do arquivo com o conteúdo limpo
                     file_storage.stream = io.BytesIO(cleaned_content)
-                    file_storage.seek(
-                        0
-                    )  # Resetar ponteiro para o início para leitura posterior
+                    file_storage.seek(0)
+                except ValueError as e:
+                    log.error(f"Segurança: SVG rejeitado {filename}: {e}")
+                    api.abort(400, f"Ficheiro SVG rejeitado: {str(e)}")
 
+            # Lógica para XML genérico
+            elif mimetype in ("application/xml", "text/xml") or filename.endswith(
+                ".xml"
+            ):
+                log.info(f"Processando e sanitizando upload de XML: {filename}")
+                try:
+                    content = file_storage.read()
+                    cleaned_content = sanitize_xml(content)
+                    file_storage.stream = io.BytesIO(cleaned_content)
+                    file_storage.seek(0)
+                except ValueError as e:
+                    log.error(f"Segurança: XML rejeitado {filename}: {e}")
+                    api.abort(400, f"Ficheiro XML rejeitado: {str(e)}")
                 except Exception as e:
-                    log.error(f"Erro Crítico ao sanitizar SVG {filename}: {e}")
-                    # Abortar upload se a sanitização falhar
-                    api.abort(
-                        400,
-                        "Erro ao processar ficheiro SVG. Ficheiro inválido ou corrompido.",
-                    )
+                    log.error(f"Erro Crítico ao sanitizar {filename}: {e}")
+                    api.abort(400, "Erro ao processar ficheiro XML.")
 
         # 2. Chamada direta (bypass) à API de Storage para evitar o bloqueio de SVG do UploadMixin original
         prefix = "/".join((dataset.slug, datetime.utcnow().strftime("%Y%m%d-%H%M%S")))
