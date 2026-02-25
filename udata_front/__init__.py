@@ -83,9 +83,31 @@ try:
 
         return infos
 
-    # Aplicar o Monkeypatch
+    # Aplicar o Monkeypatch do SVG/XML
     UploadMixin.handle_upload = patched_handle_upload
     log.info("Monkeypatch aplicado: UploadMixin.handle_upload agora sanitiza SVGs.")
+
+    # 4. Monkeypatch para Forçar Download em ficheiros Locais (Content-Disposition: attachment)
+    from flask_storage.backends.local import LocalBackend
+    from flask import send_from_directory
+
+    original_serve = LocalBackend.serve
+
+    def patched_serve(self, filename):
+        """
+        Monkeypatch ao método serve do `flask_storage` local
+        para garantir que `resources` são enviados com
+        `Content-Disposition: attachment; filename=...`
+        """
+        # Apenas forçamos o download para os resources (datasets) -> ignora imagens inline/avatares
+        if self.name == "resources":
+            return send_from_directory(self.root, filename, as_attachment=True)
+        return original_serve(self, filename)
+
+    LocalBackend.serve = patched_serve
+    log.info(
+        "Monkeypatch aplicado: LocalBackend.serve agora envia Content-Disposition: attachment."
+    )
 
 except ImportError as e:
     # Caso udata não esteja instalado (ex: durante build de assets), ignoramos silenciosamente
