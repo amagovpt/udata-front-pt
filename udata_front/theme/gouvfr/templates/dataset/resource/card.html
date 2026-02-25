@@ -64,11 +64,13 @@
             {% call dl() %}
             {% call dt() %}{{ _('URL') }}{% endcall %}
             {% call dd() %}
-            <a class="unstyled" href="{{resource.url}}">{{resource.url}}</a>
+            <a class="unstyled" href="{{resource.url}}" target="_blank" rel="ugc nofollow noopener"
+                download>{{resource.url}}</a>
             {% endcall %}
             {% call dt() %}{{ _('Permalink') }}{% endcall %}
             {% call dd() %}
-            <a class="unstyled" href="{{resource.json_ld.url}}">{{resource.json_ld.url}}</a>
+            <a class="unstyled" href="{{resource.json_ld.url}}" target="_blank" rel="ugc nofollow noopener"
+                download>{{resource.json_ld.url}}</a>
             {% endcall %}
             {% if resource.checksum %}
             {% call dt() %}{{resource.checksum.type}}{% endcall %}
