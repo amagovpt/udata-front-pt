@@ -86,12 +86,17 @@ def init_app(app):
     # if app.config.get('CAPTCHETAT_BASE_URL'):
         # Security override init
     from udata.auth import security
-    from udata_front.forms import ExtendedRegisterForm, ExtendedForgotPasswordForm
+    from udata_front.forms import (
+        ExtendedRegisterForm,
+        ExtendedForgotPasswordForm,
+        ExtendedLoginForm,
+    )
     with app.app_context():
         security.forms['register_form'].cls = ExtendedRegisterForm
         security.forms['confirm_register_form'].cls = ExtendedRegisterForm
         security.forms['send_confirmation_form'].cls = ExtendedSendConfirmationForm
         security.forms['forgot_password_form'].cls = ExtendedForgotPasswordForm
+        security.forms['login_form'].cls = ExtendedLoginForm
 
 
     if app.config.get('PROCONNECT_OPENID_CONF_URL'):
