@@ -106,4 +106,4 @@ GEMINI.md
 
 # Security Tests
 utils/vulnerability/tests_vulnerabilities/resultados_teste.txt
-utils/vulnerability/tests_vulnerabilities/user_enumeration/resultados_enumeracao.txt
+utils/vulnerability/tests_vulnerabilities/user_enumeration/relatorio_privacidade_utilizadores.txt
