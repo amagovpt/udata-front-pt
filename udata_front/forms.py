@@ -27,9 +27,9 @@ class ExtendedSendConfirmationForm(SendConfirmationForm):
             if self.email.errors:
                 self.email.errors = []
                 # Para evitar Erro 500 na view (que espera um utilizador), retornamos False
-                # mas emitimos o flash de sucesso para o utilizador.
-                msg, category = get_message("CONFIRMATION_REQUEST", email=self.email.data)
-                flash(msg, category)
+                # mas emitimos o flash de sucesso para o utilizador com uma mensagem amigável.
+                msg = _("Se o endereço de email fornecido estiver registado na nossa plataforma, receberá as instruções em breve.")
+                flash(msg, 'info')
                 return False
             return False
         return True
@@ -45,9 +45,9 @@ class ExtendedForgotPasswordForm(ForgotPasswordForm):
             if self.email.errors:
                 self.email.errors = []
                 # Para evitar Erro 500 na view (que espera um utilizador), retornamos False
-                # mas emitimos o flash de sucesso para o utilizador.
-                msg, category = get_message("PASSWORD_RESET_REQUEST", email=self.email.data)
-                flash(msg, category)
+                # mas emitimos o flash de sucesso para o utilizador com uma mensagem amigável.
+                msg = _("Se o endereço de email fornecido estiver registado na nossa plataforma, receberá as instruções em breve.")
+                flash(msg, 'info')
                 return False
             return False
         return True
