@@ -4,3 +4,4 @@ feedparser
 python-frontmatter
 Flask-Themes2
 feedgenerator
+defusedxml

@@ -136,6 +136,7 @@ def _core_xml_sanitization(content: bytes, is_svg: bool = False) -> bytes:
 
         # Coletar elementos a remover
         elements_to_remove = []
+        is_dangerous = False
 
         for element in tree.iter():
             # 1. Verificar Tag
@@ -147,6 +148,7 @@ def _core_xml_sanitization(content: bytes, is_svg: bool = False) -> bytes:
 
             if element.tag in FORBIDDEN_TAGS or tag_name in FORBIDDEN_TAGS:
                 elements_to_remove.append(element)
+                is_dangerous = True
                 continue
 
             # 2. Verificar Atributos
@@ -157,6 +159,7 @@ def _core_xml_sanitization(content: bytes, is_svg: bool = False) -> bytes:
                 # Atributos de evento
                 if EVENT_ATTRIBUTES_REGEX.match(clean_attr_name):
                     attrs_to_remove.append(attr_name)
+                    is_dangerous = True
                     continue
 
                 # URIs perigosos em atributos específicos
@@ -169,9 +172,16 @@ def _core_xml_sanitization(content: bytes, is_svg: bool = False) -> bytes:
                 ):
                     if _is_dangerous_uri(attr_value):
                         attrs_to_remove.append(attr_name)
+                        is_dangerous = True
 
             for attr in attrs_to_remove:
                 del element.attrib[attr]
+
+        if not is_svg and is_dangerous:
+            log.warning("Conteúdo malicioso detectado no ficheiro XML.")
+            raise ValueError(
+                "O ficheiro XML contém conteúdo malicioso não permitido e foi bloqueado."
+            )
 
         # Remover elementos perigosos
         for element in elements_to_remove:
