@@ -17,6 +17,26 @@ class ExtendedRegisterForm(RegisterForm):
 
 class ExtendedSendConfirmationForm(SendConfirmationForm):
     recaptcha = recaptcha.RecaptchaField()
+
+    def validate(self):
+        if not super(ExtendedSendConfirmationForm, self).validate():
+            # Se for um erro de email (ex: utilizador não existe), removemos o erro
+            # para evitar enumeração de utilizadores.
+            if 'email' in self.errors:
+                self.errors.pop('email')
+                return True
+            return False
+        return True
     
 class ExtendedForgotPasswordForm(ForgotPasswordForm):
     recaptcha = recaptcha.RecaptchaField()
+
+    def validate(self):
+        if not super(ExtendedForgotPasswordForm, self).validate():
+            # Se for um erro de email (ex: utilizador não existe), removemos o erro
+            # para evitar enumeração de utilizadores.
+            if 'email' in self.errors:
+                self.errors.pop('email')
+                return True
+            return False
+        return True
