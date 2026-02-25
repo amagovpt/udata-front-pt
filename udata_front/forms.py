@@ -1,4 +1,6 @@
+from flask import flash
 from flask_security.forms import RegisterForm, SendConfirmationForm, ForgotPasswordForm, LoginForm
+from flask_security.utils import get_message
 from flask_wtf import recaptcha
 from udata.forms import fields
 from udata.forms import validators
@@ -20,24 +22,33 @@ class ExtendedSendConfirmationForm(SendConfirmationForm):
 
     def validate(self, **kwargs):
         if not super(ExtendedSendConfirmationForm, self).validate(**kwargs):
-            # Se for um erro de email (ex: utilizador não existe), removemos o erro
-            # para evitar enumeração de utilizadores.
-            if 'email' in self.errors:
-                self.errors.pop('email')
-                return True
+            # Se for um erro de email (ex: utilizador não existe), limpamos a lista de erros
+            # do campo para evitar enumeração de utilizadores no template.
+            if self.email.errors:
+                self.email.errors = []
+                # Para evitar Erro 500 na view (que espera um utilizador), retornamos False
+                # mas emitimos o flash de sucesso para o utilizador.
+                msg, category = get_message("CONFIRMATION_REQUEST", email=self.email.data)
+                flash(msg, category)
+                return False
             return False
         return True
     
+
 class ExtendedForgotPasswordForm(ForgotPasswordForm):
     recaptcha = recaptcha.RecaptchaField()
 
     def validate(self, **kwargs):
         if not super(ExtendedForgotPasswordForm, self).validate(**kwargs):
-            # Se for um erro de email (ex: utilizador não existe), removemos o erro
-            # para evitar enumeração de utilizadores.
-            if 'email' in self.errors:
-                self.errors.pop('email')
-                return True
+            # Se for um erro de email (ex: utilizador não existe), limpamos a lista de erros
+            # do campo para evitar enumeração de utilizadores no template.
+            if self.email.errors:
+                self.email.errors = []
+                # Para evitar Erro 500 na view (que espera um utilizador), retornamos False
+                # mas emitimos o flash de sucesso para o utilizador.
+                msg, category = get_message("PASSWORD_RESET_REQUEST", email=self.email.data)
+                flash(msg, category)
+                return False
             return False
         return True
 class ExtendedLoginForm(LoginForm):
@@ -46,10 +57,10 @@ class ExtendedLoginForm(LoginForm):
             # Unificar mensagens de erro para evitar enumeração.
             # Se houver erro no email ou senha, mostramos uma mensagem genérica.
             if 'email' in self.errors or 'password' in self.errors:
-                self.errors.pop('email', None)
-                self.errors.pop('password', None)
+                self.email.errors = []
+                self.password.errors = []
                 # Adicionamos o erro genérico aos erros globais do formulário
-                self.form_errors.append(_('Invalid email or password.'))
+                self.form_errors.append(_('Email ou palavra-passe incorretos.'))
                 return False
             return False
         return True
