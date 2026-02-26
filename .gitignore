@@ -103,3 +103,5 @@ utils/catalog.txt
 
 # AI rules
 GEMINI.md
+.claude/
+
