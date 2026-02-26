@@ -53,8 +53,6 @@ export default defineConfig({
 
   // ─── Configuração partilhada pelos projectos ───────────────────────────────
   use: {
-    ignoreHTTPSErrors: true,
-
     baseURL,
 
     // Simular browser real (evita bloqueios de WAF)
@@ -62,8 +60,18 @@ export default defineConfig({
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
       "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 
-    // Aceitar self-signed certs em ambientes de teste interno (TST/DEV)
+    // Aceitar self-signed certs em ambientes de teste interno (TST/DEV/PPR)
     ignoreHTTPSErrors: true,
+
+    // Configuração de proxy (opcional, via variável de ambiente)
+    // Útil para aceder a ambientes internos através de proxy corporativo
+    ...(process.env.HTTP_PROXY
+      ? {
+          proxy: {
+            server: process.env.HTTP_PROXY,
+          },
+        }
+      : {}),
 
     // Captura de evidências em falha
     screenshot: "only-on-failure",
