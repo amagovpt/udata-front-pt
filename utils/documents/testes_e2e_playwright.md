@@ -63,3 +63,11 @@ Estes testes encontram-se definidos em: `tests/smoke/smoke-post-deploy.spec.ts`.
 ## 12. Formulário de Contacto
 
 - **Página de contacto carrega com formulário**: Verifica a presença de um formulário de contacto funcional e os respetivos campos obrigatórios.
+
+## 13. Serviços de Dados (APIs)
+
+- **Página de serviços de dados carrega e contém cards**: Valida a listagem de APIs/Serviços de Dados e a presença de resultados reais.
+
+## 14. Página de Login
+
+- **Página de login carrega corretamente**: Garante que o ponto de entrada principal para utilizadores autenticados está ONLINE e exibe os campos de email e palavra-passe.

@@ -3,6 +3,9 @@
  * Playwright Smoke Tests — Validação Pós-Deploy em Produção (PRD)
  * ============================================================================
  *
+ * Instalação necessária:
+ *   npx playwright install chromium
+ *
  * Cenários cobertos:
  *   1. Home Page carrega com HTTP 200
  *   2. Pesquisa — resultados da base de dados aparecem
@@ -16,6 +19,8 @@
  *  10. Dashboard / Estatísticas — página carrega com indicadores
  *  11. Páginas estáticas — Sobre, Termos, Acessibilidade, etc.
  *  12. Formulário de Contacto — página renderiza com campos
+ *  13. Serviços de Dados — listagem carrega e contém cards
+ *  14. Login — página de autenticação disponível
  *
  * ─── Propagação de Erro (Bubble-Up) ─────────────────────────────────────────
  *
@@ -755,6 +760,10 @@ test.describe(`[${TARGET_ENV}] 8. API REST`, () => {
     { path: "/api/1/datasets/?page_size=1", name: "Datasets" },
     { path: "/api/1/organizations/?page_size=1", name: "Organizações" },
     { path: "/api/1/reuses/?page_size=1", name: "Reutilizações" },
+    {
+      path: "/api/1/dataservices/?page_size=1",
+      name: "Serviços de Dados (APIs)",
+    },
   ];
 
   test("Raiz da API responde com HTTP < 400", async ({ request, baseURL }) => {
@@ -966,6 +975,72 @@ test.describe(`[${TARGET_ENV}] 12. Formulário de Contacto`, () => {
           `   CAUSA: Os campos do formulário podem não estar a renderizar.\n` +
           `   RESOLUÇÃO: Verificar o HTML do formulário em ${baseURL}/pt/contact/`,
       ).toBeGreaterThanOrEqual(2);
+    });
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 13. SERVIÇOS DE DADOS (APIs) — Listagem
+// ─────────────────────────────────────────────────────────────────────────────
+test.describe(`[${TARGET_ENV}] 13. Serviços de Dados (APIs)`, () => {
+  test("Página de serviços de dados carrega e contém cards", async ({
+    page,
+    baseURL,
+  }) => {
+    const response = await page.goto("/pt/dataservices/", {
+      waitUntil: "domcontentloaded",
+    });
+
+    await test.step("status HTTP deve ser < 400", async () => {
+      expect(
+        response?.status(),
+        `❌ Página de serviços de dados não respondeu correctamente em ${TARGET_ENV} (${baseURL}/pt/dataservices/).\n` +
+          `   CAUSA: A rota /pt/dataservices/ pode não existir.\n` +
+          `   RESOLUÇÃO: curl -I ${baseURL}/pt/dataservices/`,
+      ).toBeLessThan(400);
+    });
+
+    await test.step("listagem contém pelo menos 1 card de serviço de dados", async () => {
+      // O seletor .fr-tile ou .fr-card é comum no udata-front para estas listagens
+      await page.waitForSelector(".fr-tile, article, .fr-card", {
+        timeout: 15_000,
+      });
+      const cards = page.locator(".fr-tile, article.fr-card, .card");
+      const count = await cards.count();
+      expect(
+        count,
+        `❌ Nenhum card de serviço de dados encontrado em ${TARGET_ENV}.\n` +
+          `   CAUSA: A base de dados pode não ter serviços de dados ou o template mudou.\n` +
+          `   RESOLUÇÃO: Verificar /api/1/dataservices/?page_size=1`,
+      ).toBeGreaterThan(0);
+    });
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 14. PÁGINA DE LOGIN
+// ─────────────────────────────────────────────────────────────────────────────
+test.describe(`[${TARGET_ENV}] 14. Login — Autenticação`, () => {
+  test("Página de login carrega correctamente", async ({ page, baseURL }) => {
+    const response = await page.goto("/pt/login/", {
+      waitUntil: "domcontentloaded",
+    });
+
+    await test.step("status HTTP deve ser 200", async () => {
+      expect(
+        response?.status(),
+        `❌ Página de login não respondeu com 200 em ${TARGET_ENV} (${baseURL}/pt/login/).\n` +
+          `   CAUSA: O endpoint de login pode estar quebrado.\n` +
+          `   RESOLUÇÃO: Verificar logs do udata / uwsgi.`,
+      ).toBe(200);
+    });
+
+    await test.step("formulário de login deve estar visível", async () => {
+      const emailInput = page.locator('input[name="email"]').first();
+      const passwordInput = page.locator('input[name="password"]').first();
+
+      await expect(emailInput).toBeVisible();
+      await expect(passwordInput).toBeVisible();
     });
   });
 });
