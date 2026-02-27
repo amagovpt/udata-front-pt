@@ -16,6 +16,27 @@ class ExtendedRegisterForm(RegisterForm):
                          validators.NoURLs(_('URLs not allowed in this field'))])
     recaptcha = recaptcha.RecaptchaField()
 
+    def validate(self, **kwargs):
+        is_valid = super(ExtendedRegisterForm, self).validate(**kwargs)
+        if not is_valid:
+            if self.email.errors:
+                # Se o utilizador já existe, o Flask-Security cria existing_email_user
+                if getattr(self, "existing_email_user", None) is not None:
+                    self.email.errors[:] = []
+                    if 'email' in self._errors:
+                        self._errors.pop('email', None)
+                    
+                    if not any(k for k, v in self.errors.items() if k != 'email' and v):
+                        from flask import flash, redirect
+                        from flask_security.utils import get_post_register_redirect, get_message
+                        from werkzeug.exceptions import HTTPException
+                        
+                        msg, cat = get_message("CONFIRM_REGISTRATION", email=self.email.data)
+                        flash(msg, cat)
+                        raise HTTPException(response=redirect(get_post_register_redirect()))
+            return False
+        return True
+
 
 class ExtendedSendConfirmationForm(SendConfirmationForm):
     recaptcha = recaptcha.RecaptchaField()
