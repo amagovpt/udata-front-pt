@@ -59,3 +59,4 @@ udata-tabular-preview==4.0.1
 uwsgi==2.0.29
 zope.event==5.0
 zope.interface==7.2
+defusedxml==0.7.1

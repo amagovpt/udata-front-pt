@@ -1,20 +1,19 @@
-version: "3"
 services:
-    db:
-        image: mongo:6.0.4
-        volumes:
-          # - ./data/db:/data/db
-          - ./data/dump:/dump
-        expose:
-          - "27017"
-        ports:
-        - "27017:27017"
-    
-    broker:
-        image: redis
-        volumes:
-          - ./data/broker:/data
-        expose:
-          - "6379"
-        ports:
-          - "6379:6379"
+  db:
+    image: mongo:7.0.4
+    volumes:
+      - ./data/db:/data/db
+      - ./data/dump:/dump
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+
+  broker:
+    image: redis
+    volumes:
+      - ./data/broker:/data
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
