@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste ao embed do dataset</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .container { margin-bottom: 40px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Teste ao embed do dataset - Data.gov.sg (iframe)</h2>
+    <p>Este embed mostra os dados (o explorador de dados).</p>
+    <iframe
+      width="600"
+      height="600"
+      src="https://data.gov.sg/datasets/d_3f960c10fed6145404ca7b821f263b87/explorer"
+      frameborder="0">
+    </iframe>
+  </div>
+
+  <div class="container">
+    <h2>Teste ao embed do dataset - dados.gov.pt (oembed uData)</h2>
+    <p>Este embed mostra o "cartão" do dataset (metadados e link para download), e não os dados em si.</p>
+    <!--<div data-udata-dataset="6810e179fbd679e410ed87b0"></div><script src="https://dados.gov.pt/static/oembed.js" async defer></script>-->
+    <div data-udata-dataset="6810e179fbd679e410ed87b0"></div><script src="http://dev.local:7000/_themes/gouvfr/oembed.js" async defer></script>
+  </div>
+
+</body>
+</html>

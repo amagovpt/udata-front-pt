@@ -24,7 +24,7 @@
             {% if dataset.organization %}
             <img
                 alt="{{ dataset.organization.name|placeholder_alt(dataset.organization.logo) }}"
-                src="{{ dataset.organization.logo(56)|placeholder('organization') }}"
+                src="{{ dataset.organization.logo(56, external=True)|placeholder('organization', external=True) }}"
                 width="56"
                 height="56"
                 loading="lazy"
@@ -32,7 +32,7 @@
             {% elif dataset.owner %}
             <img
                 alt="{{ dataset.owner.fullname }}"
-                src="{{ dataset.owner|avatar_url(56) }}"
+                src="{{ dataset.owner|avatar_url(56, external=True) }}"
                 width="56"
                 height="56"
                 loading="lazy"
@@ -40,7 +40,7 @@
             {% else %}
             <img
                 alt=""
-                src="{{ ''|placeholder('organization') }}"
+                src="{{ ''|placeholder('organization', external=True) }}"
                 width="56"
                 height="56"
                 loading="lazy"

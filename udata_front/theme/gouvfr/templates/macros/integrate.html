@@ -1,6 +1,6 @@
 {% macro integrate_btn(obj) %}
 {% set basename = obj.__class__.__name__|lower %}
-{% set widget_url = static('oembed.js', _burst=False, _external=True) %}
+{% set widget_url = theme_static('oembed.js', inline_burst=False, force_version=False, external=True) %}
 {% set root_url= url_for('site.home_redirect', _external=True) %}
 {% set root = ('data-udata="' + root_url + '"') if (root_url and not widget_url.startswith(root_url)) else "" %}
 
