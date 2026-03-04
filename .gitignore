@@ -103,7 +103,8 @@ utils/catalog.txt
 
 # AI rules
 GEMINI.md
+.claude/
 
 # Security Tests
-utils/vulnerability/tests_vulnerabilities/xss_upload_test/resultados_teste.txt
-utils/vulnerability/tests_vulnerabilities/user_enumeration/relatorio_privacidade_utilizadores.txt
+utils/vulnerability/tests_vulnerabilities/xss_upload_test/
+utils/vulnerability/tests_vulnerabilities/user_enumeration/
