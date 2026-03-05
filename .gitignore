@@ -108,3 +108,6 @@ GEMINI.md
 # Security Tests
 utils/vulnerability/tests_vulnerabilities/xss_upload_test/
 utils/vulnerability/tests_vulnerabilities/user_enumeration/
+
+# Security Audit
+docs/security_audit/
