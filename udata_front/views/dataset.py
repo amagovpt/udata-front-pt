@@ -132,7 +132,12 @@ def resource_redirect(id):
     Redirect to the latest version of a resource given its identifier.
     '''
     resource = get_resource(id)
-    return redirect(resource.url.strip()) if resource else abort(404)
+    if not resource:
+        abort(404)
+    dataset = Dataset.objects(resources__id=id).first()
+    if dataset and dataset.private and not DatasetEditPermission(dataset).can():
+        abort(404)
+    return redirect(resource.url.strip())
 
 
 @sitemap.register_generator
