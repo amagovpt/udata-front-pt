@@ -20,7 +20,7 @@ from saml2.pack import http_form_post_message
 from saml2.sigver import SignatureError
 
 import base64
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 from .faa_level import FAAALevel, LogoutUrl
 from .requested_atributes import RequestedAttributes, RequestedAttribute

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import time
 import random
 from datetime import datetime, timezone

@@ -8,7 +8,7 @@ and exporting in XML, JSON, TXT, or TTL formats.
 
 import os
 import requests
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import time
 import sys
 import logging
